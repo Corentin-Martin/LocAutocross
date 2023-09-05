@@ -19,12 +19,14 @@ class Brand
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"brand_browse"})
+     * @Groups({"rental_found"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"brand_browse"})
+     * @Groups({"rental_found"})
      */
     private $name;
 

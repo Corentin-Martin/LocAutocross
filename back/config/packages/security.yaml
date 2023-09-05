@@ -44,15 +44,26 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/user, roles: PUBLIC_ACCESS, methods: [POST] }
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/brands, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/categories, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/championships, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/federations, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/tracks, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/events, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/login,          roles: PUBLIC_ACCESS                                                }
+        - { path: ^/api/user,           roles: PUBLIC_ACCESS,           methods: [POST]                     }
+        - { path: ^/api/brands,         roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/categories,     roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/championships,  roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/federations,    roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/tracks,         roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/tracks,         roles: ROLE_PRO,                methods: [POST]                     }
+        - { path: ^/api/rentals,        roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/rentals/book,   roles: IS_AUTHENTICATED_FULLY,  methods: [PUT, PATCH]               }
+        - { path: ^/api/rentals,        roles: ROLE_PRO,                methods: [POST, PUT, PATCH, DELETE] }
+        - { path: ^/api/events,         roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/events,         roles: ROLE_PRO,                methods: [POST, PUT, PATCH, DELETE] }
+        - { path: ^/api/vehicles,       roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/vehicles,       roles: ROLE_PRO,                methods: [POST, PUT, PATCH, DELETE] }
+        - { path: ^/api,                roles: IS_AUTHENTICATED_FULLY                                       }
+
+    role_hierarchy:
+        ROLE_PRO: ROLE_USER
+        ROLE_ADMIN: ROLE_PRO
 
 when@test:
     security:

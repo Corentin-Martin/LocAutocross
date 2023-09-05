@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RentalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=RentalRepository::class)
@@ -15,49 +16,58 @@ class Rental
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"rental_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"rental_browse"})
      */
     private $price;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="smallint", length=255)
+     * @Groups({"rental_browse"})
      */
     private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vehicle::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"rental_browse"})
      */
     private $vehicle;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="propositions")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"rental_browse"})
      */
     private $ownerUser;
 
     /**
      * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"rental_browse"})
      */
     private $event;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservations")
+     * @Groups({"rental_read"})
      */
     private $tenantUser;
 
     /**
      * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="rental", cascade={"persist", "remove"})
+     * @Groups({"rental_read"})
      */
     private $comment;
 
     /**
      * @ORM\OneToOne(targetEntity=Contract::class, mappedBy="rental", cascade={"persist", "remove"})
+     * @Groups({"rental_read"})
      */
     private $contract;
 
@@ -70,6 +80,12 @@ class Rental
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"rental_browse"})
+     */
+    private $description;
 
     public function getId(): ?int
     {
@@ -227,6 +243,18 @@ class Rental
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
