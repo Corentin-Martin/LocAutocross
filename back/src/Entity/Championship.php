@@ -19,18 +19,21 @@ class Championship
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"championship_browse"})
+     * @Groups({"federation_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"championship_browse"})
+     * @Groups({"federation_read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"championship_browse"})
+     * @Groups({"federation_read"})
      */
     private $alias;
 
