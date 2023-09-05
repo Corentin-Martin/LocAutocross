@@ -6,6 +6,7 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
@@ -17,21 +18,25 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"event_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"event_browse"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"event_browse"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"event_browse"})
      */
     private $isOfficial;
 
@@ -53,13 +58,20 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity=Track::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"event_browse"})
      */
     private $track;
 
     /**
      * @ORM\ManyToOne(targetEntity=Championship::class, inversedBy="events")
+     * @Groups({"event_browse"})
      */
     private $championship;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="events")
+     */
+    private $associatedUser;
 
     public function __construct()
     {
@@ -203,5 +215,17 @@ class Event
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function getAssociatedUser(): ?User
+    {
+        return $this->associatedUser;
+    }
+
+    public function setAssociatedUser(?User $associatedUser): self
+    {
+        $this->associatedUser = $associatedUser;
+
+        return $this;
     }
 }
