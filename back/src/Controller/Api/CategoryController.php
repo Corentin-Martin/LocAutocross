@@ -19,8 +19,8 @@ class CategoryController extends AbstractController
      */
     public function browse(CategoryRepository $categoryRepository): JsonResponse
     {
-        return (empty($categoryRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($categoryRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["category_browse"]]);
+        return (empty($categoryRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                                        : $this->json($categoryRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["category_browse", "category_championship_browse"]]);
     }
 
     /**
@@ -28,7 +28,7 @@ class CategoryController extends AbstractController
      */
     public function read(?Category $category): JsonResponse
     {
-        return (is_null($category))    ? $this->json(["message" => "Cette catégorie n'existe pas"], Response::HTTP_NOT_FOUND, []) 
-                                    : $this->json($category, Response::HTTP_OK, [], ["groups" => ["category_browse", "category_read"]]);
+        return (is_null($category)) ? $this->json(["message" => "Cette catégorie n'existe pas"], Response::HTTP_NOT_FOUND, []) 
+                                    : $this->json($category, Response::HTTP_OK, [], ["groups" => ["category_browse", "category_read", "category_championship_browse"]]);
     }
 }
