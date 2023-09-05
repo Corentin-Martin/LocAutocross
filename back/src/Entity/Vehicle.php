@@ -6,6 +6,7 @@ use App\Repository\VehicleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=VehicleRepository::class)
@@ -17,31 +18,37 @@ class Vehicle
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"vehicle_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"vehicle_browse"})
      */
     private $year;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"vehicle_read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"vehicle_read"})
      */
     private $engine;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"vehicle_read"})
      */
     private $shocks;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"vehicle_browse"})
      */
     private $picture;
 
@@ -69,13 +76,21 @@ class Vehicle
     /**
      * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="vehicles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"vehicle_browse"})
      */
     private $brand;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="vehicles")
+     * @Groups({"vehicle_browse"})
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"vehicle_browse"})
+     */
+    private $model;
 
     public function __construct()
     {
@@ -268,5 +283,17 @@ class Vehicle
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function getModel(): ?string
+    {
+        return $this->model;
+    }
+
+    public function setModel(?string $model): self
+    {
+        $this->model = $model;
+
+        return $this;
     }
 }
