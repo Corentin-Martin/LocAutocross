@@ -6,6 +6,7 @@ use App\Repository\FederationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=FederationRepository::class)
@@ -17,16 +18,22 @@ class Federation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"federation_browse"})
+     * @Groups({"category_championship_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"federation_browse"})
+     * @Groups({"category_championship_browse"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"federation_browse"})
+     * @Groups({"category_championship_browse"})
      */
     private $alias;
 
@@ -42,11 +49,13 @@ class Federation
 
     /**
      * @ORM\OneToMany(targetEntity=Championship::class, mappedBy="federation")
+     * @Groups({"federation_read"})
      */
     private $championships;
 
     /**
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="federation")
+     * @Groups({"federation_read"})
      */
     private $categories;
 
