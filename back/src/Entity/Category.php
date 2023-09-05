@@ -19,12 +19,14 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"category_browse"})
+     * @Groups({"federation_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"category_browse"})
+    * @Groups({"federation_read"})
      */
     private $name;
 
