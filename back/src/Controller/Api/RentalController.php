@@ -93,4 +93,37 @@ class RentalController extends AbstractController
 
         return $this->json(["message" => "La location a été supprimé"], Response::HTTP_OK, []);
     }
+
+    /**
+     * @Route("/book/{id}", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
+     */
+    public function book(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository) : JsonResponse
+    {
+
+        /** @var User */
+        $user = $this->getUser();
+
+        if (is_null($rental)) {
+            return $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, []);
+        }
+
+        if (!is_null($rental->getTenantUser()) && ($rental->getTenantUser() !== $user)) {
+            return $this->json(["message" => "L'utilisateur ne peut pas modifier cette location"], Response::HTTP_FORBIDDEN, []);
+        }
+
+        $serializerInterface->deserialize($request->getContent(), Rental::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $rental]);
+
+        $requestInArray = json_decode($request->getContent(), true);
+
+        if ((sizeOf($requestInArray) > 1) || (!array_key_exists("status", $requestInArray)))
+        {
+            return $this->json(["message" => "L'utilisateur ne peut pas modifier ces informations"], Response::HTTP_FORBIDDEN, []);
+        }
+
+        $rental->setTenantUser($user);
+
+        $rentalRepository->add($rental, true);
+
+        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+    }
 }
