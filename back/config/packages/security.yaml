@@ -50,6 +50,7 @@ security:
         - { path: ^/api/categories, roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/api/championships, roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/api/federations, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/tracks, roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/api/events, roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
