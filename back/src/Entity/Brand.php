@@ -6,9 +6,11 @@ use App\Repository\BrandRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BrandRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Brand
 {
@@ -16,11 +18,13 @@ class Brand
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"brand_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"brand_browse"})
      */
     private $name;
 
@@ -36,6 +40,7 @@ class Brand
 
     /**
      * @ORM\OneToMany(targetEntity=Vehicle::class, mappedBy="brand")
+     * @Groups({"brand_read"})
      */
     private $vehicles;
 
@@ -113,5 +118,25 @@ class Brand
         }
 
         return $this;
+    }
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
     }
 }
