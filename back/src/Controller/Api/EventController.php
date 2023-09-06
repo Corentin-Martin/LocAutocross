@@ -34,7 +34,7 @@ class EventController extends AbstractController
     public function read(?Event $event): JsonResponse
     {
         return (is_null($event)) ? $this->json(["message" => "Cet évenement n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($event, Response::HTTP_OK, [], ["groups" => ["event_browse", "event_read", "championship_browse", "category_championship_browse", "track_browse", "track_read"]]);
+                                        : $this->json($event, Response::HTTP_OK, [], ["groups" => ["event_browse", "event_read", "championship_browse", "category_championship_browse", "track_browse", "track_read", "event_find", "vehicle_browse", "vehicle_read", "rental_found"]]);
     }
 
     /**

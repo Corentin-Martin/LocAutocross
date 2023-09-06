@@ -23,12 +23,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"user_browse"})
+     * @Groups({"event_find"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user_browse"})
+     * @Groups({"event_find"})
      */
     private $email;
 
@@ -47,18 +49,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
+     * @Groups({"event_find"})
      */
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
+     * @Groups({"event_find"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
+     * @Groups({"event_find"})
      */
     private $lastname;
 
