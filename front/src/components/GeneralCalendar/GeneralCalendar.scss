@@ -1,0 +1,29 @@
+@import 'react-big-calendar/lib/sass/styles';
+
+.GeneralCalendar{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &-Box {
+    display: block;
+    min-width: 15rem;
+    margin: 0.2em;
+    padding: .2rem;
+    border-radius: 5px 5px;
+  }
+
+  &-Ouest {
+    background-color: #F29F05;
+  }
+
+  &-Seac {
+    background-color: #79D2E6;
+  }
+
+  &-Unofficial {
+    background-color: #FF6961;
+  }
+}

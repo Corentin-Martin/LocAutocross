@@ -1,0 +1,12 @@
+.Event {
+  position: absolute;
+  background-color: grey;
+  z-index: 99;
+  padding: 1rem;
+
+  &-Button {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+}

@@ -1,9 +1,9 @@
-import TestCalendar from '../TestCalendar/TestCalendar';
+import GeneralCalendar from '../GeneralCalendar/GeneralCalendar';
 import './App.scss';
 
 function App() {
   return (
-    <TestCalendar />
+    <GeneralCalendar />
   );
 }
 
