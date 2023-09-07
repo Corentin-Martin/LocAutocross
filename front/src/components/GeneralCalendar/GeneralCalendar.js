@@ -16,20 +16,14 @@ function GeneralCalendar() {
 
   const [events, setEvents] = useState([]);
   const [eventsFiltered, setEventsFiltered] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [championships, setChampionships] = useState([]);
   const [search, setSearch] = useState([]);
-  const [modalCalendar, setModalCalendar] = useState(
-    useSelector((state) => state.generalCalendar.setModalCalendarIsOpen),
-  );
+  const eventModal = useSelector((state) => state.generalCalendar.modalCalendarIsOpen);
   const [isLoading, setIsLoading] = useState(true);
   const [loadChampionships, setLoadChampionships] = useState(true);
 
   const dispatch = useDispatch();
-
-  const {
-    title, description, start, end, rentals, track, championship,
-  } = selectedEvent;
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/events')
@@ -57,14 +51,23 @@ function GeneralCalendar() {
   const onSelectEvent = useCallback((calEvent) => {
     axios.get(`http://localhost:8000/api/events/${calEvent.id}`)
       .then((response) => {
-        setSelectedEvent(response.data);
-        dispatch(setModalCalendarIsOpen(true));
-        setModalCalendar(true);
+        const newEvent = {
+          ...response.data,
+          start: new Date(response.data.start),
+          end: new Date(response.data.end),
+        };
+        setSelectedEvent(newEvent);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    if (selectedEvent !== null) {
+      dispatch(setModalCalendarIsOpen(true));
+    }
+  }, [selectedEvent]);
 
   const eventPropGetter = useCallback(
     (event) => {
@@ -167,15 +170,15 @@ function GeneralCalendar() {
             }}
             culture="fr"
           />
-          {modalCalendar && (
+          {eventModal && (
           <Event
-            title={title}
-            description={description}
-            start={start}
-            end={end}
-            rentals={rentals}
-            track={track}
-            championship={championship}
+            title={selectedEvent.title}
+            description={selectedEvent.description}
+            start={selectedEvent.start}
+            end={selectedEvent.end}
+            rentals={selectedEvent.rentals}
+            track={selectedEvent.track}
+            championship={selectedEvent.championship}
           />
           )}
         </>

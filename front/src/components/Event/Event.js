@@ -1,6 +1,7 @@
 import './Event.scss';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import moment from 'moment/moment';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
 
 function Event({
@@ -8,14 +9,13 @@ function Event({
 }) {
   const dispatch = useDispatch();
   const closeModal = () => {
+    console.log('ou');
     dispatch(setModalCalendarIsOpen(false));
   };
 
-  console.log(useSelector((state) => state.generalCalendar.modalCalendarIsOpen));
-
-  console.log(rentals);
   return (
-    <div className="Event">
+    <div className="Event" style={{ backgroundColor: (championship !== null) ? championship.color : '#ffcd61' }}>
+
       <button type="button" onClick={closeModal} className="Event-Button">X</button>
       <h1>{title}</h1>
       {description !== null && <h2>{description}</h2>}
@@ -29,8 +29,8 @@ function Event({
       <br />
       <h3>Dates</h3>
       <ul>
-        <li>Début : {start}</li>
-        <li>Fin : {end}</li>
+        <li>Début : {moment(start).format('DD/MM/YYYY')}</li>
+        <li>Fin : {moment(end).format('DD/MM/YYYY')}</li>
       </ul>
       <br />
       {championship !== null
