@@ -60,6 +60,12 @@ class Championship
      */
     private $events;
 
+    /**
+     * @ORM\Column(type="string", length=7, nullable=true)
+     * @Groups({"championship_browse"})
+     */
+    private $color;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
@@ -178,5 +184,17 @@ class Championship
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
     }
 }

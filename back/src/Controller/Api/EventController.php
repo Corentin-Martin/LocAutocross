@@ -22,8 +22,27 @@ class EventController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(EventRepository $eventRepository): JsonResponse
+    public function browse(Request $request, EventRepository $eventRepository): JsonResponse
     {
+        /** @var array */
+        $searchChampionships = $request->query->get('championship');
+        if (!is_null($searchChampionships)) {
+            $events = [];
+            foreach ($searchChampionships as $championship) {
+
+                $eventsForAChampionship = ($championship == 0) ? $eventRepository->findBy(['isOfficial' => false])
+                                                                : $eventRepository->findForAChampionship($championship);
+
+                foreach ($eventsForAChampionship as $event) {
+                    $events[] = $event;
+                }
+
+            }
+
+
+            return $this->json($events, Response::HTTP_OK, [], ["groups" => ["event_browse", "championship_browse", "category_championship_browse", "track_browse"]]);
+        }
+
         return (empty($eventRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                                     : $this->json($eventRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["event_browse", "championship_browse", "category_championship_browse", "track_browse"]]);
     }
