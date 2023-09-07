@@ -15,30 +15,27 @@ function GeneralCalendar() {
   const localizer = momentLocalizer(moment);
 
   const [events, setEvents] = useState([]);
-
   const [eventsFiltered, setEventsFiltered] = useState([]);
-
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const [selectedEvent, setSelectedEvent] = useState('');
+  const [championships, setChampionships] = useState([]);
+  const [search, setSearch] = useState([]);
   const [modalCalendar, setModalCalendar] = useState(
     useSelector((state) => state.generalCalendar.setModalCalendarIsOpen),
   );
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadChampionships, setLoadChampionships] = useState(true);
 
-  // useEffect(() => {
-  //   setModalIsOpen(false);
-  // }, [modalCalendar]);
+  const dispatch = useDispatch();
 
-  const [selectedEvent, setSelectedEvent] = useState('');
   const {
     title, description, start, end, rentals, track, championship,
   } = selectedEvent;
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/events')
       .then((response) => {
         setEvents(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -46,17 +43,16 @@ function GeneralCalendar() {
   }, []);
 
   useEffect(() => {
-    let eventsWithDate = [];
-
-    events.forEach((oneEvent) => {
-      eventsWithDate = [...eventsWithDate, {
-        ...oneEvent,
-        start: new Date(oneEvent.start),
-        end: new Date(oneEvent.end),
-      }];
-    });
-    setEventsFiltered(eventsWithDate);
-  }, [events]);
+    axios.get('http://localhost:8000/api/championships')
+      .then((response) => {
+        setChampionships(response.data);
+        setIsLoading(false);
+        setLoadChampionships(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const onSelectEvent = useCallback((calEvent) => {
     axios.get(`http://localhost:8000/api/events/${calEvent.id}`)
@@ -71,67 +67,118 @@ function GeneralCalendar() {
   }, []);
 
   const eventPropGetter = useCallback(
-    (event) => ({
-      ...(event.isOfficial && event.championship.alias === 'SEAC' && {
-        style: {
-          backgroundColor: '#79D2E6',
-        },
-      }),
-      ...(event.isOfficial && event.championship.alias === 'Ouest' && {
-        style: {
-          backgroundColor: '#F29F05',
-        },
-      }),
-      ...(!event.isOfficial && {
-        style: {
-          backgroundColor: '#FF6961',
-        },
-      }),
+    (event) => {
+      if (loadChampionships) {
+        return event;
+      }
 
-    }),
-    [],
+      const champ = (event.isOfficial)
+        ? championships.find((element) => element.id === event.championship.id) : null;
+
+      event.style = {
+        backgroundColor: (champ === null) ? '#ffcd61' : champ.color,
+      };
+
+      return event;
+    },
+    [championships],
   );
+
+  useEffect(() => {
+    let eventsWithDate = [];
+
+    events.forEach((oneEvent) => {
+      eventsWithDate = [...eventsWithDate, {
+        ...oneEvent,
+        start: new Date(oneEvent.start),
+        end: new Date(oneEvent.end),
+      }];
+    });
+    setEventsFiltered(eventsWithDate);
+  }, [events]);
+
+  useEffect(() => {
+    const query = search.map((oneSearch) => (`&championship[]=${oneSearch}`));
+
+    const queryString = query.toString().replace(',', '');
+
+    axios.get(`http://localhost:8000/api/events?${queryString}`)
+      .then((response) => {
+        setEvents(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [search]);
+
+  const handleInput = (event) => {
+    if (!search.includes(event.target.id)) {
+      setSearch([...search, event.target.id]);
+    }
+    else {
+      setSearch(search.filter((item) => item !== event.target.id));
+    }
+  };
 
   return (
 
     <div className="GeneralCalendar">
-      <div className="GeneralCalendar-Box GeneralCalendar-Ouest"><p className="">Challenge de l'Ouest</p></div>
-      <div className="GeneralCalendar-Box GeneralCalendar-Seac"><p className="">SEAC</p></div>
-      <div className="GeneralCalendar-Box GeneralCalendar-Unofficial"><p className="">Séance non-officielle</p></div>
+      {isLoading || loadChampionships ? (
+        <p>Chargement en cours...</p>
+      ) : (
+        <>
+          <div>
+            {championships.map((oneChampionship) => (
+              <div style={{ backgroundColor: oneChampionship.color }} key={oneChampionship.id} className="GeneralCalendar-Box">
+                <label htmlFor={oneChampionship.alias}>
+                  <input type="checkbox" onChange={handleInput} name={oneChampionship.alias} id={oneChampionship.id} />
+                  {oneChampionship.name}
+                </label>
+              </div>
+            ))}
+            <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Box">
+              <label htmlFor="unofficial">
+                <input type="checkbox" onChange={handleInput} name="unofficial" id="0" />
+                Séance non-officielle
+              </label>
+            </div>
 
-      <Calendar
-        localizer={localizer}
-        events={eventsFiltered}
-        startAccessor="start"
-        endAccessor="end"
-        defaultView={Views.MONTH}
-        style={{ height: '60vh', width: '80vw' }}
-        onSelectEvent={onSelectEvent}
-        eventPropGetter={eventPropGetter}
-        popup
-        views={{ month: true, week: true }}
-        messages={{
-          week: 'Semaine',
-          day: 'Jour',
-          month: 'Mois',
-          previous: 'Précédent',
-          next: 'Suivant',
-          today: 'Aujourd\'hui',
+          </div>
+          <Calendar
+            localizer={localizer}
+            events={eventsFiltered}
+            startAccessor="start"
+            endAccessor="end"
+            defaultView={Views.MONTH}
+            style={{ height: '60vh', width: '80vw' }}
+            onSelectEvent={onSelectEvent}
+            eventPropGetter={eventPropGetter}
+            popup
+            views={{ month: true, week: true }}
+            messages={{
+              week: 'Semaine',
+              day: 'Jour',
+              month: 'Mois',
+              previous: 'Précédent',
+              next: 'Suivant',
+              today: 'Aujourd\'hui',
 
-          showMore: (total) => `Voir ${total} supplémentaires`,
-        }}
-        culture="fr"
-      />
-      {modalCalendar && (
-        <Event
-          title={title}
-          description={description}
-          start={start}
-          end={end}
-          rentals={rentals}
-          track={track}
-          championship={championship}
-        />
+              showMore: (total) => `Voir ${total} supplémentaires`,
+            }}
+            culture="fr"
+          />
+          {modalCalendar && (
+          <Event
+            title={title}
+            description={description}
+            start={start}
+            end={end}
+            rentals={rentals}
+            track={track}
+            championship={championship}
+          />
+          )}
+        </>
       )}
     </div>
   );
