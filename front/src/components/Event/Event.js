@@ -5,6 +5,7 @@ import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
+import RentalList from './RentalList/RentalList';
 
 function Event({
   title, description, start, end, rentals, track, championship,
@@ -58,20 +59,10 @@ function Event({
       </>
       )}
       {rentals.length > 0 ? (
-        <>
-          <h3>Locations disponibles</h3>
-          <ul>
-            {rentals.map((rental) => (
-              <li key={rental.id}>
-                {rental.vehicle.category.map((category) => (
-                  ` ${category.name} /`
-                ))} {rental.vehicle.brand.name} - {rental.vehicle.model}.
-                Propriétaire : {rental.ownerUser.pseudo}. Tarif : {rental.price}€
-              </li>
-            ))}
+        <RentalList
+          rentals={rentals.filter((rental) => (rental.status > 0 && rental.status < 5))}
+        />
 
-          </ul>
-        </>
       ) : <h3>Pas de locations proposées pour cette épreuve</h3>}
 
     </div>
