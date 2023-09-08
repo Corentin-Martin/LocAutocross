@@ -39,6 +39,21 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
+       /**
+    * @return Event[] Returns an array of Event objects
+    */
+   public function findForAChampionship($championship): array
+   {
+       return $this->createQueryBuilder('e')
+           ->join('e.championship', 'c')
+           ->andWhere('c = :championship')
+           ->setParameter('championship', $championship)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
+
 //    /**
 //     * @return Event[] Returns an array of Event objects
 //     */

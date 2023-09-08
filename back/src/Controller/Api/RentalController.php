@@ -52,7 +52,7 @@ class RentalController extends AbstractController
 
         $rentalRepository->add($newRental, true);
 
-        return $this->json($newRental, Response::HTTP_CREATED, [], ["groups" => ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        return $this->json($newRental, Response::HTTP_CREATED, [], ["groups" => ["rental_browse", "rental_read", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
     }
 
     /**

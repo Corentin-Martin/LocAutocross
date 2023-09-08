@@ -1,0 +1,14 @@
+.Event {
+  position: absolute;
+  z-index: 99;
+  padding: 1rem;
+  border: 1px solid black;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 12px;
+
+  &-Button {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+}

@@ -53,6 +53,7 @@ security:
         - { path: ^/api/tracks,         roles: PUBLIC_ACCESS,           methods: [GET]                      }
         - { path: ^/api/tracks,         roles: ROLE_PRO,                methods: [POST]                     }
         - { path: ^/api/rentals,        roles: PUBLIC_ACCESS,           methods: [GET]                      }
+        - { path: ^/api/disciplines,    roles: PUBLIC_ACCESS,           methods: [GET]                      }
         - { path: ^/api/rentals/book,   roles: IS_AUTHENTICATED_FULLY,  methods: [PUT, PATCH]               }
         - { path: ^/api/rentals,        roles: ROLE_PRO,                methods: [POST, PUT, PATCH, DELETE] }
         - { path: ^/api/events,         roles: PUBLIC_ACCESS,           methods: [GET]                      }

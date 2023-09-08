@@ -26,13 +26,13 @@ class Event
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"event_browse"})
      */
-    private $name;
+    private $title;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Groups({"event_browse"})
      */
-    private $date;
+    private $start;
 
     /**
      * @ORM\Column(type="boolean")
@@ -52,6 +52,7 @@ class Event
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="event")
+     * @Groups({"event_read"})
      */
     private $rentals;
 
@@ -73,6 +74,24 @@ class Event
      */
     private $associatedUser;
 
+    /**
+     * @ORM\Column(type="datetime")
+     * @Groups({"event_browse"})
+     */
+    private $end;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"event_browse"})
+     */
+    private $allDay;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Groups({"event_browse"})
+     */
+    private $description;
+
     public function __construct()
     {
         $this->rentals = new ArrayCollection();
@@ -83,26 +102,26 @@ class Event
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getStart(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->start;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setStart(\DateTimeInterface $start): self
     {
-        $this->date = $date;
+        $this->start = $start;
 
         return $this;
     }
@@ -227,5 +246,46 @@ class Event
         $this->associatedUser = $associatedUser;
 
         return $this;
+    }
+
+    public function getEnd(): ?\DateTimeInterface
+    {
+        return $this->end;
+    }
+
+    public function setEnd(\DateTimeInterface $end): self
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    public function isAllDay(): ?bool
+    {
+        return $this->allDay;
+    }
+
+    public function setAllDay(bool $allDay): self
+    {
+        $this->allDay = $allDay;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
     }
 }

@@ -50,7 +50,7 @@ class Championship
     /**
      * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="championships")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"championship_browse"})
+     * @Groups({"championship_read"})
      */
     private $federation;
 
@@ -59,6 +59,12 @@ class Championship
      * @Groups({"championship_read"})
      */
     private $events;
+
+    /**
+     * @ORM\Column(type="string", length=7, nullable=true)
+     * @Groups({"championship_browse"})
+     */
+    private $color;
 
     public function __construct()
     {
@@ -178,5 +184,17 @@ class Championship
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
     }
 }
