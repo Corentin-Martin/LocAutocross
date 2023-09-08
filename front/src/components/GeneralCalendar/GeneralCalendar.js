@@ -7,6 +7,7 @@ import {
 } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import ReactSelect from 'react-select';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
 import Event from '../Event/Event';
 
@@ -63,11 +64,11 @@ function GeneralCalendar() {
       if (isLoading) {
         return event;
       }
-
       let value = null;
 
       federations.forEach((fd) => {
-        if (fd.championships.find((element) => element.id === event.championship.id)) {
+        if (event.championship !== null
+          && fd.championships.find((element) => element.id === event.championship.id)) {
           value = fd.championships.find((element) => element.id === event.championship.id);
         }
       });
@@ -104,13 +105,43 @@ function GeneralCalendar() {
       });
   }, [search]);
 
-  const handleInput = (event) => {
+  const handleInputOnReactSelect = (selectedOptions, meta) => {
+    if (meta.action === 'select-option') {
+      const table = [];
+      selectedOptions.forEach((element) => {
+        if (!search.includes(element.value)) {
+          table.push(element.value);
+        }
+      });
+      const tableFin = [...search, ...table];
+      setSearch(tableFin);
+    }
+
+    if (meta.action === 'remove-value') {
+      setSearch(search.filter((item) => item !== meta.removedValue.value));
+    }
+  };
+
+  const handleInputUnofficial = (event) => {
     if (!search.includes(event.target.value)) {
       setSearch([...search, event.target.value]);
     }
     else {
       setSearch(search.filter((item) => item !== event.target.value));
     }
+  };
+
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      borderRadius: '4px',
+      boxShadow: state.isFocused ? '0 0 3px rgba(0, 0, 0, 0.3)' : 'none',
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused ? 'grey' : state.data.color,
+      color: state.isFocused ? 'black' : 'inherit',
+    }),
   };
 
   return (
@@ -122,46 +153,54 @@ function GeneralCalendar() {
         <>
           <div className="GeneralCalendar-Head">
             {federations.map((fede) => (
-              <div key={fede.id}>
-                <h2>{fede.alias}</h2>
+              <details key={fede.id} className="GeneralCalendar-Federation">
+                <summary>{fede.alias}</summary>
                 <hr />
-                <h3>Disciplines</h3>
-                {fede.disciplines.map((discipline) => (
-                  <div key={discipline.id} className="GeneralCalendar-Box">
-                    <label htmlFor={discipline.name}>
-                      <input type="checkbox" onChange={handleInput} name={discipline.name} id={discipline.id} value={`discipline[]=${discipline.id}`} />
-                      {discipline.name}
-                    </label>
-                    {discipline.categories.map((cate) => (
-                      <div key={cate.id} className="GeneralCalendar-Box">
-                        <label htmlFor={cate.name}>
-                          <input type="checkbox" onChange={handleInput} name={cate.name} id={cate.id} value={`category[]=${cate.id}`} />
-                          {cate.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                ))}
+                <div className="GeneralCalendar-Box">
+                  <h3>Disciplines</h3>
+                  {fede.disciplines.map((discipline) => (
+                    <div key={discipline.id} className="GeneralCalendar-Box-Discipline">
+                      <h4>{discipline.name}</h4>
+                      <ReactSelect
+                        isMulti
+                        isSearchable
+                        isClearable={false}
+                        onChange={handleInputOnReactSelect}
+                        options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
+                      />
+                    </div>
+                  ))}
+                </div>
                 <hr />
-                <h4>Championnats</h4>
-                {fede.championships.map((oneChampionship) => (
-                  <div style={{ backgroundColor: oneChampionship.color }} key={oneChampionship.id} className="GeneralCalendar-Box">
-                    <label htmlFor={oneChampionship.alias}>
-                      <input type="checkbox" onChange={handleInput} name={oneChampionship.alias} id={oneChampionship.id} value={`championship[]=${oneChampionship.id}`} />
-                      {oneChampionship.name}
-                    </label>
+                <div className="GeneralCalendar-Box">
+                  <h4>Championnats</h4>
+
+                  <div className="GeneralCalendar-Box-Discipline">
+                    <ReactSelect
+                      styles={customStyles}
+                      isClearable={false}
+                      closeMenuOnSelect={false}
+                      isMulti
+                      isSearchable
+                      onChange={handleInputOnReactSelect}
+                      options={fede.championships.map((oneChampionship) => (
+                        { value: `championship[]=${oneChampionship.id}`, label: oneChampionship.name, color: oneChampionship.color }))}
+                    />
                   </div>
-                ))}
-              </div>
+                </div>
+
+              </details>
             ))}
+            <div style={{ backgroundColor: '#ffcd61', width: '30%' }} className="GeneralCalendar-Federation">
+
+              <label htmlFor="unofficial">
+                <input type="checkbox" onChange={handleInputUnofficial} name="unofficial" id="0" value="championship[]=0" />
+                Séance non-officielle
+              </label>
+
+            </div>
           </div>
 
-          <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Box">
-            <label htmlFor="unofficial">
-              <input type="checkbox" onChange={handleInput} name="unofficial" id="0" value="championship[]=0" />
-              Séance non-officielle
-            </label>
-          </div>
           <Calendar
             localizer={localizer}
             events={events}

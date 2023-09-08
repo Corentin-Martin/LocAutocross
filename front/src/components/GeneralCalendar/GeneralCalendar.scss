@@ -6,21 +6,32 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  &-Box {
-    display: block;
-    min-width: 15rem;
-    margin: 0.2em;
-    padding: .2rem;
-    border-radius: 5px 5px;
+  
+  &-Head{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  &-Head{
-    width: 75%;
+  &-Federation{
+    width: 100%;
+
+  }
+
+  &-Box {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+
+
+    &-Discipline {
+      width: 45%;
+    }
   }
 
 }
+
