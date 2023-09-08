@@ -2,6 +2,8 @@ import './Event.scss';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import moment from 'moment/moment';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
 
 function Event({
@@ -9,9 +11,19 @@ function Event({
 }) {
   const dispatch = useDispatch();
   const closeModal = () => {
-    console.log('ou');
     dispatch(setModalCalendarIsOpen(false));
   };
+  const [federation, setFederation] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/api/championships/${championship.id}`)
+      .then((response) => {
+        setFederation(response.data.federation);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [championship]);
 
   return (
     <div className="Event" style={{ backgroundColor: (championship !== null) ? championship.color : '#ffcd61' }}>
@@ -40,7 +52,7 @@ function Event({
         <ul>
           <li>Nom : {championship.name}</li>
           <li> Diminutif : {championship.alias}</li>
-          <li> Fédération : {championship.federation.alias}</li>
+          <li> Fédération : {federation.alias}</li>
         </ul>
         <br />
       </>

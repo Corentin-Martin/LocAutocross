@@ -15,33 +15,19 @@ function GeneralCalendar() {
   const localizer = momentLocalizer(moment);
 
   const [events, setEvents] = useState([]);
-  const [eventsFiltered, setEventsFiltered] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [championships, setChampionships] = useState([]);
   const [search, setSearch] = useState([]);
   const eventModal = useSelector((state) => state.generalCalendar.modalCalendarIsOpen);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadChampionships, setLoadChampionships] = useState(true);
+  const [federations, setFederations] = useState([]);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/events')
+    axios.get('http://localhost:8000/api/federations')
       .then((response) => {
-        setEvents(response.data);
+        setFederations(response.data);
         setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/api/championships')
-      .then((response) => {
-        setChampionships(response.data);
-        setIsLoading(false);
-        setLoadChampionships(false);
       })
       .catch((error) => {
         console.log(error);
@@ -49,18 +35,21 @@ function GeneralCalendar() {
   }, []);
 
   const onSelectEvent = useCallback((calEvent) => {
-    axios.get(`http://localhost:8000/api/events/${calEvent.id}`)
-      .then((response) => {
-        const newEvent = {
-          ...response.data,
-          start: new Date(response.data.start),
-          end: new Date(response.data.end),
-        };
-        setSelectedEvent(newEvent);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (calEvent && calEvent.id) {
+      axios.get(`http://localhost:8000/api/events/${calEvent.id}`)
+        .then((response) => {
+          const newEvent = {
+            ...response.data,
+            start: new Date(response.data.start),
+            end: new Date(response.data.end),
+          };
+          setSelectedEvent(newEvent);
+          console.log(newEvent);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -71,12 +60,19 @@ function GeneralCalendar() {
 
   const eventPropGetter = useCallback(
     (event) => {
-      if (loadChampionships) {
+      if (isLoading) {
         return event;
       }
 
-      const champ = (event.isOfficial)
-        ? championships.find((element) => element.id === event.championship.id) : null;
+      let value = null;
+
+      federations.forEach((fd) => {
+        if (fd.championships.find((element) => element.id === event.championship.id)) {
+          value = fd.championships.find((element) => element.id === event.championship.id);
+        }
+      });
+
+      const champ = (event.isOfficial) ? value : null;
 
       event.style = {
         backgroundColor: (champ === null) ? '#ffcd61' : champ.color,
@@ -84,30 +80,24 @@ function GeneralCalendar() {
 
       return event;
     },
-    [championships],
+    [federations],
   );
 
   useEffect(() => {
-    let eventsWithDate = [];
-
-    events.forEach((oneEvent) => {
-      eventsWithDate = [...eventsWithDate, {
-        ...oneEvent,
-        start: new Date(oneEvent.start),
-        end: new Date(oneEvent.end),
-      }];
-    });
-    setEventsFiltered(eventsWithDate);
-  }, [events]);
-
-  useEffect(() => {
-    const query = search.map((oneSearch) => (`&championship[]=${oneSearch}`));
-
-    const queryString = query.toString().replace(',', '');
+    const queryString = search.join('&');
 
     axios.get(`http://localhost:8000/api/events?${queryString}`)
       .then((response) => {
-        setEvents(response.data);
+        let eventsWithDate = [];
+
+        response.data.forEach((oneEvent) => {
+          eventsWithDate = [...eventsWithDate, {
+            ...oneEvent,
+            start: new Date(oneEvent.start),
+            end: new Date(oneEvent.end),
+          }];
+        });
+        setEvents(eventsWithDate);
       })
       .catch((error) => {
         console.log(error);
@@ -115,41 +105,66 @@ function GeneralCalendar() {
   }, [search]);
 
   const handleInput = (event) => {
-    if (!search.includes(event.target.id)) {
-      setSearch([...search, event.target.id]);
+    if (!search.includes(event.target.value)) {
+      setSearch([...search, event.target.value]);
     }
     else {
-      setSearch(search.filter((item) => item !== event.target.id));
+      setSearch(search.filter((item) => item !== event.target.value));
     }
   };
 
   return (
 
     <div className="GeneralCalendar">
-      {isLoading || loadChampionships ? (
+      {isLoading ? (
         <p>Chargement en cours...</p>
       ) : (
         <>
-          <div>
-            {championships.map((oneChampionship) => (
-              <div style={{ backgroundColor: oneChampionship.color }} key={oneChampionship.id} className="GeneralCalendar-Box">
-                <label htmlFor={oneChampionship.alias}>
-                  <input type="checkbox" onChange={handleInput} name={oneChampionship.alias} id={oneChampionship.id} />
-                  {oneChampionship.name}
-                </label>
+          <div className="GeneralCalendar-Head">
+            {federations.map((fede) => (
+              <div key={fede.id}>
+                <h2>{fede.alias}</h2>
+                <hr />
+                <h3>Disciplines</h3>
+                {fede.disciplines.map((discipline) => (
+                  <div key={discipline.id} className="GeneralCalendar-Box">
+                    <label htmlFor={discipline.name}>
+                      <input type="checkbox" onChange={handleInput} name={discipline.name} id={discipline.id} value={`discipline[]=${discipline.id}`} />
+                      {discipline.name}
+                    </label>
+                    {discipline.categories.map((cate) => (
+                      <div key={cate.id} className="GeneralCalendar-Box">
+                        <label htmlFor={cate.name}>
+                          <input type="checkbox" onChange={handleInput} name={cate.name} id={cate.id} value={`category[]=${cate.id}`} />
+                          {cate.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                <hr />
+                <h4>Championnats</h4>
+                {fede.championships.map((oneChampionship) => (
+                  <div style={{ backgroundColor: oneChampionship.color }} key={oneChampionship.id} className="GeneralCalendar-Box">
+                    <label htmlFor={oneChampionship.alias}>
+                      <input type="checkbox" onChange={handleInput} name={oneChampionship.alias} id={oneChampionship.id} value={`championship[]=${oneChampionship.id}`} />
+                      {oneChampionship.name}
+                    </label>
+                  </div>
+                ))}
               </div>
             ))}
-            <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Box">
-              <label htmlFor="unofficial">
-                <input type="checkbox" onChange={handleInput} name="unofficial" id="0" />
-                Séance non-officielle
-              </label>
-            </div>
+          </div>
 
+          <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Box">
+            <label htmlFor="unofficial">
+              <input type="checkbox" onChange={handleInput} name="unofficial" id="0" value="championship[]=0" />
+              Séance non-officielle
+            </label>
           </div>
           <Calendar
             localizer={localizer}
-            events={eventsFiltered}
+            events={events}
             startAccessor="start"
             endAccessor="end"
             defaultView={Views.MONTH}
