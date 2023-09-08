@@ -26,8 +26,8 @@ class EventController extends AbstractController
     {
         /** @var array */
         $searchChampionships = $request->query->get('championship');
+        $events = [];
         if (!is_null($searchChampionships)) {
-            $events = [];
             foreach ($searchChampionships as $championship) {
 
                 $eventsForAChampionship = ($championship == 0) ? $eventRepository->findBy(['isOfficial' => false])
@@ -38,9 +38,61 @@ class EventController extends AbstractController
                 }
 
             }
+        }
 
+        /** @var array */
+        $searchCategories = $request->query->get('category');
+        $eventsForCategory = [];
+        if (!is_null($searchCategories)) {
+            foreach ($searchCategories as $cat) {
+                
+                foreach ($eventRepository->findAll() as $event) {
+                    $haveAtLeastARental = false;
+                    $rentals = $event->getRentals();
 
-            return $this->json($events, Response::HTTP_OK, [], ["groups" => ["event_browse", "championship_browse", "category_championship_browse", "track_browse"]]);
+                    if (!is_null(($rentals))) {
+
+                        foreach ($rentals as $rental) {
+                            
+                            if ($rental->getStatus() > 0 && $rental->getStatus() < 4) {
+                                $vehicle = $rental->getVehicle();
+                                $categories = $vehicle->getCategory();
+                                
+                                
+                                foreach ($categories as $category) {
+
+                                    if ($category->getId() == $cat) {
+                                        if (empty($events)) {
+                                            $eventsForCategory[] = $event;
+                                        } else {
+                                            if (in_array($event, $events)) {
+                                                $eventsForCategory[] = $event;
+                                            }
+                                        }
+                                        $haveAtLeastARental = true;
+                                    } 
+                                }
+                            }
+                        }
+                    }
+
+                    if (!$haveAtLeastARental && !is_null($events)) {
+
+                        if (in_array($event, $events)) {
+                            unset($events[array_search($event, $events)]);
+                        }
+                    }
+                }
+
+            }
+     
+        }
+
+        if (!is_null($searchChampionships) || !is_null($searchCategories)) {
+            
+            $reunitedEvents = array_merge($events, $eventsForCategory);
+            $finalEvents = array_unique($reunitedEvents);
+            return $this->json($finalEvents, Response::HTTP_OK, [], ["groups" => ["event_browse", "championship_browse", "category_championship_browse", "track_browse"]]);
         }
 
         return (empty($eventRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
