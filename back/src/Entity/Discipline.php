@@ -38,7 +38,8 @@ class Discipline
 
     /**
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="discipline")
-     * @Groups({"discipline_read"}
+     * @Groups({"discipline_read"})
+     * @Groups({"federation_browse"})
      */
     private $categories;
 

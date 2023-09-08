@@ -50,7 +50,7 @@ class Championship
     /**
      * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="championships")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"championship_browse"})
+     * @Groups({"championship_read"})
      */
     private $federation;
 

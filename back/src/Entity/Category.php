@@ -19,7 +19,7 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"category_browse"})
-     * @Groups({"federation_read"})
+     * @Groups({"federation_browse"})
      * @Groups({"rental_found"})
      */
     private $id;
@@ -27,7 +27,7 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"category_browse"})
-     * @Groups({"federation_read"})
+     * @Groups({"federation_browse"})
      * @Groups({"rental_found"})
      */
     private $name;

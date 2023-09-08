@@ -49,13 +49,13 @@ class Federation
 
     /**
      * @ORM\OneToMany(targetEntity=Championship::class, mappedBy="federation")
-     * @Groups({"federation_read"})
+     * @Groups({"federation_browse"})
      */
     private $championships;
 
     /**
      * @ORM\OneToMany(targetEntity=Discipline::class, mappedBy="federation")
-     * @Groups({"federation_read"})
+     * @Groups({"federation_browse"})
      */
     private $disciplines;
 
