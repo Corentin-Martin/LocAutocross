@@ -17,13 +17,15 @@ function Event({
   const [federation, setFederation] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/championships/${championship.id}`)
-      .then((response) => {
-        setFederation(response.data.federation);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (championship !== null) {
+      axios.get(`http://localhost:8000/api/championships/${championship.id}`)
+        .then((response) => {
+          setFederation(response.data.federation);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [championship]);
 
   return (
