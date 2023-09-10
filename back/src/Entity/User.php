@@ -24,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      * @Groups({"user_browse"})
      * @Groups({"event_find"})
+     * @Groups({"rental_found"})
      */
     private $id;
 
@@ -31,6 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user_browse"})
      * @Groups({"event_find"})
+     * @Groups({"rental_found"})
      */
     private $email;
 
@@ -50,6 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
      * @Groups({"event_find"})
+     * @Groups({"rental_found"})
      */
     private $pseudo;
 
@@ -57,6 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
      * @Groups({"event_find"})
+     * @Groups({"rental_found"})
      */
     private $firstname;
 
@@ -64,6 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
      * @Groups({"event_find"})
+     * @Groups({"rental_found"})
      */
     private $lastname;
 

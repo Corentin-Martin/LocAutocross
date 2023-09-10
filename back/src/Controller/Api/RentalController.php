@@ -33,7 +33,7 @@ class RentalController extends AbstractController
     public function read(?Rental $rental): JsonResponse
     {
         return (is_null($rental)) ? $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($rental, Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+                                        : $this->json($rental, Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "rental_found", "event_browse"]]);
     }
 
     /**

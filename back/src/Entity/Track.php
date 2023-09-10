@@ -19,30 +19,35 @@ class Track
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"track_browse"})
+     * @Groups({"rental_found"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"track_browse"})
+     * @Groups({"rental_found"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"track_browse"})
+     * @Groups({"rental_found"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"track_read"})
+     * @Groups({"rental_found"})
      */
     private $department;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"track_read"})
+     * @Groups({"rental_found"})
      */
     private $postCode;
 

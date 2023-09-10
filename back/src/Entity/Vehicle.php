@@ -19,36 +19,42 @@ class Vehicle
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"vehicle_browse"})
+     * @Groups({"rental_found"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="date")
      * @Groups({"vehicle_browse"})
+     * @Groups({"rental_found"})
      */
     private $year;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"vehicle_read"})
+     * @Groups({"rental_found"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"vehicle_read"})
+     * @Groups({"rental_found"})
      */
     private $engine;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"vehicle_read"})
+     * @Groups({"rental_found"})
      */
     private $shocks;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"vehicle_browse"})
+     * @Groups({"rental_found"})
      */
     private $picture;
 
@@ -77,18 +83,21 @@ class Vehicle
      * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="vehicles")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"vehicle_browse"})
+     * @Groups({"rental_found"})
      */
     private $brand;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="vehicles")
      * @Groups({"vehicle_browse"})
+     * @Groups({"rental_found"})
      */
     private $category;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"vehicle_browse"})
+     * @Groups({"rental_found"})
      */
     private $model;
 

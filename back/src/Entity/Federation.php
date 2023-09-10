@@ -20,6 +20,7 @@ class Federation
      * @ORM\Column(type="integer")
      * @Groups({"federation_browse"})
      * @Groups({"category_championship_browse"})
+     * @Groups({"rental_found"})
      */
     private $id;
 
@@ -27,6 +28,7 @@ class Federation
      * @ORM\Column(type="string", length=255)
      * @Groups({"federation_browse"})
      * @Groups({"category_championship_browse"})
+     * @Groups({"rental_found"})
      */
     private $name;
 
@@ -34,6 +36,7 @@ class Federation
      * @ORM\Column(type="string", length=20)
      * @Groups({"federation_browse"})
      * @Groups({"category_championship_browse"})
+     * @Groups({"rental_found"})
      */
     private $alias;
 
