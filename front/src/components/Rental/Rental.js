@@ -31,9 +31,7 @@ function Rental() {
   return (
     <div className="Rental">
       {isLoading ? <p>Chargement...</p> : (
-        <>
-          {rental.id} {statusMatching[rental.status]}
-        </>
+        <h1 className="test">{rental.id} {statusMatching[rental.status]}</h1>
       )}
     </div>
   );
