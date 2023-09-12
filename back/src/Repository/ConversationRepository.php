@@ -39,6 +39,20 @@ class ConversationRepository extends ServiceEntityRepository
         }
     }
 
+   /**
+    * @return Conversation[] Returns an array of Conversation objects
+    */
+   public function findByOwnerUser($user): array
+   {
+       return $this->createQueryBuilder('c')
+           ->join('c.rental', 'r')
+           ->andWhere('r.ownerUser = :user')
+           ->setParameter('user', $user)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Conversation[] Returns an array of Conversation objects
 //     */
