@@ -42,12 +42,14 @@ class ConversationRepository extends ServiceEntityRepository
    /**
     * @return Conversation[] Returns an array of Conversation objects
     */
-   public function findByOwnerUser($user): array
+   public function findByOwnerUser($user, $bool): array
    {
        return $this->createQueryBuilder('c')
            ->join('c.rental', 'r')
            ->andWhere('r.ownerUser = :user')
+           ->andWhere('c.isReadByOwnerUser = :bool')
            ->setParameter('user', $user)
+           ->setParameter(':bool', $bool)
            ->getQuery()
            ->getResult()
        ;

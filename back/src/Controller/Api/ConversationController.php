@@ -26,15 +26,22 @@ class ConversationController extends AbstractController
     public function browse(ConversationRepository $conversationRepository): JsonResponse
     {
 
-        $conversationsWhereUserAsks = $conversationRepository->findBy(['interestedUser' => $this->getUser()]);
+        $conversationsWhereUserAsksAndDoesNotRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => false]);
+        $conversationsWhereUserAsksAndRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => true]);
 
-        $conversationsWhereUserIsOwner = $conversationRepository->findByOwnerUser($this->getUser());
+        $conversationsWhereUserIsOwnerAndDoesNotRead = $conversationRepository->findByOwnerUser($this->getUser(), false);
+        $conversationsWhereUserIsOwnerAndRead = $conversationRepository->findByOwnerUser($this->getUser(), true);
 
-        $conversations = array_merge($conversationsWhereUserAsks, $conversationsWhereUserIsOwner);
-        $conversationsWithoutDouble = array_unique($conversations);
+        $conversations = [];
 
-        return (empty($conversationsWithoutDouble))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                        : $this->json($conversationsWithoutDouble, Response::HTTP_OK, [], ["groups" => ["conversation_browse", "rental_browse", "user_browse", "message_read"]]);
+        $unread =  array_merge($conversationsWhereUserAsksAndDoesNotRead, $conversationsWhereUserIsOwnerAndDoesNotRead);
+        $conversations['unread'] = array_unique($unread);
+
+        $read = array_merge($conversationsWhereUserAsksAndRead, $conversationsWhereUserIsOwnerAndRead);
+        $conversations['read'] = array_unique($read);
+
+        return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation_browse", "rental_browse", "user_browse", "message_read"]]);
     }
 
     /**
@@ -46,7 +53,7 @@ class ConversationController extends AbstractController
         {
             return $this->json(["message" => "Cet conversation n'existe pas"], Response::HTTP_NOT_FOUND, []);
         }
-        
+
         if($conversation->getInterestedUser() !== $this->getUser() && $conversation->getRental()->getOwnerUser() !== $this->getUser())
         {
             return $this->json(["message" => "Accès interdit à cette conversation"], Response::HTTP_UNAUTHORIZED, []);
