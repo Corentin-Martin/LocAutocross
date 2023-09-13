@@ -52,6 +52,16 @@ class Conversation
      */
     private $messages;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isReadByInterestedUser;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isReadByOwnerUser;
+
 
 
     public function __construct()
@@ -165,6 +175,30 @@ class Conversation
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function isIsReadByInterestedUser(): ?bool
+    {
+        return $this->isReadByInterestedUser;
+    }
+
+    public function setIsReadByInterestedUser(bool $isReadByInterestedUser): self
+    {
+        $this->isReadByInterestedUser = $isReadByInterestedUser;
+
+        return $this;
+    }
+
+    public function isIsReadByOwnerUser(): ?bool
+    {
+        return $this->isReadByOwnerUser;
+    }
+
+    public function setIsReadByOwnerUser(bool $isReadByOwnerUser): self
+    {
+        $this->isReadByOwnerUser = $isReadByOwnerUser;
+
+        return $this;
     }
 
 
