@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './Dashboard.scss';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [conversations, setConversations] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/conversations', {
@@ -31,7 +34,12 @@ function Dashboard() {
               <ul>
 
                 {conversations.unread.map((conv) => (
-                  <li key={conv.id}>Entre {`${conv.rental.ownerUser.pseudo} `}
+                  <li
+                    onClick={() => {
+                      navigate(`/conversation/${conv.id}`);
+                    }}
+                    key={conv.id}
+                  >Entre {`${conv.rental.ownerUser.pseudo} `}
                     et {conv.interestedUser.pseudo}
                   </li>
                 ))}
