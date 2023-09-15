@@ -20,6 +20,7 @@ class Championship
      * @ORM\Column(type="integer")
      * @Groups({"championship_browse"})
      * @Groups({"federation_read"})
+     * @Groups({"rental_found"})
      */
     private $id;
 
@@ -27,6 +28,7 @@ class Championship
      * @ORM\Column(type="string", length=255)
      * @Groups({"championship_browse"})
      * @Groups({"federation_read"})
+     * @Groups({"rental_found"})
      */
     private $name;
 
@@ -34,6 +36,7 @@ class Championship
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"championship_browse"})
      * @Groups({"federation_read"})
+     * @Groups({"rental_found"})
      */
     private $alias;
 
@@ -51,6 +54,7 @@ class Championship
      * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="championships")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"championship_read"})
+     * @Groups({"rental_found"})
      */
     private $federation;
 

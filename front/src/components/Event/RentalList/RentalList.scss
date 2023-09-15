@@ -1,0 +1,10 @@
+.RentalList {
+
+  &-Li {
+    cursor: pointer;
+  }
+
+  &-Li:hover {
+    color: red;
+  }
+}
