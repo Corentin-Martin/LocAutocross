@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import './Chat.scss';
 
@@ -10,7 +10,9 @@ function Chat() {
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState('');
 
-  useEffect(() => {
+  const navigate = useNavigate();
+
+  const getMessages = () => {
     axios.get(`http://localhost:8000/api/conversations/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -23,11 +25,22 @@ function Chat() {
       .catch((err) => {
         console.error(err);
       });
-  }, [isLoading]);
+  };
+
+  useEffect(
+    () => {
+      getMessages();
+      const intervalMessages = setInterval(getMessages, 2500);
+
+      return () => {
+        clearInterval(intervalMessages);
+      };
+    },
+    [],
+  );
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setIsLoading(true);
     axios.post(
       `http://localhost:8000/api/messages/${id}`,
       {
@@ -42,7 +55,6 @@ function Chat() {
     )
       .then(() => {
         setContent('');
-        setIsLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -55,9 +67,8 @@ function Chat() {
         : (
           <>
             {conversation.messages.map((message) => (
-              <div key={message.id}>
-                <p>Auteur : {message.user.pseudo}</p>
-                <p>Date : {moment(message.createdAt).format('DD/MM/YYYY HH:mm:ss')}</p>
+              <div className="Chat-Message" key={message.id}>
+                <p>De : {message.user.pseudo} - Le : {moment(message.createdAt).format('DD/MM/YYYY HH:mm:ss')}</p>
                 <p>Message : {message.content}</p>
               </div>
             ))}
@@ -75,6 +86,13 @@ function Chat() {
         />
         <button type="submit">Envoyer votre message</button>
       </form>
+      <button
+        type="button"
+        onClick={() => {
+          navigate('/');
+        }}
+      >Go
+      </button>
     </div>
 
   );

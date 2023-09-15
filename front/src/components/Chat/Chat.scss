@@ -1,0 +1,13 @@
+.Chat {
+  
+  &-Message {
+    background-color: grey;
+    min-width: 20%;
+    max-width: 30%;
+    text-align: center;
+    margin: 0.5rem 0;
+    padding: .2rem;
+    border-radius: 5px 5px 5px;
+    box-shadow: 5px 5px 5px black;
+  }
+}
