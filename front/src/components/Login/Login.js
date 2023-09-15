@@ -3,10 +3,14 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.scss';
+import { useDispatch } from 'react-redux';
+import { setUserConnected } from '../../actions/user';
 
 function Login() {
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -18,6 +22,7 @@ function Login() {
     })
       .then((res) => {
         localStorage.setItem('token', res.data.token);
+        dispatch(setUserConnected(true));
         navigate('/dashboard');
       })
       .catch((err) => {

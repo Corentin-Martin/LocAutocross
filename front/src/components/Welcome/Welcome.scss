@@ -1,0 +1,6 @@
+
+@use 'src/styles/vars';
+
+.card-body {
+  box-shadow: 5px 5px 7px vars.$tertiary;
+}

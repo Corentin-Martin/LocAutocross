@@ -1,14 +1,23 @@
 @use 'reset';
 @use 'vars';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+$body-bg: vars.$background;
+$body-color: vars.$text;
+
+$theme-colors: (
+  'primary': vars.$primary,
+  'secondary': vars.$secondary,
+  'tertiary': vars.$tertiary,
+  'danger': #e90606,
+  );
 
 body {
   font-family: sans-serif;
+  // background-color: vars.$background;
 
 }
+
+@import '~bootstrap/scss/bootstrap';
 
 /* 
   // or you can import your own font

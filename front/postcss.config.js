@@ -5,8 +5,5 @@ module.exports = {
     },
     'postcss-import': {},
     cssnano: {},
-    tailwindcss: {},
-    autoprefixer: {},
-    'tailwindcss/nesting': {},
   },
 }

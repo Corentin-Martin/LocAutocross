@@ -1,0 +1,62 @@
+@use 'src/styles/vars';
+@import url(https://fonts.bunny.net/css?family=racing-sans-one:400);
+
+.Header {
+
+  &-Title {
+    color : vars.$primary;
+    font-weight: bold;
+    font-size: 1.8rem;
+    font-family: 'Racing Sans One', display;
+  }
+
+  &-Ul {
+    color: vars.$primary;
+  }
+}
+
+.nav-link {
+  border-radius: 4px;
+  background: linear-gradient(145deg, #d0d4d7, #f7fdff);
+  box-shadow:  7px 7px 14px #cbd0d2,
+               -7px -7px 14px #ffffff;
+  margin: 0.5rem;
+  padding: .6rem;
+  width: calc(100%/6);
+}
+
+@media screen and (min-width: 768px) {
+  .Header-Title {
+    font-size: 3rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .Header-Title {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .Header-Title {
+    font-size: 3.5rem;
+  }
+}
+
+.hideMenuNav {
+  display: none;
+}
+.showMenuNav {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: white;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
