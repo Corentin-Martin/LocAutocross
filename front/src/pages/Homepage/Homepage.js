@@ -34,7 +34,7 @@ function Homepage() {
           <Card.Body className="bg-tertiary">
             <Stack direction="horizontal">
 
-              <h2>Les 4 dernières mises en location</h2>
+              <h2>Les nouveautés</h2>
               <Button variant="primary" className="p-2 ms-auto">
                 En voir plus
               </Button>

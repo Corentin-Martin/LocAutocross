@@ -1,0 +1,10 @@
+@use 'src/styles/vars';
+
+.Footer {
+  border-top: 1px solid vars.$text;
+  color: vars.$text;
+
+  a{
+    color: vars.$text;
+}
+}

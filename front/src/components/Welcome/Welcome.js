@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 function Welcome() {
   return (
 
-    <Card className="mb-3">
+    <Card className="mb-3 Welcome">
       <Card.Body className="bg-secondary">
         <Card.Text>Bienvenue sur Loc'Autocross !</Card.Text>
         <Card.Text>Vous êtes pilote ou vous souhaitez le devenir ? Vous cherchez
