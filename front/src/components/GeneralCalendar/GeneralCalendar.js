@@ -8,10 +8,9 @@ import {
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactSelect from 'react-select';
-import Spinner from 'react-bootstrap/Spinner';
-import { Container, Row, Col } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import {
+  Container, Row, Col, Alert, Button, Offcanvas, Spinner,
+} from 'react-bootstrap';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
 import Event from '../Event/Event';
 
@@ -25,6 +24,7 @@ function GeneralCalendar() {
   const eventModal = useSelector((state) => state.generalCalendar.modalCalendarIsOpen);
   const [isLoading, setIsLoading] = useState(true);
   const [federations, setFederations] = useState([]);
+  const [noEvents, setNoEvents] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -49,7 +49,6 @@ function GeneralCalendar() {
             end: new Date(response.data.end),
           };
           setSelectedEvent(newEvent);
-          console.log(newEvent);
         })
         .catch((error) => {
           console.log(error);
@@ -103,6 +102,11 @@ function GeneralCalendar() {
           }];
         });
         setEvents(eventsWithDate);
+        setNoEvents(false);
+
+        if (response.data.length === 0) {
+          setNoEvents(true);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -151,12 +155,18 @@ function GeneralCalendar() {
   const [showFFSA, setShowFFSA] = useState(false);
 
   const handleCloseFFSA = () => setShowFFSA(false);
-  const handleShowFFSA = () => setShowFFSA(true);
+  const handleShowFFSA = () => {
+    setShowFFSA(true);
+    setSearch([]);
+  };
 
   const [showUFOLEP, setShowUFOLEP] = useState(false);
 
   const handleCloseUFOLEP = () => setShowUFOLEP(false);
-  const handleShowUFOLEP = () => setShowUFOLEP(true);
+  const handleShowUFOLEP = () => {
+    setShowUFOLEP(true);
+    setSearch([]);
+  };
 
   return (
 
@@ -169,70 +179,79 @@ function GeneralCalendar() {
 
         <Container fluid>
 
-          <Row>
+          <Row className="mb-3">
             {federations.map((fede) => (
               <Col size={6} key={fede.id}>
                 <Button variant="primary" className="col-8" onClick={fede.alias === 'FFSA' ? handleShowFFSA : handleShowUFOLEP}>
-                  {fede.alias}
+                  {'>'} {fede.alias}
                 </Button>
 
                 <Offcanvas
                   show={fede.alias === 'FFSA' ? showFFSA : showUFOLEP}
                   onHide={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}
                   placement={fede.alias === 'FFSA' ? 'start' : 'end'}
+                  scroll
                 >
                   <Offcanvas.Header closeButton>
                     <Offcanvas.Title>{fede.alias}</Offcanvas.Title>
                   </Offcanvas.Header>
                   <Offcanvas.Body>
-                    <div className="GeneralCalendar-Box">
-                      {fede.disciplines.map((discipline) => (
-                        <div key={discipline.id} className="GeneralCalendar-Box-Discipline">
-                          <h4>{discipline.name}</h4>
-                          <ReactSelect
-                            placeholder="Sélectionnez..."
-                            isMulti
-                            isSearchable
-                            isClearable={false}
-                            onChange={handleInputOnReactSelect}
-                            options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
-                          />
-                        </div>
-
-                      ))}
-                    </div>
-                    <hr />
-                    <div className="GeneralCalendar-Box">
-                      <h4>Championnats</h4>
-
-                      <div className="GeneralCalendar-Box-Discipline">
+                    {fede.disciplines.map((discipline) => (
+                      <div key={discipline.id} className="GeneralCalendar-Discipline">
+                        <h4>{discipline.name}</h4>
                         <ReactSelect
-                          styles={customStyles}
-                          isClearable={false}
-                          closeMenuOnSelect={false}
+                          placeholder="Sélectionnez..."
                           isMulti
                           isSearchable
+                          isClearable={false}
                           onChange={handleInputOnReactSelect}
-                          options={fede.championships.map((oneChampionship) => (
-                            { value: `championship[]=${oneChampionship.id}`, label: oneChampionship.name, color: oneChampionship.color }))}
+                          options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
                         />
                       </div>
+                    ))}
+                    <hr />
+                    <div className="GeneralCalendar-Discipline">
+                      <h4>Championnat</h4>
+                      <ReactSelect
+                        styles={customStyles}
+                        isClearable={false}
+                        closeMenuOnSelect={false}
+                        isMulti
+                        isSearchable
+                        onChange={handleInputOnReactSelect}
+                        options={fede.championships.map((oneChampionship) => (
+                          { value: `championship[]=${oneChampionship.id}`, label: oneChampionship.name, color: oneChampionship.color }))}
+                      />
                     </div>
+                    <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Unofficial">
+
+                      <label htmlFor="unofficial">
+                        <input type="checkbox" onChange={handleInputUnofficial} name="unofficial" id="unofficial" value="championship[]=0" />
+                        Séances non-officielles
+                      </label>
+
+                    </div>
+                    <hr />
+                    <Button type="button" className="col-12" onClick={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}>Valider mes choix</Button>
                   </Offcanvas.Body>
                 </Offcanvas>
-
               </Col>
             ))}
           </Row>
+          <Row className="mb-3">
+            <Col size={8}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setSearch([]);
+                }}
+              >Réinitialiser les filtres
+              </Button>
+            </Col>
+          </Row>
 
-          <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Federation">
-
-            <label htmlFor="unofficial">
-              <input type="checkbox" onChange={handleInputUnofficial} name="unofficial" id="0" value="championship[]=0" />
-              Séance non-officielle
-            </label>
-
-          </div>
+          {noEvents && <Alert variant="danger">Aucun événement ne correspond à votre recherche</Alert>}
 
           <Calendar
             localizer={localizer}
