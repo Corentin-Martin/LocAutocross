@@ -1,0 +1,29 @@
+@use 'src/styles/vars';
+@import url(https://fonts.bunny.net/css?family=racing-sans-one:400);
+
+.Header {
+
+  border-bottom: 1px solid vars.$text;
+
+  &-Title {
+    color : vars.$primary;
+    font-weight: bold;
+    font-size: 1.8rem;
+    font-family: 'Racing Sans One', display;
+  }
+
+  @media screen and (min-width: 768px) {
+    &-Title {
+      font-size: 3rem;
+    }
+  }
+  
+  @media screen and (min-width: 1440px) {
+    &-Title {
+      font-size: 3.5rem;
+    }
+  }
+}
+
+
+

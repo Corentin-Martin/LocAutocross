@@ -21,10 +21,14 @@ class RentalController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(RentalRepository $rentalRepository): JsonResponse
+    public function browse(Request $request, RentalRepository $rentalRepository): JsonResponse
     {
+        if (!is_null($request->query->get('last'))) {
+            $rentals = $rentalRepository->findBy([],['createdAt' => 'DESC'],5);
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "rental_found", "event_browse"]]);
+        }
         return (empty($rentalRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rental_browse", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "rental_found", "event_browse"]]);
     }
 
     /**

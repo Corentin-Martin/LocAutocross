@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactSelect from 'react-select';
+import Spinner from 'react-bootstrap/Spinner';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
 import Event from '../Event/Event';
 
@@ -148,7 +149,9 @@ function GeneralCalendar() {
 
     <div className="GeneralCalendar">
       {isLoading ? (
-        <p>Chargement en cours...</p>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </Spinner>
       ) : (
         <>
           <div className="GeneralCalendar-Head">

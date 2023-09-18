@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './Dashboard.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [conversations, setConversations] = useState('');
@@ -49,6 +49,7 @@ function Dashboard() {
             <p>{conversations.unread.length + conversations.read.length} conversation{conversations.unread.length + conversations.read.length > 1 ? 's' : ''} au total</p>
           </>
         )}
+      <Link to="/">Ici</Link>
     </div>
   );
 }
