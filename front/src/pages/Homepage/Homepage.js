@@ -1,11 +1,11 @@
 import {
-  Card, Spinner, Stack, Button,
+  Card, Spinner, Stack, Button, Row, Col,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Welcome from '../../components/Welcome/Welcome';
 import './Homepage.scss';
+import RentalExtract from '../../components/RentalExtract/RentalExtract';
 
 function Homepage() {
   const [newRentals, setNewRentals] = useState('');
@@ -30,23 +30,22 @@ function Homepage() {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-
         <Card>
           <Card.Body className="bg-tertiary">
             <Stack direction="horizontal">
 
-              <h2>Les 5 dernières mises en location</h2>
-              <Button variant="outline-primary" className="p-2 ms-auto">
-                <Link to="">
-                  En voir plus
-                  {' '}
-
-                </Link>
+              <h2>Les 4 dernières mises en location</h2>
+              <Button variant="primary" className="p-2 ms-auto">
+                En voir plus
               </Button>
             </Stack>
-            <ul>
-              {newRentals.map((rental) => (<li key={rental.id}>{rental.ownerUser.pseudo}</li>))}
-            </ul>
+            <Row>
+              {newRentals.map((rental) => (
+                <Col key={rental.id} xs={12} md={6} lg={3} className="mb-2">
+                  <RentalExtract rental={rental} />
+                </Col>
+              ))}
+            </Row>
           </Card.Body>
         </Card>
       )}

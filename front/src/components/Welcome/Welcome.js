@@ -4,8 +4,22 @@ import Card from 'react-bootstrap/Card';
 function Welcome() {
   return (
 
-    <Card>
-      <Card.Body className="bg-secondary">Bienvenue sur Loc'Autocross, le site qui va vous aider à trouver la location des vos rêves !</Card.Body>
+    <Card className="mb-3">
+      <Card.Body className="bg-secondary">
+        <Card.Text>Bienvenue sur Loc'Autocross !</Card.Text>
+        <Card.Text>Vous êtes pilote ou vous souhaitez le devenir ? Vous cherchez
+          un véhicule pour une course ou pour une session d'entrainement
+          ? Ce site est fait pour vous !
+        </Card.Text>
+        <Card.Text>Vous êtes un professionnel, vous avez des véhicules à louer,
+          vous organisez des sessions de roulage sur votre circuit ?
+          Ce site est également fait pour vous !
+        </Card.Text>
+        <Card.Text>Vous êtes un particulier et cherchez à mettre en location
+          votre véhicule pour une ou plusieurs courses dans la saison
+          ? Là aussi, ce site est fait pour vous !
+        </Card.Text>
+      </Card.Body>
     </Card>
   );
 }

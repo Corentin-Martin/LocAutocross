@@ -1,6 +1,8 @@
 @use 'reset';
 @use 'vars';
 
+@import url(https://fonts.bunny.net/css?family=reem-kufi-fun:400,500,600,700);
+
 $body-bg: vars.$background;
 $body-color: vars.$text;
 
@@ -11,13 +13,14 @@ $theme-colors: (
   'danger': #e90606,
   );
 
+@import '~bootstrap/scss/bootstrap';
+
 body {
-  font-family: sans-serif;
+  font-family: 'Reem Kufi Fun', sans-serif;
   // background-color: vars.$background;
 
 }
 
-@import '~bootstrap/scss/bootstrap';
 
 /* 
   // or you can import your own font
