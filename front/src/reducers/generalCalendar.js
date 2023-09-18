@@ -1,7 +1,21 @@
-import { SET_MODAL_CALENDAR_OPEN } from '../actions/generalCalendar';
+import { SET_MODAL_CALENDAR_OPEN, SET_SELECTED_EVENT } from '../actions/generalCalendar';
 
 const initialState = {
   modalCalendarIsOpen: false,
+  selectedEvent: {
+    championship: null,
+    description: null,
+    title: '',
+    track: {
+      name: '',
+      city: '',
+      department: '',
+    },
+    start: '2023-01-01',
+    end: '2023-01-01',
+    rentals: [],
+    id: 1,
+  },
 };
 
 function reducer(state = initialState, action = {}) {
@@ -19,6 +33,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         modalCalendarIsOpen: action.payload.modalCalendarIsOpen,
+      };
+
+    case SET_SELECTED_EVENT:
+      return {
+        ...state,
+        selectedEvent: action.payload.selectedEvent,
       };
 
     default:

@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 import moment from 'moment/moment';
-import './Rental.scss';
+import './RentalComponent.scss';
+import defaultKart from '../../assets/images/defaultKart.jpg';
 
 function Rental() {
   const { rentalId } = useParams();
@@ -33,7 +35,11 @@ function Rental() {
 
   return (
     <div className="Rental">
-      {isLoading ? <p>Chargement...</p> : (
+      {isLoading ? (
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </Spinner>
+      ) : (
         <div className="Rental-Box">
           <div onClick={() => (navigate('/'))} className="Rental-Box-Event">
             <h2>{rental.event.title}</h2>
@@ -51,7 +57,7 @@ function Rental() {
               {statusMatching[rental.status][0]}
             </span>
           </h2>
-          <img className="Rental-Box-Image" src={rental.vehicle.picture ?? 'https://cdn-icons-png.flaticon.com/512/3272/3272412.png'} alt="vehicule" />
+          <img className="Rental-Box-Image" src={rental.vehicle.picture ?? defaultKart} alt="vehicule" />
           <div className="Rental-Box-Infos">
             <div className="Rental-Box-Infos-Element">
               <h3 className="Rental-Box-Infos-Element-Title">La location</h3>

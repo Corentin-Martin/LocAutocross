@@ -11,7 +11,7 @@ function Header() {
   return (
     <Navbar expand="xl" className="bg-body-primary mb-3 Header">
       <Container fluid>
-        <Navbar.Brand className="Header-Title">Loc'Autocross</Navbar.Brand>
+        <Navbar.Brand><Link to="/" className="Header-Title">Loc'Autocross</Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-false" />
         <Navbar.Offcanvas
           id="offcanvasNavbar-expand-false"
@@ -38,7 +38,7 @@ function Header() {
                 </NavDropdown>
               ) : <Link className="nav-link" href="#action1">Mon Bureau</Link>}
               <Link to="/dashboard" className="nav-link">A propos</Link>
-              <Link to="/dashboard" className="nav-link">Calendrier</Link>
+              <Link to="/calendrier" className="nav-link">Calendrier</Link>
               <Link to="/dashboard" className="nav-link">Les évenèments</Link>
               <Link to="/dashboard" className="nav-link">Les circuits</Link>
               <Link to="/dashboard" className="nav-link">Les locations</Link>
