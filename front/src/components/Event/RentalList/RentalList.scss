@@ -1,10 +1,16 @@
+@use '/src/styles/vars';
+
 .RentalList {
 
   &-Li {
     cursor: pointer;
+    background-color: vars.$secondary;
+    border-radius: 5px 5px 5px;
+    padding: 0.5rem;
   }
 
   &-Li:hover {
-    color: red;
+    color: white;
+    background-color: vars.$primary;
   }
 }

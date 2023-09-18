@@ -6,22 +6,20 @@ import {
   useEffect, useState,
 } from 'react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ReactSelect from 'react-select';
 import {
   Container, Row, Col, Alert, Button, Offcanvas, Spinner,
 } from 'react-bootstrap';
-import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
-import Event from '../Event/Event';
+import { setModalCalendarIsOpen, setSelectedEvent } from '../../actions/generalCalendar';
 
 function GeneralCalendar() {
   moment.locale('fr-FR');
   const localizer = momentLocalizer(moment);
 
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEventLocal] = useState(null);
   const [search, setSearch] = useState([]);
-  const eventModal = useSelector((state) => state.generalCalendar.modalCalendarIsOpen);
   const [isLoading, setIsLoading] = useState(true);
   const [federations, setFederations] = useState([]);
   const [noEvents, setNoEvents] = useState(false);
@@ -48,7 +46,7 @@ function GeneralCalendar() {
             start: new Date(response.data.start),
             end: new Date(response.data.end),
           };
-          setSelectedEvent(newEvent);
+          setSelectedEventLocal(newEvent);
         })
         .catch((error) => {
           console.log(error);
@@ -59,6 +57,7 @@ function GeneralCalendar() {
   useEffect(() => {
     if (selectedEvent !== null) {
       dispatch(setModalCalendarIsOpen(true));
+      dispatch(setSelectedEvent(selectedEvent));
     }
   }, [selectedEvent]);
 
@@ -276,18 +275,6 @@ function GeneralCalendar() {
             }}
             culture="fr"
           />
-
-          {eventModal && (
-          <Event
-            title={selectedEvent.title}
-            description={selectedEvent.description}
-            start={selectedEvent.start}
-            end={selectedEvent.end}
-            rentals={selectedEvent.rentals}
-            track={selectedEvent.track}
-            championship={selectedEvent.championship}
-          />
-          )}
 
         </Container>
       )}

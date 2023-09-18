@@ -1,10 +1,11 @@
 import './Calendar.scss';
 import Card from 'react-bootstrap/Card';
 import GeneralCalendar from '../../components/GeneralCalendar/GeneralCalendar';
+import Event from '../../components/Event/Event';
 
 function Calendar() {
   return (
-    <>
+    <div className="Calendar">
       <Card className="mb-3 Welcome">
         <Card.Body className="bg-secondary">
           <Card.Text>Ici, vous trouverez le calendrier de toutes les courses et évenements.
@@ -15,7 +16,8 @@ function Calendar() {
         </Card.Body>
       </Card>
       <GeneralCalendar />
-    </>
+      <Event />
+    </div>
   );
 }
 

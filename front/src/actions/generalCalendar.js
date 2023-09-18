@@ -17,3 +17,11 @@ export const setModalCalendarIsOpen = (bool) => ({
     modalCalendarIsOpen: bool,
   },
 });
+
+export const SET_SELECTED_EVENT = 'SET_SELECTED_EVENT';
+export const setSelectedEvent = (event) => ({
+  type: SET_SELECTED_EVENT,
+  payload: {
+    selectedEvent: event,
+  },
+});
