@@ -29,9 +29,14 @@
 
 
     &-Discipline {
-      width: 45%;
+      width: 100%;
+
+      & h4 {
+        margin-top: 1rem;
+      }
     }
   }
 
 }
+
 
