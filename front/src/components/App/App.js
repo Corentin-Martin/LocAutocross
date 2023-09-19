@@ -13,32 +13,34 @@ import Registration from '../../pages/Registration/Registration';
 function App() {
   return (
     <Container>
+      <div className="App">
 
-      <Routes>
-        <Route
-          path="/"
-          element={(<Skeleton page={<Homepage />} />)}
-        />
-        <Route
-          path="/calendrier"
-          element={(<Skeleton page={<Calendar />} />)}
-        />
-        <Route
-          path="/location/:rentalId"
-          element={(<Skeleton page={<Rental />} />)}
-        />
-        <Route
-          path="/connexion"
-          element={(<Skeleton page={<Login />} />)}
-        />
-        <Route
-          path="/inscription"
-          element={(<Skeleton page={<Registration />} />)}
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={(<Skeleton page={<Homepage />} />)}
+          />
+          <Route
+            path="/calendrier"
+            element={(<Skeleton page={<Calendar />} />)}
+          />
+          <Route
+            path="/location/:rentalId"
+            element={(<Skeleton page={<Rental />} />)}
+          />
+          <Route
+            path="/connexion"
+            element={(<Skeleton page={<Login />} />)}
+          />
+          <Route
+            path="/inscription"
+            element={(<Skeleton page={<Registration />} />)}
+          />
 
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="conversation/:id" element={<Chat />} />
-      </Routes>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="conversation/:id" element={<Chat />} />
+        </Routes>
+      </div>
     </Container>
 
   );

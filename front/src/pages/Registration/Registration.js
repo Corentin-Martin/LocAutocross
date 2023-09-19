@@ -277,7 +277,7 @@ function Registration() {
             }}
           >
 
-            <Form.Check // prettier-ignore
+            <Form.Check
               type="switch"
               id="pro"
               name="role"
@@ -296,7 +296,7 @@ function Registration() {
             }}
           >
 
-            <Form.Check // prettier-ignore
+            <Form.Check
               type="switch"
               id="user"
               name="role"

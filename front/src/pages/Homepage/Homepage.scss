@@ -1,4 +1,9 @@
-
+.Homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
 
 @media screen and (max-width : 576px) {
 .hstack {
