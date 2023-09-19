@@ -10,7 +10,8 @@ $theme-colors: (
   'primary': vars.$primary,
   'secondary': vars.$secondary,
   'tertiary': vars.$tertiary,
-  'danger': #e90606,
+  'success' : green,
+  'danger' : red
   );
 
 @import '~bootstrap/scss/bootstrap';

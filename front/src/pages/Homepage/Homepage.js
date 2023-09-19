@@ -23,8 +23,10 @@ function Homepage() {
   }, []);
 
   return (
-    <>
+    <div className="Homepage">
+
       <Welcome />
+
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
@@ -49,7 +51,7 @@ function Homepage() {
           </Card.Body>
         </Card>
       )}
-    </>
+    </div>
   );
 }
 

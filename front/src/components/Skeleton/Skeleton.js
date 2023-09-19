@@ -4,11 +4,11 @@ import './Skeleton.scss';
 
 function Skeleton({ page }) {
   return (
-    <>
+    <div className="Skeleton">
       <Header />
       {page}
       <Footer />
-    </>
+    </div>
   );
 }
 

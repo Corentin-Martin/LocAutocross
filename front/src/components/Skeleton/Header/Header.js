@@ -4,49 +4,118 @@ import './Header.scss';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, NavDropdown, Offcanvas } from 'react-bootstrap';
+import { useState } from 'react';
 
 function Header() {
   const isUserConnected = useSelector((state) => state.user.isUserConnected);
+  const [showOffCanvas, setShowOffCanvas] = useState(false);
 
   return (
-    <Navbar expand="xl" className="bg-body-primary mb-3 Header">
-      <Container fluid>
-        <Navbar.Brand><Link to="/" className="Header-Title">Loc'Autocross</Link></Navbar.Brand>
-        <Navbar.Toggle aria-controls="offcanvasNavbar-expand-false" />
-        <Navbar.Offcanvas
-          id="offcanvasNavbar-expand-false"
-          aria-labelledby="offcanvasNavbarLabel-expand-false"
-          placement="end"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
-              Loc'Autocross
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              {!isUserConnected ? (
-                <NavDropdown
-                  title="Connexion / Inscription"
-                  id="offcanvasNavbarDropdown-expand-false"
-                >
-                  <NavDropdown.Item><Link to="/login" className="nav-link">Connexion</Link></NavDropdown.Item>
-                  <NavDropdown.Item>
-                    <Link to="/login" className="nav-link">Inscription</Link>
-                  </NavDropdown.Item>
+    <div className="Header">
+      <Navbar expand="xl" className="bg-body-primary mb-3">
+        <Container fluid>
+          <Navbar.Brand><Link to="/" className="Header-Title">Loc'Autocross</Link></Navbar.Brand>
+          <Navbar.Toggle
+            aria-controls="offcanvasNavbar-expand-false"
+            onClick={() => {
+              setShowOffCanvas(true);
+            }}
+          />
+          <Navbar.Offcanvas
+            id="offcanvasNavbar-expand-false"
+            aria-labelledby="offcanvasNavbarLabel-expand-false"
+            placement="end"
+            show={showOffCanvas}
+            onHide={() => {
+              setShowOffCanvas(false);
+            }}
+          >
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
+                Loc'Autocross
+              </Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="justify-content-end flex-grow-1 pe-3">
+                {!isUserConnected ? (
+                  <NavDropdown
+                    title="Connexion / Inscription"
+                    id="offcanvasNavbarDropdown-expand-false"
+                  >
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/connexion"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Connexion
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/inscription"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Inscription
+                    </NavDropdown.Item>
 
-                </NavDropdown>
-              ) : <Link className="nav-link" href="#action1">Mon Bureau</Link>}
-              <Link to="/dashboard" className="nav-link">A propos</Link>
-              <Link to="/calendrier" className="nav-link">Calendrier</Link>
-              <Link to="/dashboard" className="nav-link">Les évenèments</Link>
-              <Link to="/dashboard" className="nav-link">Les circuits</Link>
-              <Link to="/dashboard" className="nav-link">Les locations</Link>
-            </Nav>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
-      </Container>
-    </Navbar>
+                  </NavDropdown>
+                ) : (
+                  <Nav.Link
+                    as={Link}
+                    to="/dashboard"
+                    onClick={() => {
+                      setShowOffCanvas(false);
+                    }}
+                  >Mon Bureau
+                  </Nav.Link>
+                )}
+                <Nav.Link
+                  as={Link}
+                  to="/dashboard"
+                  onClick={() => {
+                    setShowOffCanvas(false);
+                  }}
+                >A propos
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/calendrier"
+                  onClick={() => {
+                    setShowOffCanvas(false);
+                  }}
+                >Calendrier
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/dashboard"
+                  onClick={() => {
+                    setShowOffCanvas(false);
+                  }}
+                >Les évenèments
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/dashboard"
+                  onClick={() => {
+                    setShowOffCanvas(false);
+                  }}
+                >Les circuits
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/dashboard"
+                  onClick={() => {
+                    setShowOffCanvas(false);
+                  }}
+                >Les locations
+                </Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Navbar.Offcanvas>
+        </Container>
+      </Navbar>
+    </div>
   );
 }
 
