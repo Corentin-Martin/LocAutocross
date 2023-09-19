@@ -38,6 +38,8 @@ function Login() {
   return (
     <Row className="d-flex justify-content-center">
 
+      <h1 className="text-center">Connexion</h1>
+
       {wrongConnexion && (
       <Alert variant="danger" className="col-8 text-center">
         Erreur, identifiant ou mot de passe invalides...
