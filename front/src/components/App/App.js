@@ -8,6 +8,7 @@ import Homepage from '../../pages/Homepage/Homepage';
 import Rental from '../../pages/Rental/Rental';
 import Calendar from '../../pages/Calendar/Calendar';
 import Login from '../../pages/Login/Login';
+import Registration from '../../pages/Registration/Registration';
 
 function App() {
   return (
@@ -29,6 +30,10 @@ function App() {
         <Route
           path="/connexion"
           element={(<Skeleton page={<Login />} />)}
+        />
+        <Route
+          path="/inscription"
+          element={(<Skeleton page={<Registration />} />)}
         />
 
         <Route path="dashboard" element={<Dashboard />} />

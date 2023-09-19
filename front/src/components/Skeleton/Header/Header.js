@@ -32,7 +32,7 @@ function Header() {
                 >
                   <NavDropdown.Item><Link to="/connexion" className="nav-link">Connexion</Link></NavDropdown.Item>
                   <NavDropdown.Item>
-                    <Link to="/login" className="nav-link">Inscription</Link>
+                    <Link to="/inscription" className="nav-link">Inscription</Link>
                   </NavDropdown.Item>
 
                 </NavDropdown>
