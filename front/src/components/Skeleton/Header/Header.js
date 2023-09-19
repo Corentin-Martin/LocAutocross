@@ -30,7 +30,7 @@ function Header() {
                   title="Connexion / Inscription"
                   id="offcanvasNavbarDropdown-expand-false"
                 >
-                  <NavDropdown.Item><Link to="/login" className="nav-link">Connexion</Link></NavDropdown.Item>
+                  <NavDropdown.Item><Link to="/connexion" className="nav-link">Connexion</Link></NavDropdown.Item>
                   <NavDropdown.Item>
                     <Link to="/login" className="nav-link">Inscription</Link>
                   </NavDropdown.Item>
