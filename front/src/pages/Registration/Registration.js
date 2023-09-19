@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './Registration.scss';
 import {
-  Form, Button, FloatingLabel, Row, Alert, Card,
+  Form, Button, FloatingLabel, Row, Alert, Modal, Badge,
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +9,17 @@ import axios from 'axios';
 import { setUserConnected } from '../../actions/user';
 
 function Registration() {
-  const [mail, setMail] = useState('');
-  const [pseudo, setPseudo] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [mail, setMail] = useState(null);
+  const [pseudo, setPseudo] = useState(null);
+  const [firstname, setFirstname] = useState(null);
+  const [lastname, setLastname] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null);
+  const [role, setRole] = useState([]);
   const [wrongConnexion, setWrongConnexion] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [pastePassword, setPastePassword] = useState(false);
   const [displayRequirements, setDisplayRequirements] = useState(false);
 
@@ -24,6 +28,12 @@ function Registration() {
   const [lowercase, setLowercase] = useState(true);
   const [digit, setDigit] = useState(true);
   const [specialChars, setSpecialChars] = useState(true);
+  const [samePasswords, setSamePasswords] = useState(true);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const isStrongPassword = (passwordToVerify) => {
     setLength(
@@ -55,38 +65,49 @@ function Registration() {
     setSpecialChars(!hasSpecialChar ?? false);
   };
 
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
+  const areSamePasswords = (passwordToVerify) => {
+    setSamePasswords(passwordToVerify === password);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:8000/api/login_check', {
-      email: mail,
-      password: password,
-    })
-      .then((res) => {
-        localStorage.setItem('token', res.data.token);
-        dispatch(setUserConnected(true));
-        setWrongConnexion(false);
-        navigate('/dashboard');
+    if ([mail, pseudo, firstname, lastname, password, role].some((value) => value === null)) {
+      setWrongConnexion(true);
+    }
+    if (password === confirmPassword) {
+      axios.post('http://localhost:8000/api/user', {
+        email: mail,
+        password: password,
+        pseudo: pseudo,
+        firstname: firstname,
+        lastname: lastname,
+        roles: role,
       })
-      .catch(() => {
-        setWrongConnexion(true);
-      });
+        .then((res) => {
+          localStorage.setItem('token', res.data.token);
+          dispatch(setUserConnected(true));
+          setWrongConnexion(false);
+          navigate('/dashboard');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   const handlePaste = (event) => {
-    event.preventDefault(); // Empêche l'action de collage
+    event.preventDefault();
     setPastePassword(true);
   };
 
   return (
     <Row className="d-flex justify-content-center">
 
+      <h1 className="text-center">Inscription</h1>
+
       {wrongConnexion && (
       <Alert variant="danger" className="col-8 text-center">
-        Erreur, identifiant ou mot de passe invalides...
+        Attention, tous les champs sont obligatoires pour l'inscription !
       </Alert>
       )}
 
@@ -106,7 +127,7 @@ function Registration() {
         </FloatingLabel>
 
         <FloatingLabel
-          controlId="floatingInput"
+          controlId="floatingInput2"
           label="Pseudo"
           className="mb-3 col-8"
         >
@@ -120,7 +141,7 @@ function Registration() {
         </FloatingLabel>
 
         <FloatingLabel
-          controlId="floatingInput"
+          controlId="floatingInput3"
           label="Prénom"
           className="mb-3 col-8"
         >
@@ -134,7 +155,7 @@ function Registration() {
         </FloatingLabel>
 
         <FloatingLabel
-          controlId="floatingInput"
+          controlId="floatingInput4"
           label="Nom de famille"
           className="mb-3 col-8"
         >
@@ -151,9 +172,10 @@ function Registration() {
           controlId="floatingPassword"
           className="mb-3 col-8"
           label="Mot de passe"
-          onClick={() => {
+          onFocus={() => {
             setDisplayRequirements(true);
           }}
+
         >
           <Form.Control
             onChange={(event) => {
@@ -166,7 +188,7 @@ function Registration() {
         </FloatingLabel>
 
         {displayRequirements && (
-        <p>Votre mot de passe doit contenir au moins <span className={!lowercase ? 'text text-success' : 'text text-danger'}>une minuscule, </span>
+        <p className="text-center">Votre mot de passe doit contenir au moins <span className={!lowercase ? 'text text-success' : 'text text-danger'}>une minuscule, </span>
           <span className={!uppercase ? 'text text-success' : 'text text-danger'}>une majuscule, </span>
           <span className={!digit ? 'text text-success' : 'text text-danger'}>un chiffre, </span>
           <span className={!specialChars ? 'text text-success' : 'text text-danger'}>un caractère spécial, </span>
@@ -175,22 +197,118 @@ function Registration() {
 
         )}
 
-        <FloatingLabel controlId="floatingConfirmPassword" className="mb-3 col-8" label="Confirmez votre mot de passe">
+        <FloatingLabel
+          controlId="floatingConfirmPassword"
+          className="mb-3 col-8"
+          label="Confirmez votre mot de passe"
+          onFocus={() => {
+            setDisplayRequirements(false);
+          }}
+        >
           <Form.Control
             onPaste={handlePaste}
             onChange={(event) => {
               setConfirmPassword(event.currentTarget.value);
               setPastePassword(false);
+              areSamePasswords(event.currentTarget.value);
             }}
             type="password"
             placeholder="ConfirmPassword"
           />
         </FloatingLabel>
+        {!samePasswords && <p className="text text-center text-danger">Les deux mots de passe doivent être identiques.</p>}
         {pastePassword && (
         <Alert variant="danger" className="col-8 text-center">
           Vous devez retaper votre mot de passe.
         </Alert>
         )}
+
+        <Row className="mb-3 col-8 text-center d-flex flex-column justify-content-center align-items-center">
+
+          <h5>Choisissez votre rôle :</h5>
+
+          <Button variant="secondary" className="col-6 mb-3" onClick={handleShow}>
+            Quel rôle choisir ?
+          </Button>
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Quel rôle choisir ?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="text-center">Si vous êtes un particulier souhaitant mettre son véhicule en location pour une ou plusieurs épreuves
+              <br />ou
+              <br />
+              un professionnel proposant des véhicules à la
+              location et/ou organisant des évenèments sur circuits :
+              <br />
+              <h3>
+                <Badge
+                  bg="tertiary mt-2"
+                  onClick={() => {
+                    setRole(['ROLE_PRO']);
+                    handleClose();
+                  }}
+                >
+                  Sélectionnez le rôle <span className="fw-bold">PRO</span>
+                </Badge>
+              </h3>
+              <hr />
+              Si vous êtes un pilote à la recherche d'une location pour une ou plusieurs épreuves :
+              <br />
+              <h3>
+                <Badge
+                  bg="tertiary mt-2"
+                  onClick={() => {
+                    setRole(['ROLE_USER']);
+                    handleClose();
+                  }}
+                >
+                  Sélectionnez le rôle <span className="fw-bold">PILOTE</span>
+                </Badge>
+              </h3>
+
+            </Modal.Body>
+          </Modal>
+
+          <div
+            className="role-input col-7 bg-tertiary p-1 m-1 rounded"
+            onClick={() => {
+              setRole(['ROLE_PRO']);
+            }}
+          >
+
+            <Form.Check // prettier-ignore
+              type="switch"
+              id="pro"
+              name="role"
+              label="Pro"
+              checked={role.includes('ROLE_PRO')}
+              onChange={() => {
+                setRole(['ROLE_PRO']);
+              }}
+            />
+          </div>
+
+          <div
+            className="role-input col-7 bg-tertiary p-1 m-1 rounded"
+            onClick={() => {
+              setRole(['ROLE_USER']);
+            }}
+          >
+
+            <Form.Check // prettier-ignore
+              type="switch"
+              id="user"
+              name="role"
+              label="Pilote"
+              checked={role.includes('ROLE_USER')}
+              onChange={() => {
+                setRole(['ROLE_USER']);
+              }}
+            />
+          </div>
+
+        </Row>
 
         <Button variant="primary" type="submit">
           Se connecter
