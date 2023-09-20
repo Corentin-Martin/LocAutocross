@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import moment from 'moment/moment';
 import './RentalComponent.scss';
-import defaultKart from '../../assets/images/defaultKart.jpg';
+import defaultKart from '../../assets/images/defaultKart.jpeg';
 
 function Rental() {
   const { rentalId } = useParams();

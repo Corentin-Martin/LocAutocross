@@ -121,8 +121,8 @@ function VehicleCreation() {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-
         <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12 col-md-8 col-lg-6">
+          <h2 className="text-center">Nouveau véhicule</h2>
 
           <Form.Group controlId="pictureSelect" className="mb-3 col-10">
             <Form.Label>Photo</Form.Label>
