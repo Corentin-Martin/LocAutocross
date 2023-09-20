@@ -5,10 +5,14 @@
 
     &-DeleteIcon {
       position: absolute;
-      top:0;
+      top:45%;
       right:0;
       margin: 1rem;
       transition-duration: .5s;
+
+      @media screen and (min-width: 768px) {
+        top: 0;
+      }
     }
 
     &-DeleteIcon:hover, &-EditIcon:hover, &-MoreIcon:hover{
@@ -17,10 +21,14 @@
 
     &-EditIcon {
       position: absolute;
-      bottom:0;
+      bottom:45%;
       right:0;
       margin: 1rem;
       transition-duration: .5s;
+
+      @media screen and (min-width: 768px) {
+        bottom: 0;
+      }
     }
 
     &-MoreIcon {
@@ -28,10 +36,34 @@
       bottom:0;
       left: 50%;
       transform: translateX(-50%);
-      margin: .7rem;
+      margin-bottom: 2rem;
       transition-duration: .5s;
       color: vars.$text;
+
+      @media screen and (min-width: 768px) {
+        margin-bottom: .7rem;
+      }
     }
 
+  }
+}
+
+.under768 {
+  position: relative;
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 4rem;
+}
+
+.over768 {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .under768 {
+    display: none;
+  }
+  .over768 {
+    display: block;
   }
 }

@@ -115,13 +115,14 @@ function VehicleCreation() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center col-12 col-lg-6">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12 col-md-8 col-lg-6">
+
+        <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
           <h2 className="text-center">Nouveau véhicule</h2>
 
           <Form.Group controlId="pictureSelect" className="mb-3 col-10">

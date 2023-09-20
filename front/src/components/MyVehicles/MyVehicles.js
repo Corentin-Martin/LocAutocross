@@ -35,7 +35,7 @@ function MyVehicles() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center col-12 col-lg-6">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
@@ -44,17 +44,26 @@ function MyVehicles() {
         <Carousel
           activeIndex={index}
           onSelect={handleSelect}
-          style={{ height: '400px', width: '600px' }}
+          className="container "
+          style={{ maxWidth: '600px', maxHeight: '600px' }}
         >
           {vehicles.map((vehicle) => (
             <Carousel.Item key={vehicle.id}>
               <img
                 src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
                 alt={vehicle.model}
-                className="rounded-4 MyVehicles-Carousel-Image"
-                style={{ height: '400px', width: '600px' }}
+                className="img-fluid MyVehicles-Carousel-Image rounded-4"
               />
-              <Carousel.Caption className="bg-tertiary rounded-4 bg-opacity-75 MyVehicles-Carousel-Caption">
+              <div className="under768 bg-tertiary bg-opacity-25">
+                <TrashFill size={24} className="text-black MyVehicles-Carousel-DeleteIcon" />
+                <h3>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
+                <p>Moteur : {vehicle.engine}</p>
+                <p>Amortisseurs : {vehicle.shocks}</p>
+                <PencilSquare size={24} className="text-secondary MyVehicles-Carousel-EditIcon" />
+                <ThreeDots size={24} className="MyVehicles-Carousel-MoreIcon" />
+              </div>
+
+              <Carousel.Caption className="bg-tertiary rounded-4 bg-opacity-75 MyVehicles-Carousel-Caption over768">
                 <TrashFill size={24} className="text-black MyVehicles-Carousel-DeleteIcon" />
                 <h3>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
                 <p>Moteur : {vehicle.engine}</p>
