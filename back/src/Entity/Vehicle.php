@@ -39,14 +39,14 @@ class Vehicle
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicle_browse"})
      * @Groups({"rental_found"})
      */
     private $engine;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicle_browse"})
      * @Groups({"rental_found"})
      */
     private $shocks;
