@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Entity\Vehicle;
 use App\Repository\VehicleRepository;
+use App\Services\UploadImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,7 @@ class VehicleController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request, SerializerInterface $serializerInterface, VehicleRepository $vehicleRepository): JsonResponse
+    public function add(Request $request, SerializerInterface $serializerInterface, VehicleRepository $vehicleRepository, UploadImageService $uploadImageService): JsonResponse
     {
 
         /** @var User */
@@ -50,6 +51,8 @@ class VehicleController extends AbstractController
         $newVehicle = $serializerInterface->deserialize($request->getContent(), Vehicle::class, 'json');
 
         $newVehicle->setOwnerUser($user);
+
+        $uploadImageService->upload($newVehicle);
 
         $vehicleRepository->add($newVehicle, true);
 
