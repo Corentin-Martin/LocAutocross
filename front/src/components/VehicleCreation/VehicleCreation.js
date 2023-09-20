@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import './VehicleCreation.scss';
 import {
-  Form, FloatingLabel, Spinner, Button,
+  Form, FloatingLabel, Spinner, Button, Accordion,
 } from 'react-bootstrap';
 import axios from 'axios';
 
 function VehicleCreation() {
   const [brands, setBrands] = useState([]);
+  const [disciplines, setDisciplines] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [model, setModel] = useState(null);
@@ -18,12 +19,21 @@ function VehicleCreation() {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState('2023-01-01');
   const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/brands')
       .then((resp) => {
         setBrands(resp.data);
-        setIsLoading(false);
+
+        axios.get('http://localhost:8000/api/disciplines')
+          .then((response) => {
+            setDisciplines(response.data);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.error(err);
@@ -32,14 +42,38 @@ function VehicleCreation() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(year);
+
+    axios.post(
+      'http://localhost:8000/api/vehicles',
+      {
+        model: model,
+        brand: brand.id,
+        engine: engine,
+        shocks: shocks,
+        description: description,
+        picture: picture,
+        year: year,
+        category: categories,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+
+    )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleYearChange = (e) => {
     const yearSelect = parseInt(e.target.value, 10);
     setSelectedYear(yearSelect);
     setYear(`${yearSelect}-01-01`);
-    // Faites ce que vous voulez avec l'année sélectionnée.
   };
 
   const convertToBase64 = (file) => new Promise((resolve, reject) => {
@@ -68,16 +102,50 @@ function VehicleCreation() {
     }
   };
 
+  const handleCategoriesSelect = (e) => {
+    if (categories.includes(e.currentTarget.id)) {
+      const newCategories = categories.filter(
+        (categorySearch) => categorySearch !== e.currentTarget.id,
+      );
+      setCategories(newCategories);
+    }
+    else {
+      setCategories([...categories, e.currentTarget.id]);
+    }
+  };
+
   return (
-    <div>
+    <div className="d-flex flex-column align-items-center">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
 
-        <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
-          <Form.Group controlId="brandSelect">
+        <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12 col-md-8 col-lg-6">
+
+          <Form.Group controlId="pictureSelect" className="mb-3 col-10">
+            <Form.Label>Photo</Form.Label>
+            <Form.Control
+              type="file"
+              label="Image"
+              name="myFile"
+              accept=".jpeg, .png, .jpg"
+              onChange={(e) => handleFileUpload(e)}
+            />
+          </Form.Group>
+
+          <Form.Group controlId="yearSelect" className="mb-3 col-10">
+            <Form.Label className="text-center">Année</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Sélectionnez l'année"
+              value={selectedYear}
+              onChange={handleYearChange}
+            />
+          </Form.Group>
+
+          <Form.Group controlId="brandSelect" className="mb-3 col-10">
             <Form.Label>Marque</Form.Label>
             <Form.Control
               type="text"
@@ -96,7 +164,7 @@ function VehicleCreation() {
           <FloatingLabel
             controlId="floatingInput"
             label="Modèle"
-            className="mb-3 col-8"
+            className="mb-3 col-10"
           >
             <Form.Control
               onChange={(event) => {
@@ -107,20 +175,10 @@ function VehicleCreation() {
             />
           </FloatingLabel>
 
-          <Form.Group controlId="yearSelect">
-            <Form.Label>Année</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Sélectionnez l'année"
-              value={selectedYear}
-              onChange={handleYearChange}
-            />
-          </Form.Group>
-
           <FloatingLabel
             controlId="floatingInput2"
             label="Moteur"
-            className="mb-3 col-8"
+            className="mb-3 col-10"
           >
             <Form.Control
               onChange={(event) => {
@@ -134,7 +192,7 @@ function VehicleCreation() {
           <FloatingLabel
             controlId="floatingInput3"
             label="Amortisseurs"
-            className="mb-3 col-8"
+            className="mb-3 col-10"
           >
             <Form.Control
               onChange={(event) => {
@@ -147,8 +205,8 @@ function VehicleCreation() {
 
           <FloatingLabel
             controlId="floatingInput4"
-            label="Description / Informations complémentaires"
-            className="mb-3 col-8"
+            label="Informations complémentaires"
+            className="mb-3 col-10"
           >
             <Form.Control
               onChange={(event) => {
@@ -156,18 +214,35 @@ function VehicleCreation() {
               }}
               type="textarea"
               placeholder="description"
+              style={{ height: '100px' }}
             />
           </FloatingLabel>
 
-          <Form.Group controlId="pictureSelect">
-            <Form.Label>Photo</Form.Label>
-            <Form.Control
-              type="file"
-              label="Image"
-              name="myFile"
-              accept=".jpeg, .png, .jpg"
-              onChange={(e) => handleFileUpload(e)}
-            />
+          <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
+            <Form.Label>Catégorie(s)</Form.Label>
+
+            <Accordion>
+              {disciplines.map((discipline) => (
+                <Accordion.Item eventKey={discipline.id} key={discipline.id}>
+                  <Accordion.Header>
+                    {discipline.name} - {discipline.federation.alias}
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {discipline.categories.map((category) => (
+                      <Form.Check // prettier-ignore
+                        key={category.id}
+                        type="checkbox"
+                        name="categories"
+                        id={category.id}
+                        label={category.name}
+                        onChange={handleCategoriesSelect}
+                      />
+                    ))}
+                  </Accordion.Body>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+
           </Form.Group>
 
           <Button type="submit">Creer</Button>
