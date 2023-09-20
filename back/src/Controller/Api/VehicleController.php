@@ -23,8 +23,13 @@ class VehicleController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(VehicleRepository $vehicleRepository): JsonResponse
+    public function browse(Request $request, VehicleRepository $vehicleRepository): JsonResponse
     {
+        if (!is_null($request->query->get('my'))) {
+            $vehicles = $vehicleRepository->findBy(["ownerUser" => $this->getUser()],['createdAt' => 'DESC']);
+            return $this->json($vehicles, Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
+        }
+
         return (empty($vehicleRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                                     : $this->json($vehicleRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
     }
