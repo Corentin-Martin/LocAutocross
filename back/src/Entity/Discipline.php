@@ -32,13 +32,13 @@ class Discipline
 
     /**
      * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="disciplines")
-     * @Groups({"discipline_read"})
+     * @Groups({"discipline_browse"})
      */
     private $federation;
 
     /**
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="discipline")
-     * @Groups({"discipline_read"})
+     * @Groups({"discipline_browse"})
      * @Groups({"federation_browse"})
      */
     private $categories;
