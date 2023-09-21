@@ -21,7 +21,8 @@ function Vehicles() {
       <div className="Vehicles-under992">
         <GarageInfos />
         {vehicle === null && <VehicleCreation />}
-        {(vehicle === null && !isOpenCreationModal) ? <MyVehicles /> : <VehicleDetail />}
+        {(vehicle === null && !isOpenCreationModal) && <MyVehicles />}
+        {vehicle !== null && <VehicleDetail />}
       </div>
 
       <div className="Vehicles-over992">

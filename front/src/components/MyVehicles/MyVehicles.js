@@ -6,7 +6,10 @@ import moment from 'moment';
 import { PencilSquare, ThreeDots } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
-import { setMyVehicles, setVehicleForDetails } from '../../actions/dashboard';
+import {
+  setIdToEdit,
+  setMyVehicles, setOpenCreation, setVehicleForDetails,
+} from '../../actions/dashboard';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
 function MyVehicles() {
@@ -100,7 +103,14 @@ function MyVehicles() {
                 <h3>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
                 <p>Moteur : {vehicle.engine}</p>
                 <p>Amortisseurs : {vehicle.shocks}</p>
-                <PencilSquare size={24} className="text-secondary MyVehicles-Carousel-EditIcon" />
+                <PencilSquare
+                  size={24}
+                  className="text-secondary MyVehicles-Carousel-EditIcon"
+                  onClick={() => {
+                    dispatch(setIdToEdit(vehicle.id));
+                    dispatch(setOpenCreation(true));
+                  }}
+                />
                 <ThreeDots
                   size={24}
                   className="MyVehicles-Carousel-MoreIcon"

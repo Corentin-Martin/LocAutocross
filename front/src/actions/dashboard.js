@@ -26,6 +26,14 @@ export const setVehicleForDetails = (vehicle) => ({
   },
 });
 
+export const SET_ID_VEHICLE_TO_EDIT = 'SET_ID_VEHICLE_TO_EDIT';
+export const setIdToEdit = (idVehicleToEdit) => ({
+  type: SET_ID_VEHICLE_TO_EDIT,
+  payload: {
+    idToEdit: idVehicleToEdit,
+  },
+});
+
 export const SET_MY_VEHICLES = 'SET_MY_VEHICLES';
 export const setMyVehicles = (myVehicles) => ({
   type: SET_MY_VEHICLES,

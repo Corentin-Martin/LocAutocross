@@ -1,9 +1,13 @@
-import { SET_MY_VEHICLES, SET_OPEN_CREATION, SET_VEHICLE } from '../actions/dashboard';
+import {
+  SET_ID_VEHICLE_TO_EDIT,
+  SET_MY_VEHICLES, SET_OPEN_CREATION, SET_VEHICLE,
+} from '../actions/dashboard';
 
 const initialState = {
   isOpenCreationModal: false,
   vehicle: null,
   myVehicles: [],
+  idToEdit: null,
 
 };
 
@@ -28,6 +32,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         vehicle: action.payload.vehicle,
+      };
+
+    case SET_ID_VEHICLE_TO_EDIT:
+      return {
+        ...state,
+        idToEdit: action.payload.idToEdit,
       };
 
     case SET_MY_VEHICLES:

@@ -6,12 +6,18 @@ import {
 import axios from 'axios';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMyVehicles, setOpenCreation, setVehicleForDetails } from '../../actions/dashboard';
+import moment from 'moment';
+import {
+  setIdToEdit, setMyVehicles, setOpenCreation, setVehicleForDetails,
+} from '../../actions/dashboard';
+import Checkbox from './Checkbox/Checkbox';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
   const vehicles = useSelector((state) => state.dashboard.myVehicles);
   const vehicle = useSelector((state) => state.dashboard.vehicle);
+  const idToEdit = useSelector((state) => state.dashboard.idToEdit);
+  const [vehicleToEdit, setVehicleToEdit] = useState(null);
   const [brands, setBrands] = useState([]);
   const [disciplines, setDisciplines] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +34,39 @@ function VehicleCreation() {
   const [categories, setCategories] = useState([]);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (idToEdit === null) {
+      setVehicleToEdit(null);
+      setIsLoading(false);
+    }
+    else {
+      axios.get(
+        `http://localhost:8000/api/vehicles/${idToEdit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      )
+        .then((response) => {
+          setVehicleToEdit(response.data);
+          setIsLoading(false);
+          setModel(response.data.model);
+          setBrand(response.data.brand);
+          setEngine(response.data.engine);
+          setShocks(response.data.shocks);
+          setDescription(response.data.description);
+          setPicture(response.data.picture);
+          setYear(response.data.year);
+          setCategories(response.data.category.map((cat) => cat.id));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idToEdit]);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/brands')
@@ -52,34 +91,66 @@ function VehicleCreation() {
     event.preventDefault();
     setIsLoading(true);
 
-    axios.post(
-      'http://localhost:8000/api/vehicles',
-      {
-        model: model,
-        brand: brand.id,
-        engine: engine,
-        shocks: shocks,
-        description: description,
-        picture: picture,
-        year: year,
-        category: categories,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+    if (idToEdit === null) {
+      axios.post(
+        'http://localhost:8000/api/vehicles',
+        {
+          model: model,
+          brand: brand.id,
+          engine: engine,
+          shocks: shocks,
+          description: description,
+          picture: picture,
+          year: year,
+          category: categories,
         },
-      },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
 
-    )
-      .then((response) => {
-        setIsLoading(false);
-        dispatch(setOpenCreation(false));
-        dispatch(setVehicleForDetails(response.data));
-        dispatch(setMyVehicles([...vehicles, response.data]));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      )
+        .then((response) => {
+          setIsLoading(false);
+          dispatch(setOpenCreation(false));
+          dispatch(setVehicleForDetails(response.data));
+          dispatch(setMyVehicles([...vehicles, response.data]));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+    else {
+      axios.put(
+        `http://localhost:8000/api/vehicles/${idToEdit}`,
+        {
+          model: model,
+          brand: brand.id,
+          engine: engine,
+          shocks: shocks,
+          description: description,
+          picture: picture,
+          year: year,
+          category: categories,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+
+      )
+        .then((response) => {
+          setIsLoading(false);
+          dispatch(setOpenCreation(false));
+          dispatch(setVehicleForDetails(response.data));
+          // dispatch(setMyVehicles([...vehicles, response.data]));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   const handleYearChange = (e) => {
@@ -114,19 +185,39 @@ function VehicleCreation() {
     }
   };
 
-  const handleCategoriesSelect = (e) => {
-    if (categories.includes(e.currentTarget.id)) {
-      const newCategories = categories.filter(
-        (categorySearch) => categorySearch !== e.currentTarget.id,
-      );
-      setCategories(newCategories);
+  const handleCheckboxChange = (categoryId) => {
+    if (categories.includes(categoryId)) {
+      setCategories(categories.filter((id) => id !== categoryId));
     }
     else {
-      setCategories([...categories, e.currentTarget.id]);
+      setCategories([...categories, categoryId]);
     }
   };
 
+  const resetKey = categories.join(',');
+
   const [openItem, setOpenItem] = useState(null);
+
+  useEffect(() => {
+    if (isOpenCreationModal) {
+      setOpenItem('0');
+    }
+    else {
+      setOpenItem(null);
+      setVehicleToEdit(null);
+
+      dispatch(setIdToEdit(null));
+
+      setModel('');
+      setBrand('');
+      setEngine('');
+      setShocks('');
+      setDescription('');
+      setPicture('');
+      setYear('2023-01-01');
+      setCategories([]);
+    }
+  }, [isOpenCreationModal]);
 
   const handleAccordionToggle = (eventKey) => {
     setOpenItem(openItem === eventKey ? null : eventKey);
@@ -159,7 +250,7 @@ function VehicleCreation() {
           <Accordion.Item eventKey="0" onClick={() => handleAccordionToggle('0')}>
             <Accordion.Header className="text-center bg-secondary">
 
-              <PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule
+              {!vehicleToEdit ? <><PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule</> : 'Modification de véhicule'}
             </Accordion.Header>
             <Accordion.Body onClick={(e) => {
               e.stopPropagation();
@@ -182,7 +273,7 @@ function VehicleCreation() {
                   <Form.Control
                     type="number"
                     placeholder="Sélectionnez l'année"
-                    value={selectedYear}
+                    value={vehicleToEdit !== null ? moment(year).format('YYYY') : selectedYear}
                     onChange={handleYearChange}
                   />
                 </Form.Group>
@@ -214,6 +305,7 @@ function VehicleCreation() {
                     }}
                     type="text"
                     placeholder="modèle"
+                    value={model}
                   />
                 </FloatingLabel>
 
@@ -228,6 +320,7 @@ function VehicleCreation() {
                     }}
                     type="text"
                     placeholder="moteur"
+                    value={engine}
                   />
                 </FloatingLabel>
 
@@ -242,6 +335,7 @@ function VehicleCreation() {
                     }}
                     type="text"
                     placeholder="amortisseurs"
+                    value={shocks}
                   />
                 </FloatingLabel>
 
@@ -257,6 +351,7 @@ function VehicleCreation() {
                     type="textarea"
                     placeholder="description"
                     style={{ height: '100px' }}
+                    value={description}
                   />
                 </FloatingLabel>
 
@@ -271,13 +366,12 @@ function VehicleCreation() {
                         </Accordion.Header>
                         <Accordion.Body>
                           {discipline.categories.map((category) => (
-                            <Form.Check // prettier-ignore
-                              key={category.id}
-                              type="checkbox"
-                              name="categories"
+                            <Checkbox
+                              key={`${resetKey}-${category.id}`}
                               id={category.id}
                               label={category.name}
-                              onChange={handleCategoriesSelect}
+                              checked={categories.includes(category.id)}
+                              onChange={() => handleCheckboxChange(category.id)}
                             />
                           ))}
                         </Accordion.Body>
