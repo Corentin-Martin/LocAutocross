@@ -12,6 +12,7 @@ import GarageInfos from '../../components/GarageInfos/GarageInfos';
 function Vehicles() {
   const vehicle = useSelector((state) => state.dashboard.vehicle);
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
+  const idToEdit = useSelector((state) => state.dashboard.idToEdit);
 
   return (
     <Row className="d-flex justify-content-center">
@@ -20,9 +21,10 @@ function Vehicles() {
 
       <div className="Vehicles-under992">
         <GarageInfos />
-        {vehicle === null && <VehicleCreation />}
+        {(vehicle === null && idToEdit === null) && <VehicleCreation />}
+        {/* {(vehicle !== null && idToEdit !== null && isOpenCreationModal) && <VehicleCreation />} */}
         {(vehicle === null && !isOpenCreationModal) && <MyVehicles />}
-        {vehicle !== null && <VehicleDetail />}
+        {(vehicle !== null && idToEdit === null) && <VehicleDetail />}
       </div>
 
       <div className="Vehicles-over992">

@@ -6,7 +6,7 @@ import moment from 'moment';
 import { PencilSquare, XCircleFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
-import { setVehicleForDetails } from '../../actions/dashboard';
+import { setIdToEdit, setOpenCreation, setVehicleForDetails } from '../../actions/dashboard';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
 function VehicleDetail() {
@@ -35,6 +35,10 @@ function VehicleDetail() {
         <PencilSquare
           size={24}
           className="text-tertiary VehicleDetail-EditIcon"
+          onClick={() => {
+            dispatch(setIdToEdit(vehicle.id));
+            dispatch(setOpenCreation(true));
+          }}
         />
         <Card.Title>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</Card.Title>
 

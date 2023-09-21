@@ -145,6 +145,7 @@ function VehicleCreation() {
           setIsLoading(false);
           dispatch(setOpenCreation(false));
           dispatch(setVehicleForDetails(response.data));
+          console.log(response.data);
           // dispatch(setMyVehicles([...vehicles, response.data]));
         })
         .catch((err) => {
