@@ -9,6 +9,7 @@
       right:0;
       margin: 1rem;
       transition-duration: .5s;
+      cursor: pointer;
 
       @media screen and (min-width: 768px) {
         top: 0;
@@ -25,6 +26,8 @@
       right:0;
       margin: 1rem;
       transition-duration: .5s;
+      cursor: pointer;
+
 
       @media screen and (min-width: 768px) {
         bottom: 0;
@@ -39,6 +42,8 @@
       margin-bottom: 2rem;
       transition-duration: .5s;
       color: vars.$text;
+      cursor: pointer;
+
 
       @media screen and (min-width: 768px) {
         margin-bottom: .7rem;

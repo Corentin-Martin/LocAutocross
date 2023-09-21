@@ -4,6 +4,9 @@ import {
   Form, FloatingLabel, Spinner, Button, Accordion,
 } from 'react-bootstrap';
 import axios from 'axios';
+import { PlusCircleFill } from 'react-bootstrap-icons';
+import { useDispatch } from 'react-redux';
+import { setVehicleForDetails } from '../../actions/dashboard';
 
 function VehicleCreation() {
   const [brands, setBrands] = useState([]);
@@ -20,6 +23,8 @@ function VehicleCreation() {
   const [year, setYear] = useState('2023-01-01');
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [categories, setCategories] = useState([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/brands')
@@ -115,139 +120,155 @@ function VehicleCreation() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 col-lg-6">
+    <div className="d-flex flex-column align-items-center">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
 
-        <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
-          <h2 className="text-center">Nouveau véhicule</h2>
+        <Accordion
+          className="col-12"
+          onClick={() => {
+            dispatch(setVehicleForDetails(null));
+          }}
+        >
 
-          <Form.Group controlId="pictureSelect" className="mb-3 col-10">
-            <Form.Label>Photo</Form.Label>
-            <Form.Control
-              type="file"
-              label="Image"
-              name="myFile"
-              accept=".jpeg, .png, .jpg"
-              onChange={(e) => handleFileUpload(e)}
-            />
-          </Form.Group>
+          <Accordion.Item eventKey="0">
+            <Accordion.Header className="text-center bg-secondary">
 
-          <Form.Group controlId="yearSelect" className="mb-3 col-10">
-            <Form.Label className="text-center">Année</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Sélectionnez l'année"
-              value={selectedYear}
-              onChange={handleYearChange}
-            />
-          </Form.Group>
+              <PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule
+            </Accordion.Header>
+            <Accordion.Body>
+              <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
+                <Form.Group controlId="pictureSelect" className="mb-3 col-10">
+                  <Form.Label>Photo</Form.Label>
+                  <Form.Control
+                    type="file"
+                    label="Image"
+                    name="myFile"
+                    accept=".jpeg, .png, .jpg"
+                    onChange={(e) => handleFileUpload(e)}
+                  />
+                </Form.Group>
 
-          <Form.Group controlId="brandSelect" className="mb-3 col-10">
-            <Form.Label>Marque</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Sélectionnez une marque"
-              list="brandsList" // Utilisez le datalist ici
-              value={brand ? brand.name : ''}
-              onChange={handleBrandChange}
-            />
-            <datalist id="brandsList">
-              {brands.map((oneBrand) => (
-                <option key={oneBrand.id} value={oneBrand.name} />
-              ))}
-            </datalist>
-          </Form.Group>
+                <Form.Group controlId="yearSelect" className="mb-3 col-10">
+                  <Form.Label className="text-center">Année</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Sélectionnez l'année"
+                    value={selectedYear}
+                    onChange={handleYearChange}
+                  />
+                </Form.Group>
 
-          <FloatingLabel
-            controlId="floatingInput"
-            label="Modèle"
-            className="mb-3 col-10"
-          >
-            <Form.Control
-              onChange={(event) => {
-                setModel(event.currentTarget.value);
-              }}
-              type="text"
-              placeholder="modèle"
-            />
-          </FloatingLabel>
-
-          <FloatingLabel
-            controlId="floatingInput2"
-            label="Moteur"
-            className="mb-3 col-10"
-          >
-            <Form.Control
-              onChange={(event) => {
-                setEngine(event.currentTarget.value);
-              }}
-              type="text"
-              placeholder="moteur"
-            />
-          </FloatingLabel>
-
-          <FloatingLabel
-            controlId="floatingInput3"
-            label="Amortisseurs"
-            className="mb-3 col-10"
-          >
-            <Form.Control
-              onChange={(event) => {
-                setShocks(event.currentTarget.value);
-              }}
-              type="text"
-              placeholder="amortisseurs"
-            />
-          </FloatingLabel>
-
-          <FloatingLabel
-            controlId="floatingInput4"
-            label="Informations complémentaires"
-            className="mb-3 col-10"
-          >
-            <Form.Control
-              onChange={(event) => {
-                setDescription(event.currentTarget.value);
-              }}
-              type="textarea"
-              placeholder="description"
-              style={{ height: '100px' }}
-            />
-          </FloatingLabel>
-
-          <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
-            <Form.Label>Catégorie(s)</Form.Label>
-
-            <Accordion>
-              {disciplines.map((discipline) => (
-                <Accordion.Item eventKey={discipline.id} key={discipline.id}>
-                  <Accordion.Header>
-                    {discipline.name} - {discipline.federation.alias}
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    {discipline.categories.map((category) => (
-                      <Form.Check // prettier-ignore
-                        key={category.id}
-                        type="checkbox"
-                        name="categories"
-                        id={category.id}
-                        label={category.name}
-                        onChange={handleCategoriesSelect}
-                      />
+                <Form.Group controlId="brandSelect" className="mb-3 col-10">
+                  <Form.Label>Marque</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Sélectionnez une marque"
+                    list="brandsList" // Utilisez le datalist ici
+                    value={brand ? brand.name : ''}
+                    onChange={handleBrandChange}
+                  />
+                  <datalist id="brandsList">
+                    {brands.map((oneBrand) => (
+                      <option key={oneBrand.id} value={oneBrand.name} />
                     ))}
-                  </Accordion.Body>
-                </Accordion.Item>
-              ))}
-            </Accordion>
+                  </datalist>
+                </Form.Group>
 
-          </Form.Group>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Modèle"
+                  className="mb-3 col-10"
+                >
+                  <Form.Control
+                    onChange={(event) => {
+                      setModel(event.currentTarget.value);
+                    }}
+                    type="text"
+                    placeholder="modèle"
+                  />
+                </FloatingLabel>
 
-          <Button type="submit">Creer</Button>
-        </Form>
+                <FloatingLabel
+                  controlId="floatingInput2"
+                  label="Moteur"
+                  className="mb-3 col-10"
+                >
+                  <Form.Control
+                    onChange={(event) => {
+                      setEngine(event.currentTarget.value);
+                    }}
+                    type="text"
+                    placeholder="moteur"
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  controlId="floatingInput3"
+                  label="Amortisseurs"
+                  className="mb-3 col-10"
+                >
+                  <Form.Control
+                    onChange={(event) => {
+                      setShocks(event.currentTarget.value);
+                    }}
+                    type="text"
+                    placeholder="amortisseurs"
+                  />
+                </FloatingLabel>
+
+                <FloatingLabel
+                  controlId="floatingInput4"
+                  label="Informations complémentaires"
+                  className="mb-3 col-10"
+                >
+                  <Form.Control
+                    onChange={(event) => {
+                      setDescription(event.currentTarget.value);
+                    }}
+                    type="textarea"
+                    placeholder="description"
+                    style={{ height: '100px' }}
+                  />
+                </FloatingLabel>
+
+                <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
+                  <Form.Label>Catégorie(s)</Form.Label>
+
+                  <Accordion>
+                    {disciplines.map((discipline) => (
+                      <Accordion.Item eventKey={discipline.id} key={discipline.id}>
+                        <Accordion.Header>
+                          {discipline.name} - {discipline.federation.alias}
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          {discipline.categories.map((category) => (
+                            <Form.Check // prettier-ignore
+                              key={category.id}
+                              type="checkbox"
+                              name="categories"
+                              id={category.id}
+                              label={category.name}
+                              onChange={handleCategoriesSelect}
+                            />
+                          ))}
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    ))}
+                  </Accordion>
+
+                </Form.Group>
+
+                <Button type="submit">Creer</Button>
+              </Form>
+            </Accordion.Body>
+          </Accordion.Item>
+
+        </Accordion>
+
       )}
     </div>
   );

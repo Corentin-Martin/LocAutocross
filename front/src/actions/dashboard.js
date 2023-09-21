@@ -17,3 +17,11 @@ export const setOpenCreation = (bool) => ({
     isOpenCreationModal: bool,
   },
 });
+
+export const SET_VEHICLE = 'SET_VEHICLE';
+export const setVehicleForDetails = (vehicle) => ({
+  type: SET_VEHICLE,
+  payload: {
+    vehicle: vehicle,
+  },
+});

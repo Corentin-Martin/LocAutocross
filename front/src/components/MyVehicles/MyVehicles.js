@@ -4,15 +4,19 @@ import axios from 'axios';
 import { Carousel, Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import { PencilSquare, TrashFill, ThreeDots } from 'react-bootstrap-icons';
+import { useDispatch } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
+import { setVehicleForDetails } from '../../actions/dashboard';
 
 function MyVehicles() {
   const [vehicles, setVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     axios.get(
-      'http://localhost:8000/api/vehicles',
+      'http://localhost:8000/api/vehicles?my',
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -34,6 +38,23 @@ function MyVehicles() {
     setIndex(selectedIndex);
   };
 
+  const handleSeeDetails = (id) => {
+    axios.get(
+      `http://localhost:8000/api/vehicles/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+    )
+      .then((response) => {
+        dispatch(setVehicleForDetails(response.data));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <div className="d-flex flex-column align-items-center col-12 col-lg-6">
       {isLoading ? (
@@ -44,15 +65,15 @@ function MyVehicles() {
         <Carousel
           activeIndex={index}
           onSelect={handleSelect}
-          className="container "
+          className="container"
           style={{ maxWidth: '600px', maxHeight: '600px' }}
         >
           {vehicles.map((vehicle) => (
-            <Carousel.Item key={vehicle.id}>
+            <Carousel.Item key={vehicle.id} className="rounded-4">
               <img
                 src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
                 alt={vehicle.model}
-                className="img-fluid MyVehicles-Carousel-Image rounded-4"
+                className="img-fluid MyVehicles-Carousel-Image"
               />
               <div className="under768 bg-tertiary bg-opacity-25">
                 <TrashFill size={24} className="text-black MyVehicles-Carousel-DeleteIcon" />
@@ -60,7 +81,13 @@ function MyVehicles() {
                 <p>Moteur : {vehicle.engine}</p>
                 <p>Amortisseurs : {vehicle.shocks}</p>
                 <PencilSquare size={24} className="text-secondary MyVehicles-Carousel-EditIcon" />
-                <ThreeDots size={24} className="MyVehicles-Carousel-MoreIcon" />
+                <ThreeDots
+                  size={24}
+                  className="MyVehicles-Carousel-MoreIcon"
+                  onClick={() => {
+                    handleSeeDetails(vehicle.id);
+                  }}
+                />
               </div>
 
               <Carousel.Caption className="bg-tertiary rounded-4 bg-opacity-75 MyVehicles-Carousel-Caption over768">
@@ -69,7 +96,13 @@ function MyVehicles() {
                 <p>Moteur : {vehicle.engine}</p>
                 <p>Amortisseurs : {vehicle.shocks}</p>
                 <PencilSquare size={24} className="text-secondary MyVehicles-Carousel-EditIcon" />
-                <ThreeDots size={24} className="MyVehicles-Carousel-MoreIcon" />
+                <ThreeDots
+                  size={24}
+                  className="MyVehicles-Carousel-MoreIcon"
+                  onClick={() => {
+                    handleSeeDetails(vehicle.id);
+                  }}
+                />
               </Carousel.Caption>
             </Carousel.Item>
           ))}
