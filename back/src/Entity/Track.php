@@ -20,6 +20,7 @@ class Track
      * @ORM\Column(type="integer")
      * @Groups({"track_browse"})
      * @Groups({"rental_found"})
+     * @Groups({"vehicle_detail"})
      */
     private $id;
 
@@ -27,6 +28,7 @@ class Track
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"track_browse"})
      * @Groups({"rental_found"})
+     * @Groups({"vehicle_detail"})
      */
     private $name;
 
@@ -34,6 +36,7 @@ class Track
      * @ORM\Column(type="string", length=255)
      * @Groups({"track_browse"})
      * @Groups({"rental_found"})
+     * @Groups({"vehicle_detail"})
      */
     private $city;
 

@@ -39,8 +39,8 @@ class VehicleController extends AbstractController
      */
     public function read(?Vehicle $vehicle): JsonResponse
     {
-        return (is_null($vehicle)) ? $this->json(["message" => "Cet évenement n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($vehicle, Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse"]]);
+        return (is_null($vehicle)) ? $this->json(["message" => "Ce véhicule n'existe pas"], Response::HTTP_NOT_FOUND, [])
+                                        : $this->json($vehicle, Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse", "vehicle_detail"]]);
     }
 
     /**
@@ -61,13 +61,13 @@ class VehicleController extends AbstractController
 
         $vehicleRepository->add($newVehicle, true);
 
-        return $this->json($newVehicle, Response::HTTP_CREATED, [], ["groups" => ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse"]]);
+        return $this->json($newVehicle, Response::HTTP_CREATED, [], ["groups" => ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse", "vehicle_detail"]]);
     }
 
     /**
      * @Route("/{id}", name="edit", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
      */
-    public function edit(?Vehicle $vehicle, Request $request, SerializerInterface $serializerInterface, VehicleRepository $vehicleRepository): JsonResponse
+    public function edit(?Vehicle $vehicle, Request $request, SerializerInterface $serializerInterface, VehicleRepository $vehicleRepository, UploadImageService $uploadImageService): JsonResponse
     {
 
         if (is_null($vehicle)) {
@@ -80,9 +80,11 @@ class VehicleController extends AbstractController
 
         $serializerInterface->deserialize($request->getContent(), Vehicle::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $vehicle]);
 
+        $uploadImageService->upload($vehicle);
+
         $vehicleRepository->add($vehicle, true);
 
-        return $this->json($vehicle, Response::HTTP_OK, [], ["groups"=> ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse"]]);
+        return $this->json($vehicle, Response::HTTP_OK, [], ["groups"=> ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse", "vehicle_detail"]]);
     }
 
     /**

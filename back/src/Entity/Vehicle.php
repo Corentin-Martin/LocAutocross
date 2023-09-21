@@ -70,6 +70,7 @@ class Vehicle
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="vehicle")
+     * @Groups({"vehicle_detail"})
      */
     private $rentals;
 
@@ -251,11 +252,10 @@ class Vehicle
     }
 
     /**
-     * @return Collection<int, Category>
      */
-    public function getCategory(): Collection
+    public function getCategory()
     {
-        return $this->category;
+        return $this->category->getValues();
     }
 
     public function addCategory(Category $category): self
