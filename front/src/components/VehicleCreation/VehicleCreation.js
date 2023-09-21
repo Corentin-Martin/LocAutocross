@@ -6,10 +6,11 @@ import {
 import axios from 'axios';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOpenCreation, setVehicleForDetails } from '../../actions/dashboard';
+import { setMyVehicles, setOpenCreation, setVehicleForDetails } from '../../actions/dashboard';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
+  const vehicles = useSelector((state) => state.dashboard.myVehicles);
   const vehicle = useSelector((state) => state.dashboard.vehicle);
   const [brands, setBrands] = useState([]);
   const [disciplines, setDisciplines] = useState([]);
@@ -49,6 +50,7 @@ function VehicleCreation() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     axios.post(
       'http://localhost:8000/api/vehicles',
@@ -70,7 +72,10 @@ function VehicleCreation() {
 
     )
       .then((response) => {
-        console.log(response.data);
+        setIsLoading(false);
+        dispatch(setOpenCreation(false));
+        dispatch(setVehicleForDetails(response.data));
+        dispatch(setMyVehicles([...vehicles, response.data]));
       })
       .catch((err) => {
         console.error(err);
@@ -156,7 +161,10 @@ function VehicleCreation() {
 
               <PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule
             </Accordion.Header>
-            <Accordion.Body>
+            <Accordion.Body onClick={(e) => {
+              e.stopPropagation();
+            }}
+            >
               <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
                 <Form.Group controlId="pictureSelect" className="mb-3 col-10">
                   <Form.Label>Photo</Form.Label>

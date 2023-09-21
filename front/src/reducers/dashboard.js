@@ -33,7 +33,7 @@ function reducer(state = initialState, action = {}) {
     case SET_MY_VEHICLES:
       return {
         ...state,
-        vehicles: action.payload.vehicles,
+        myVehicles: action.payload.myVehicles,
       };
 
     default:

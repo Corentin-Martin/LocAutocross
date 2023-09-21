@@ -3,10 +3,11 @@ import './VehicleDetail.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
 import moment from 'moment';
-import { PencilSquare, TrashFill, XCircleFill } from 'react-bootstrap-icons';
+import { PencilSquare, XCircleFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import { setVehicleForDetails } from '../../actions/dashboard';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 function VehicleDetail() {
   const vehicle = useSelector((state) => state.dashboard.vehicle);
@@ -28,10 +29,9 @@ function VehicleDetail() {
         onClick={() => dispatch(setVehicleForDetails(null))}
       />
       <Card.Body style={{ position: 'relative' }}>
-        <TrashFill
-          size={24}
-          className="text-black VehicleDetail-DeleteIcon"
-        />
+        <div className="VehicleDetail-DeleteIcon">
+          <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+        </div>
         <PencilSquare
           size={24}
           className="text-tertiary VehicleDetail-EditIcon"

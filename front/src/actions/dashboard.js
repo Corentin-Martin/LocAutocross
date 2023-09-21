@@ -27,9 +27,9 @@ export const setVehicleForDetails = (vehicle) => ({
 });
 
 export const SET_MY_VEHICLES = 'SET_MY_VEHICLES';
-export const setMyVehicles = (vehicles) => ({
+export const setMyVehicles = (myVehicles) => ({
   type: SET_MY_VEHICLES,
   payload: {
-    vehicles: vehicles,
+    myVehicles: myVehicles,
   },
 });

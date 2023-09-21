@@ -3,13 +3,14 @@ import './MyVehicles.scss';
 import axios from 'axios';
 import { Carousel, Spinner } from 'react-bootstrap';
 import moment from 'moment';
-import { PencilSquare, TrashFill, ThreeDots } from 'react-bootstrap-icons';
+import { PencilSquare, ThreeDots } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import { setMyVehicles, setVehicleForDetails } from '../../actions/dashboard';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 function MyVehicles() {
-  const vehicles = useSelector((state) => state.dashboard.vehicles);
+  const vehicles = useSelector((state) => state.dashboard.myVehicles);
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -76,8 +77,10 @@ function MyVehicles() {
                 className="img-fluid MyVehicles-Carousel-Image"
               />
               <div className="under768 bg-tertiary bg-opacity-25">
-                <TrashFill size={24} className="text-black MyVehicles-Carousel-DeleteIcon" />
-                <h3>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
+                <div className="MyVehicles-Carousel-DeleteIcon">
+                  <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+                </div>
+                <h3 className="mt-3">{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
                 <p>Moteur : {vehicle.engine}</p>
                 <p>Amortisseurs : {vehicle.shocks}</p>
                 <PencilSquare size={24} className="text-secondary MyVehicles-Carousel-EditIcon" />
@@ -91,7 +94,9 @@ function MyVehicles() {
               </div>
 
               <Carousel.Caption className="bg-tertiary rounded-4 bg-opacity-75 MyVehicles-Carousel-Caption over768">
-                <TrashFill size={24} className="text-black MyVehicles-Carousel-DeleteIcon" />
+                <div className="MyVehicles-Carousel-DeleteIcon">
+                  <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+                </div>
                 <h3>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
                 <p>Moteur : {vehicle.engine}</p>
                 <p>Amortisseurs : {vehicle.shocks}</p>

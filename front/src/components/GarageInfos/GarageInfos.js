@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 function GarageInfos() {
-  const vehicles = useSelector((state) => state.dashboard.vehicles);
+  const vehicles = useSelector((state) => state.dashboard.myVehicles);
   const [isLoading, setIsLoading] = useState(true);
   const [length, setLength] = useState(0);
 
@@ -25,7 +25,7 @@ function GarageInfos() {
       ) : (
         <Card style={{ width: '100%', height: '100%' }}>
           <Card.Title>Les informations de votre garage</Card.Title>
-          <Card.Subtitle>Nombre de véhicules</Card.Subtitle>
+          <Card.Subtitle>Nombre de véhicule{length > 1 ? 's' : ''}</Card.Subtitle>
           <Card.Title>{length}</Card.Title>
         </Card>
       )}
