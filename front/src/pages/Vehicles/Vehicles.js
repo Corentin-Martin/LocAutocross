@@ -7,17 +7,29 @@ import './Vehicles.scss';
 import MyVehicles from '../../components/MyVehicles/MyVehicles';
 
 import VehicleDetail from '../../components/VehicleDetail/VehicleDetail';
+import GarageInfos from '../../components/GarageInfos/GarageInfos';
 
 function Vehicles() {
   const vehicle = useSelector((state) => state.dashboard.vehicle);
+  const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
 
   return (
     <Row className="d-flex justify-content-center">
 
       <h1 className="text-center">Mon garage</h1>
       <Row className="d-flex justify-content-center">
-        <MyVehicles />
-        <Col className="col-12 col-lg-6">
+        <Col className="col-12 col-lg-6 d-flex flex-column">
+          <MyVehicles />
+          <CSSTransition
+            in={vehicle !== null || isOpenCreationModal}
+            timeout={1000}
+            classNames="your-component"
+            unmountOnExit
+          >
+            <GarageInfos />
+          </CSSTransition>
+        </Col>
+        <Col className="col-12 col-lg-6 d-flex flex-column">
           <VehicleCreation />
           <CSSTransition
             in={vehicle !== null}
@@ -27,6 +39,8 @@ function Vehicles() {
           >
             <VehicleDetail />
           </CSSTransition>
+
+          {(vehicle === null && !isOpenCreationModal) && <GarageInfos />}
 
         </Col>
 

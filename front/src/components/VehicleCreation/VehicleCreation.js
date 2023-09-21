@@ -5,10 +5,12 @@ import {
 } from 'react-bootstrap';
 import axios from 'axios';
 import { PlusCircleFill } from 'react-bootstrap-icons';
-import { useDispatch } from 'react-redux';
-import { setVehicleForDetails } from '../../actions/dashboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { setOpenCreation, setVehicleForDetails } from '../../actions/dashboard';
 
 function VehicleCreation() {
+  const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
+  const vehicle = useSelector((state) => state.dashboard.vehicle);
   const [brands, setBrands] = useState([]);
   const [disciplines, setDisciplines] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -119,6 +121,19 @@ function VehicleCreation() {
     }
   };
 
+  const [openItem, setOpenItem] = useState(null);
+
+  const handleAccordionToggle = (eventKey) => {
+    setOpenItem(openItem === eventKey ? null : eventKey);
+  };
+
+  useEffect(() => {
+    if (vehicle) {
+      setOpenItem(null);
+      dispatch(setOpenCreation(false));
+    }
+  }, [vehicle]);
+
   return (
     <div className="d-flex flex-column align-items-center">
       {isLoading ? (
@@ -131,10 +146,12 @@ function VehicleCreation() {
           className="col-12"
           onClick={() => {
             dispatch(setVehicleForDetails(null));
+            dispatch(setOpenCreation(!isOpenCreationModal));
           }}
+          activeKey={openItem}
         >
 
-          <Accordion.Item eventKey="0">
+          <Accordion.Item eventKey="0" onClick={() => handleAccordionToggle('0')}>
             <Accordion.Header className="text-center bg-secondary">
 
               <PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule

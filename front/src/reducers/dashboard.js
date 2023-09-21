@@ -1,8 +1,9 @@
-import { SET_OPEN_CREATION, SET_VEHICLE } from '../actions/dashboard';
+import { SET_MY_VEHICLES, SET_OPEN_CREATION, SET_VEHICLE } from '../actions/dashboard';
 
 const initialState = {
-  isOpenCreationModal: true,
+  isOpenCreationModal: false,
   vehicle: null,
+  myVehicles: [],
 
 };
 
@@ -27,6 +28,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         vehicle: action.payload.vehicle,
+      };
+
+    case SET_MY_VEHICLES:
+      return {
+        ...state,
+        vehicles: action.payload.vehicles,
       };
 
     default:

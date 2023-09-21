@@ -4,12 +4,12 @@ import axios from 'axios';
 import { Carousel, Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import { PencilSquare, TrashFill, ThreeDots } from 'react-bootstrap-icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
-import { setVehicleForDetails } from '../../actions/dashboard';
+import { setMyVehicles, setVehicleForDetails } from '../../actions/dashboard';
 
 function MyVehicles() {
-  const [vehicles, setVehicles] = useState([]);
+  const vehicles = useSelector((state) => state.dashboard.vehicles);
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function MyVehicles() {
       },
     )
       .then((response) => {
-        setVehicles(response.data);
+        dispatch(setMyVehicles(response.data));
         setIsLoading(false);
       })
       .catch((err) => {
@@ -56,7 +56,7 @@ function MyVehicles() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 col-lg-6">
+    <div className="d-flex flex-column align-items-center">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
