@@ -65,7 +65,7 @@ function MyVehicles() {
         <Carousel
           activeIndex={index}
           onSelect={handleSelect}
-          className="container"
+          className="container mt-2"
           style={{ maxWidth: '600px', maxHeight: '600px' }}
         >
           {vehicles.map((vehicle) => (

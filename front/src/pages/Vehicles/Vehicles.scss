@@ -22,3 +22,19 @@
   transform: scale(0.9);
   transition: opacity 1000ms, transform 1000ms;
 }
+
+.Vehicles {
+
+  &-over992 {
+    display: none;
+  }
+
+  @media screen and (min-width: 992px) {
+    &-under992 {
+      display: none;
+    }
+    &-over992 {
+      display: block;
+    }
+  }
+}

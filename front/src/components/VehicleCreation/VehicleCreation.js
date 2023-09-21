@@ -143,7 +143,7 @@ function VehicleCreation() {
       ) : (
 
         <Accordion
-          className="col-12"
+          className="col-12 mt-2 mb-2"
           onClick={() => {
             dispatch(setVehicleForDetails(null));
             dispatch(setOpenCreation(!isOpenCreationModal));

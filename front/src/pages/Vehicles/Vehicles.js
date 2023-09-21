@@ -17,34 +17,44 @@ function Vehicles() {
     <Row className="d-flex justify-content-center">
 
       <h1 className="text-center">Mon garage</h1>
-      <Row className="d-flex justify-content-center">
-        <Col className="col-12 col-lg-6 d-flex flex-column">
-          <MyVehicles />
-          <CSSTransition
-            in={vehicle !== null || isOpenCreationModal}
-            timeout={1000}
-            classNames="your-component"
-            unmountOnExit
-          >
-            <GarageInfos />
-          </CSSTransition>
-        </Col>
-        <Col className="col-12 col-lg-6 d-flex flex-column">
-          <VehicleCreation />
-          <CSSTransition
-            in={vehicle !== null}
-            timeout={1000}
-            classNames="your-component"
-            unmountOnExit
-          >
-            <VehicleDetail />
-          </CSSTransition>
 
-          {(vehicle === null && !isOpenCreationModal) && <GarageInfos />}
+      <div className="Vehicles-under992">
+        <GarageInfos />
+        {vehicle === null && <VehicleCreation />}
+        {(vehicle === null && !isOpenCreationModal) ? <MyVehicles /> : <VehicleDetail />}
+      </div>
 
-        </Col>
+      <div className="Vehicles-over992">
 
-      </Row>
+        <Row className="d-flex justify-content-center">
+          <Col className="col-12 col-lg-6 d-flex flex-column">
+            <MyVehicles />
+            <CSSTransition
+              in={vehicle !== null || isOpenCreationModal}
+              timeout={1000}
+              classNames="your-component"
+              unmountOnExit
+            >
+              <GarageInfos />
+            </CSSTransition>
+          </Col>
+          <Col className="col-12 col-lg-6 d-flex flex-column">
+            <VehicleCreation />
+            <CSSTransition
+              in={vehicle !== null}
+              timeout={1000}
+              classNames="your-component"
+              unmountOnExit
+            >
+              <VehicleDetail />
+            </CSSTransition>
+
+            {(vehicle === null && !isOpenCreationModal) && <GarageInfos />}
+
+          </Col>
+
+        </Row>
+      </div>
     </Row>
   );
 }

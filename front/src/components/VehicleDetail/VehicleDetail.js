@@ -16,7 +16,7 @@ function VehicleDetail() {
     return null;
   }
   return (
-    <Card style={{ width: '100%', position: 'relative' }} className="mt-3 text-center">
+    <Card style={{ width: '100%', position: 'relative' }} className="mt-3 text-center bg-secondary">
       <Card.Img
         variant="top"
         src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
@@ -34,7 +34,7 @@ function VehicleDetail() {
         />
         <PencilSquare
           size={24}
-          className="text-secondary VehicleDetail-EditIcon"
+          className="text-tertiary VehicleDetail-EditIcon"
         />
         <Card.Title>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</Card.Title>
 
