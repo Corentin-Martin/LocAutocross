@@ -6,7 +6,7 @@ import {
 const initialState = {
   isOpenCreationModal: false,
   vehicle: null,
-  myVehicles: [],
+  myVehicles: null,
   idToEdit: null,
 
 };

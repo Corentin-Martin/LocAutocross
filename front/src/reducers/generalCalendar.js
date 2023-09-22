@@ -1,4 +1,4 @@
-import { SET_MODAL_CALENDAR_OPEN, SET_SELECTED_EVENT } from '../actions/generalCalendar';
+import { SET_FEDERATIONS, SET_MODAL_CALENDAR_OPEN, SET_SELECTED_EVENT } from '../actions/generalCalendar';
 
 const initialState = {
   modalCalendarIsOpen: false,
@@ -16,6 +16,7 @@ const initialState = {
     rentals: [],
     id: 1,
   },
+  federations: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -39,6 +40,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         selectedEvent: action.payload.selectedEvent,
+      };
+
+    case SET_FEDERATIONS:
+      return {
+        ...state,
+        federations: action.payload.federations,
       };
 
     default:

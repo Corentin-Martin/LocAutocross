@@ -6,7 +6,7 @@ import {
   useEffect, useState,
 } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactSelect from 'react-select';
 import {
   Container, Row, Col, Alert, Button, Offcanvas, Spinner,
@@ -21,21 +21,16 @@ function GeneralCalendar() {
   const [selectedEvent, setSelectedEventLocal] = useState(null);
   const [search, setSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [federations, setFederations] = useState([]);
+  const federations = useSelector((state) => state.generalCalendar.federations);
   const [noEvents, setNoEvents] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/federations')
-      .then((response) => {
-        setFederations(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    if (federations) {
+      setIsLoading(false);
+    }
+  }, [federations]);
 
   const onSelectEvent = useCallback((calEvent) => {
     if (calEvent && calEvent.id) {
@@ -75,6 +70,8 @@ function GeneralCalendar() {
         }
       });
 
+      console.log(federations);
+
       const champ = (event.isOfficial) ? value : null;
 
       event.style = {
@@ -83,7 +80,7 @@ function GeneralCalendar() {
 
       return event;
     },
-    [federations],
+    [isLoading],
   );
 
   useEffect(() => {

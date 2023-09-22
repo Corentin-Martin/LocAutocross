@@ -1,5 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import Dashboard from '../Dashboard/Dashboard';
 import Chat from '../Chat/Chat';
 import './App.scss';
@@ -10,8 +13,38 @@ import Calendar from '../../pages/Calendar/Calendar';
 import Login from '../../pages/Login/Login';
 import Registration from '../../pages/Registration/Registration';
 import Vehicles from '../../pages/Vehicles/Vehicles';
+import RentalGestion from '../../pages/RentalGestion/RentalGestion';
+import { setFederations } from '../../actions/generalCalendar';
+import { setMyVehicles } from '../../actions/dashboard';
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/federations')
+      .then((response) => {
+        dispatch(setFederations(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get(
+      'http://localhost:8000/api/vehicles?my',
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+    )
+      .then((response) => {
+        dispatch(setMyVehicles(response.data));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   return (
     <Container>
       <div className="App">
@@ -42,6 +75,10 @@ function App() {
           <Route
             path="/garage"
             element={(<Skeleton page={<Vehicles />} />)}
+          />
+          <Route
+            path="/mes-locations"
+            element={(<Skeleton page={<RentalGestion />} />)}
           />
 
           <Route path="dashboard" element={<Dashboard />} />
