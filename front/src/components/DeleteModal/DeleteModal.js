@@ -50,8 +50,8 @@ function DeleteModal({ type, idToDelete }) {
         <Modal.Header closeButton>
           <Modal.Title>Attention ! </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Vous êtes sur le point d'effectuer une
-          supression. Confirmez-vous cette action ?
+        <Modal.Body>
+          {type === 'vehicles' ? "Vous êtes sur le point de supprimer ce véhicule. Celui-ci sera désactivé et ne pourra plus être proposé à la location. En revanche, il apparaitra toujours dans l'historique de vos locations passées. Confirmez-vous cette action ?" : "Vous êtes sur le point d'effectuer une supression. Confirmez-vous cette action ?" }
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

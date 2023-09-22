@@ -20,7 +20,7 @@ function Vehicles() {
       <h1 className="text-center">Mon garage</h1>
 
       <div className="Vehicles-under992">
-        <GarageInfos />
+        {!isOpenCreationModal && <GarageInfos />}
         {(vehicle === null) && <VehicleCreation />}
         {(vehicle === null && !isOpenCreationModal) && <MyVehicles />}
         {(vehicle !== null && idToEdit === null) && <VehicleDetail />}

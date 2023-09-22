@@ -41,7 +41,7 @@ function VehicleDetail() {
             dispatch(setVehicleForDetails(null));
           }}
         />
-        <Card.Title>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</Card.Title>
+        <Card.Title>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</Card.Title>
 
         <Card.Subtitle>Informations</Card.Subtitle>
         <Card.Text>{vehicle.description ?? '/'}</Card.Text>
@@ -50,7 +50,7 @@ function VehicleDetail() {
         <Card.Text>{vehicle.engine}</Card.Text>
 
         <Card.Subtitle>Amortisseurs</Card.Subtitle>
-        <Card.Text>{vehicle.shocks}</Card.Text>
+        <Card.Text>{vehicle.shocks ?? 'Non renseigné'}</Card.Text>
 
         <Card.Subtitle>Catégorie{vehicle.category.length > 1 ? 's' : ''}</Card.Subtitle>
         <Card.Text>
