@@ -20,6 +20,7 @@ class Rental
      * @ORM\Column(type="integer")
      * @Groups({"rental_browse"})
      * @Groups({"event_find"})
+     * @Groups({"vehicle_detail"})
      */
     private $id;
 
@@ -27,6 +28,7 @@ class Rental
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"rental_browse"})
      * @Groups({"event_find"})
+     * @Groups({"vehicle_detail"})
      */
     private $price;
 
@@ -34,6 +36,7 @@ class Rental
      * @ORM\Column(type="smallint", length=255)
      * @Groups({"rental_browse"})
      * @Groups({"event_find"})
+     * @Groups({"vehicle_detail"})
      */
     private $status;
 
@@ -57,6 +60,7 @@ class Rental
      * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"rental_browse"})
+     * @Groups({"vehicle_detail"})
      */
     private $event;
 

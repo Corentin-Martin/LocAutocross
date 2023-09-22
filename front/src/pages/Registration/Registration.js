@@ -74,7 +74,7 @@ function Registration() {
     if ([mail, pseudo, firstname, lastname, password, role].some((value) => value === null)) {
       setWrongConnexion(true);
     }
-    if (password === confirmPassword) {
+    else if (password === confirmPassword) {
       axios.post('http://localhost:8000/api/user', {
         email: mail,
         password: password,

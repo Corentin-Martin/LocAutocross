@@ -39,14 +39,14 @@ class Vehicle
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicle_browse"})
      * @Groups({"rental_found"})
      */
     private $engine;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicle_browse"})
      * @Groups({"rental_found"})
      */
     private $shocks;
@@ -60,16 +60,19 @@ class Vehicle
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vehicle_browse"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"vehicle_browse"})
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="vehicle")
+     * @Groups({"vehicle_detail"})
      */
     private $rentals;
 
@@ -100,6 +103,11 @@ class Vehicle
      * @Groups({"rental_found"})
      */
     private $model;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActiv;
 
     public function __construct()
     {
@@ -251,11 +259,10 @@ class Vehicle
     }
 
     /**
-     * @return Collection<int, Category>
      */
-    public function getCategory(): Collection
+    public function getCategory()
     {
-        return $this->category;
+        return $this->category->getValues();
     }
 
     public function addCategory(Category $category): self
@@ -302,6 +309,18 @@ class Vehicle
     public function setModel(?string $model): self
     {
         $this->model = $model;
+
+        return $this;
+    }
+
+    public function isIsActiv(): ?bool
+    {
+        return $this->isActiv;
+    }
+
+    public function setIsActiv(bool $isActiv): self
+    {
+        $this->isActiv = $isActiv;
 
         return $this;
     }

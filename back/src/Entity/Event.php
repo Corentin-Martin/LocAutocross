@@ -19,18 +19,21 @@ class Event
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"event_browse"})
+     * @Groups({"vehicle_detail"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"event_browse"})
+     * @Groups({"vehicle_detail"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"event_browse"})
+     * @Groups({"vehicle_detail"})
      */
     private $start;
 
@@ -60,6 +63,7 @@ class Event
      * @ORM\ManyToOne(targetEntity=Track::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"event_browse"})
+     * @Groups({"vehicle_detail"})
      */
     private $track;
 

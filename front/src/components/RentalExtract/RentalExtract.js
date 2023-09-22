@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import defaultKart from '../../assets/images/defaultKart.jpg';
+import defaultKart from '../../assets/images/defaultKart.jpeg';
 
 function RentalExtract({ rental }) {
   const navigate = useNavigate();

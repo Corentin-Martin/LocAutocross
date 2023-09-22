@@ -49,7 +49,7 @@ function Dashboard() {
             <p>{conversations.unread.length + conversations.read.length} conversation{conversations.unread.length + conversations.read.length > 1 ? 's' : ''} au total</p>
           </>
         )}
-      <Link to="/">Ici</Link>
+      <Link to="/garage">Ici</Link>
     </div>
   );
 }
