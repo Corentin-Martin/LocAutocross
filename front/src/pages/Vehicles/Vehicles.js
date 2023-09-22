@@ -21,8 +21,7 @@ function Vehicles() {
 
       <div className="Vehicles-under992">
         <GarageInfos />
-        {(vehicle === null && idToEdit === null) && <VehicleCreation />}
-        {/* {(vehicle !== null && idToEdit !== null && isOpenCreationModal) && <VehicleCreation />} */}
+        {(vehicle === null) && <VehicleCreation />}
         {(vehicle === null && !isOpenCreationModal) && <MyVehicles />}
         {(vehicle !== null && idToEdit === null) && <VehicleDetail />}
       </div>
@@ -42,7 +41,7 @@ function Vehicles() {
             </CSSTransition>
           </Col>
           <Col className="col-12 col-lg-6 d-flex flex-column">
-            <VehicleCreation />
+            {(vehicle === null) && <VehicleCreation />}
             <CSSTransition
               in={vehicle !== null}
               timeout={1000}

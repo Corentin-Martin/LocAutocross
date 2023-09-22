@@ -86,7 +86,14 @@ function MyVehicles() {
                 <h3 className="mt-3">{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</h3>
                 <p>Moteur : {vehicle.engine}</p>
                 <p>Amortisseurs : {vehicle.shocks}</p>
-                <PencilSquare size={24} className="text-secondary MyVehicles-Carousel-EditIcon" />
+                <PencilSquare
+                  size={24}
+                  className="text-secondary MyVehicles-Carousel-EditIcon"
+                  onClick={() => {
+                    dispatch(setIdToEdit(vehicle.id));
+                    dispatch(setOpenCreation(true));
+                  }}
+                />
                 <ThreeDots
                   size={24}
                   className="MyVehicles-Carousel-MoreIcon"

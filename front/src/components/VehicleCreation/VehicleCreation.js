@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './VehicleCreation.scss';
 import {
-  Form, FloatingLabel, Spinner, Button, Accordion,
+  Form, FloatingLabel, Spinner, Button, Accordion, Alert,
 } from 'react-bootstrap';
 import axios from 'axios';
 import { PlusCircleFill } from 'react-bootstrap-icons';
@@ -53,12 +53,12 @@ function VehicleCreation() {
         .then((response) => {
           setVehicleToEdit(response.data);
           setIsLoading(false);
-          setModel(response.data.model);
+          setModel(response.data.model ?? '');
           setBrand(response.data.brand);
           setEngine(response.data.engine);
-          setShocks(response.data.shocks);
-          setDescription(response.data.description);
-          setPicture(response.data.picture);
+          setShocks(response.data.shocks ?? '');
+          setDescription(response.data.description ?? '');
+          setPicture(response.data.picture ?? '');
           setYear(response.data.year);
           setCategories(response.data.category.map((cat) => cat.id));
         })
@@ -87,70 +87,103 @@ function VehicleCreation() {
       });
   }, []);
 
+  const [wrong, setWrong] = useState([]);
+
+  const verification = () => {
+    let verif = true;
+    const error = [];
+    if (brands.filter((brandFilter) => brandFilter.id === brand.id).length !== 1) {
+      error.push('La marque du véhicule est obligatoire');
+      verif = false;
+    }
+
+    if (!engine) {
+      error.push('Vous devez renseigner le moteur du véhicule');
+      verif = false;
+    }
+
+    if (categories.length === 0) {
+      error.push('Le véhicule doit appartenir à au moins une catégorie');
+      verif = false;
+    }
+
+    setWrong(error);
+    return verif;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsLoading(true);
 
-    if (idToEdit === null) {
-      axios.post(
-        'http://localhost:8000/api/vehicles',
-        {
-          model: model,
-          brand: brand.id,
-          engine: engine,
-          shocks: shocks,
-          description: description,
-          picture: picture,
-          year: year,
-          category: categories,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
+    if (verification()) {
+      const pictureToSend = (!picture ? null : picture);
+      const descriptionToSend = (!description ? null : description);
+      const modelToSend = (!model ? null : model);
+      const shocksToSend = (!shocks ? null : shocks);
 
-      )
-        .then((response) => {
-          setIsLoading(false);
-          dispatch(setOpenCreation(false));
-          dispatch(setVehicleForDetails(response.data));
-          dispatch(setMyVehicles([...vehicles, response.data]));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      if (idToEdit === null) {
+        axios.post(
+          'http://localhost:8000/api/vehicles',
+          {
+            model: modelToSend,
+            brand: brand.id,
+            engine: engine,
+            shocks: shocksToSend,
+            description: descriptionToSend,
+            picture: pictureToSend,
+            year: year,
+            category: categories,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          },
+
+        )
+          .then((response) => {
+            setIsLoading(false);
+            dispatch(setOpenCreation(false));
+            dispatch(setVehicleForDetails(response.data));
+            dispatch(setMyVehicles([...vehicles, response.data]));
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+      else {
+        axios.put(
+          `http://localhost:8000/api/vehicles/${idToEdit}`,
+          {
+            model: modelToSend,
+            brand: brand.id,
+            engine: engine,
+            shocks: shocksToSend,
+            description: descriptionToSend,
+            picture: pictureToSend,
+            year: year,
+            category: categories,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          },
+
+        )
+          .then((response) => {
+            setIsLoading(false);
+            dispatch(setOpenCreation(false));
+            dispatch(setVehicleForDetails(response.data));
+            dispatch(setIdToEdit(null));
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
     else {
-      axios.put(
-        `http://localhost:8000/api/vehicles/${idToEdit}`,
-        {
-          model: model,
-          brand: brand.id,
-          engine: engine,
-          shocks: shocks,
-          description: description,
-          picture: picture,
-          year: year,
-          category: categories,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-
-      )
-        .then((response) => {
-          setIsLoading(false);
-          dispatch(setOpenCreation(false));
-          dispatch(setVehicleForDetails(response.data));
-          console.log(response.data);
-          // dispatch(setMyVehicles([...vehicles, response.data]));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      setIsLoading(false);
     }
   };
 
@@ -217,6 +250,7 @@ function VehicleCreation() {
       setPicture('');
       setYear('2023-01-01');
       setCategories([]);
+      setWrong([]);
     }
   }, [isOpenCreationModal]);
 
@@ -382,8 +416,15 @@ function VehicleCreation() {
 
                 </Form.Group>
 
-                <Button type="submit">Creer</Button>
+                <Button type="submit">{!vehicleToEdit ? 'Créer' : 'Modifier'}</Button>
+                {wrong.length > 0 && (
+                <Alert variant="danger" className="text-center mt-2">
+                  <Alert.Heading>Erreur{wrong.length > 1 ? 's' : ''}</Alert.Heading>
+                  {wrong.map((error) => (<p key={error}>{error}</p>))}
+                </Alert>
+                )}
               </Form>
+
             </Accordion.Body>
           </Accordion.Item>
 

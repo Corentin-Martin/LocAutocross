@@ -38,6 +38,7 @@ function VehicleDetail() {
           onClick={() => {
             dispatch(setIdToEdit(vehicle.id));
             dispatch(setOpenCreation(true));
+            dispatch(setVehicleForDetails(null));
           }}
         />
         <Card.Title>{vehicle.brand.name} - {vehicle.model} - {moment(vehicle.year).format('YYYY')}</Card.Title>
