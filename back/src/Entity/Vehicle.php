@@ -60,11 +60,13 @@ class Vehicle
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vehicle_browse"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"vehicle_browse"})
      */
     private $updatedAt;
 
