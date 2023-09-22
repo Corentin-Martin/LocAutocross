@@ -18,28 +18,46 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"event_browse"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"vehicle"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"event_browse"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"vehicle"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"event_browse"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"vehicle"})
+     * @Groups({"federations"})
+     * @Groups({"championship"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $start;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"event_browse"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $isOfficial;
 
@@ -55,21 +73,29 @@ class Event
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="event")
-     * @Groups({"event_read"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
      */
     private $rentals;
 
     /**
      * @ORM\ManyToOne(targetEntity=Track::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"event_browse"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"vehicle"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
+     * @Groups({"championship"})
      */
     private $track;
 
     /**
      * @ORM\ManyToOne(targetEntity=Championship::class, inversedBy="events")
-     * @Groups({"event_browse"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"rentals"})
      */
     private $championship;
 
@@ -80,19 +106,25 @@ class Event
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"event_browse"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
      */
     private $end;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"event_browse"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
      */
     private $allDay;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"event_browse"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
      */
     private $description;
 

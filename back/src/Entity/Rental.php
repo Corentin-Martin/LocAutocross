@@ -18,67 +18,77 @@ class Rental
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"rental_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"rental_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="smallint", length=255)
-     * @Groups({"rental_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vehicle::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"rental_browse"})
-     * @Groups({"event_find"})
+     * @Groups({"rentals"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $vehicle;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="propositions")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"rental_browse"})
-     * @Groups({"event_find"})
+     * @Groups({"rentals"})
+     * @Groups({"event"})
+     * @Groups({"conversation"})
      */
     private $ownerUser;
 
     /**
      * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"rental_browse"})
-     * @Groups({"vehicle_detail"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"conversation"})
      */
     private $event;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservations")
-     * @Groups({"rental_read"})
+     * @Groups({"rentals"})
      */
     private $tenantUser;
 
     /**
      * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="rental", cascade={"persist", "remove"})
-     * @Groups({"rental_read"})
+     * @Groups({"rentals"})
      */
     private $comment;
 
     /**
      * @ORM\OneToOne(targetEntity=Contract::class, mappedBy="rental", cascade={"persist", "remove"})
-     * @Groups({"rental_read"})
+     * @Groups({"rentals"})
      */
     private $contract;
 
@@ -94,7 +104,9 @@ class Rental
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
+     * @Groups({"federations"})
      */
     private $description;
 

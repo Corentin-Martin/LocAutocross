@@ -21,7 +21,7 @@ class FederationController extends AbstractController
     public function browse(FederationRepository $federationRepository): JsonResponse
     {
         return (empty($federationRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                            : $this->json($federationRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["federation_browse", "championship_browse", "discipline_browse"]]);
+                                                            : $this->json($federationRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["federations"]]);
     }
 
     /**
@@ -30,6 +30,6 @@ class FederationController extends AbstractController
     public function read(?Federation $federation): JsonResponse
     {
         return (is_null($federation)) ? $this->json(["message" => "Ce championnat n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($federation, Response::HTTP_OK, [], ["groups" => ["federation_browse", "federation_read"]]);
+                                        : $this->json($federation, Response::HTTP_OK, [], ["groups" => ["federation"]]);
     }
 }

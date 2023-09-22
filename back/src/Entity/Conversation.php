@@ -18,21 +18,21 @@ class Conversation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"conversation_browse"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Rental::class, inversedBy="conversations")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"conversation_browse"})
+     * @Groups({"conversation"})
      */
     private $rental;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="conversations")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"conversation_browse"})
+     * @Groups({"conversation"})
      */
     private $interestedUser;
 
@@ -48,7 +48,7 @@ class Conversation
 
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="conversation")
-     * @Groups({"conversation_browse"})
+     * @Groups({"conversation"})
      */
     private $messages;
 

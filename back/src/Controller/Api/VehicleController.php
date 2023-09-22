@@ -27,11 +27,11 @@ class VehicleController extends AbstractController
     {
         if (!is_null($request->query->get('my'))) {
             $vehicles = $vehicleRepository->findBy(["ownerUser" => $this->getUser(), "isActiv" => true],['createdAt' => 'DESC']);
-            return $this->json($vehicles, Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
+            return $this->json($vehicles, Response::HTTP_OK, [], ["groups" => ["vehicles"]]);
         }
 
         return (empty($vehicleRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($vehicleRepository->findBy(["isActiv" => true]), Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
+                                                    : $this->json($vehicleRepository->findBy(["isActiv" => true]), Response::HTTP_OK, [], ["groups" => ["vehicles"]]);
     }
 
     /**
@@ -40,7 +40,7 @@ class VehicleController extends AbstractController
     public function read(?Vehicle $vehicle): JsonResponse
     {
         return (is_null($vehicle)) ? $this->json(["message" => "Ce véhicule n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($vehicle, Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse", "vehicle_detail"]]);
+                                        : $this->json($vehicle, Response::HTTP_OK, [], ["groups" => ["vehicle"]]);
     }
 
     /**
@@ -62,7 +62,7 @@ class VehicleController extends AbstractController
 
         $vehicleRepository->add($newVehicle, true);
 
-        return $this->json($newVehicle, Response::HTTP_CREATED, [], ["groups" => ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse", "vehicle_detail"]]);
+        return $this->json($newVehicle, Response::HTTP_CREATED, [], ["groups" => ["vehicle"]]);
     }
 
     /**
@@ -85,7 +85,7 @@ class VehicleController extends AbstractController
 
         $vehicleRepository->add($vehicle, true);
 
-        return $this->json($vehicle, Response::HTTP_OK, [], ["groups"=> ["vehicle_browse", "vehicle_read", "brand_browse", "category_browse", "category_championship_browse", "vehicle_detail"]]);
+        return $this->json($vehicle, Response::HTTP_OK, [], ["groups"=> ["vehicle"]]);
     }
 
     /**

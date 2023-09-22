@@ -18,25 +18,31 @@ class Federation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"federation_browse"})
-     * @Groups({"category_championship_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"championship"})
+     * @Groups({"disciplines"})
+     * @Groups({"rentals"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"federation_browse"})
-     * @Groups({"category_championship_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"championship"})
+     * @Groups({"disciplines"})
+     * @Groups({"rentals"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=20)
-     * @Groups({"federation_browse"})
-     * @Groups({"category_championship_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"championship"})
+     * @Groups({"disciplines"})
+     * @Groups({"rentals"})
      */
     private $alias;
 
@@ -52,13 +58,15 @@ class Federation
 
     /**
      * @ORM\OneToMany(targetEntity=Championship::class, mappedBy="federation")
-     * @Groups({"federation_browse"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $championships;
 
     /**
      * @ORM\OneToMany(targetEntity=Discipline::class, mappedBy="federation")
-     * @Groups({"federation_browse"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $disciplines;
 

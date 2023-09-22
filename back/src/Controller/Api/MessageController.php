@@ -59,6 +59,6 @@ class MessageController extends AbstractController
 
         $messageRepository->add($newMessage, true);
 
-        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message_read"]]);
+        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
     }
 }

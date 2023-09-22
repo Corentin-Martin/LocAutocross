@@ -18,28 +18,39 @@ class Discipline
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"discipline_browse"})
-     * @Groups({"category_browse"})
+     * @Groups({"disciplines"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"category"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"discipline_browse"})
-     * @Groups({"category_browse"})
+     * @Groups({"disciplines"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"category"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="disciplines")
-     * @Groups({"discipline_browse"})
+     * @Groups({"disciplines"})
      */
     private $federation;
 
     /**
      * @ORM\OneToMany(targetEntity=Category::class, mappedBy="discipline")
-     * @Groups({"discipline_browse"})
-     * @Groups({"federation_browse"})
+     * @Groups({"disciplines"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $categories;
 

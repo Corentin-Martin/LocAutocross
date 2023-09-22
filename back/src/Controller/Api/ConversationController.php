@@ -41,7 +41,7 @@ class ConversationController extends AbstractController
         $conversations['read'] = array_unique($read);
 
         return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation_browse", "rental_browse", "user_browse", "message_read"]]);
+                                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
     }
 
     /**
@@ -69,7 +69,7 @@ class ConversationController extends AbstractController
 
         $conversationRepository->add($conversation, true);
 
-        return  $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation_browse", "rental_browse", "user_browse", "message_read"]]);
+        return  $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
     }
 
     /**
@@ -102,7 +102,7 @@ class ConversationController extends AbstractController
 
         $messageRepository->add($newMessage, true);
 
-        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message_read"]]);
+        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
     }
 
 }
