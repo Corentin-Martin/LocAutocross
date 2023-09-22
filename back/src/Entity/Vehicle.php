@@ -104,6 +104,11 @@ class Vehicle
      */
     private $model;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActiv;
+
     public function __construct()
     {
         $this->rentals = new ArrayCollection();
@@ -304,6 +309,18 @@ class Vehicle
     public function setModel(?string $model): self
     {
         $this->model = $model;
+
+        return $this;
+    }
+
+    public function isIsActiv(): ?bool
+    {
+        return $this->isActiv;
+    }
+
+    public function setIsActiv(bool $isActiv): self
+    {
+        $this->isActiv = $isActiv;
 
         return $this;
     }

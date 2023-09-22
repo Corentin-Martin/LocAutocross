@@ -26,12 +26,12 @@ class VehicleController extends AbstractController
     public function browse(Request $request, VehicleRepository $vehicleRepository): JsonResponse
     {
         if (!is_null($request->query->get('my'))) {
-            $vehicles = $vehicleRepository->findBy(["ownerUser" => $this->getUser()],['createdAt' => 'DESC']);
+            $vehicles = $vehicleRepository->findBy(["ownerUser" => $this->getUser(), "isActiv" => true],['createdAt' => 'DESC']);
             return $this->json($vehicles, Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
         }
 
         return (empty($vehicleRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($vehicleRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
+                                                    : $this->json($vehicleRepository->findBy(["isActiv" => true]), Response::HTTP_OK, [], ["groups" => ["vehicle_browse", "brand_browse", "category_browse", "category_championship_browse"]]);
     }
 
     /**
@@ -56,6 +56,7 @@ class VehicleController extends AbstractController
         $newVehicle = $serializerInterface->deserialize($request->getContent(), Vehicle::class, 'json');
 
         $newVehicle->setOwnerUser($user);
+        $newVehicle->setIsActiv(true);
 
         $uploadImageService->upload($newVehicle);
 
@@ -100,8 +101,10 @@ class VehicleController extends AbstractController
             return $this->json(["message" => "L'utilisateur ne peut pas supprimer ce véhicule"], Response::HTTP_FORBIDDEN, []);
         }
 
-        $vehicleRepository->remove($vehicle, true);
+        $vehicle->setIsActiv(false);
 
-        return $this->json(["message" => "Le véhicule a été supprimé"], Response::HTTP_OK, []);
+        $vehicleRepository->add($vehicle, true);
+
+        return $this->json(["message" => "Le véhicule a été désactivé"], Response::HTTP_OK, []);
     }
 }
