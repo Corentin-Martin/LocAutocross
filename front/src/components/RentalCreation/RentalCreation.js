@@ -1,19 +1,24 @@
 import {
-  Accordion, Button, FloatingLabel, Form, Spinner,
+  Accordion, Badge, Button, FloatingLabel, Form, Row, Spinner,
 } from 'react-bootstrap';
 import './RentalCreation.scss';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import { X } from 'react-bootstrap-icons';
+import axios from 'axios';
 
 function RentalCreation() {
   const myVehicles = useSelector((state) => state.dashboard.myVehicles);
   const federations = useSelector((state) => state.generalCalendar.federations);
-  const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [vehicle, setVehicle] = useState(null);
   const [event, setEvent] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [status, setStatus] = useState(0);
 
   useEffect(() => {
     if (myVehicles && federations) {
@@ -21,19 +26,76 @@ function RentalCreation() {
     }
   }, [myVehicles, federations]);
 
-  // TODO GERER EVENTS
-  const handleEventChange = (e) => {
-    setEvent(e.target.value);
-    const selectedEvent = events.find((oneEvent) => oneEvent.title === e.target.value);
-
-    if (selectedEvent) {
-      setEvent(selectedEvent);
-    }
-  };
-
   const [openItem, setOpenItem] = useState(null);
 
+  const [fedeChoice, setFedeChoice] = useState(null);
+  const [champChoice, setChampChoice] = useState(null);
+  const [privateEvent, setPrivateEvent] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [noEvents, setNoEvents] = useState(true);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (champChoice !== null) {
+      axios.get(`http://localhost:8000/api/events?championship[]=${champChoice.id}`)
+        .then((response) => {
+          let eventsWithDate = [];
+
+          response.data.forEach((oneEvent) => {
+            if (moment(oneEvent.start) > moment()) {
+              eventsWithDate = [...eventsWithDate, {
+                ...oneEvent,
+                start: new Date(oneEvent.start),
+                end: new Date(oneEvent.end),
+              }];
+            }
+          });
+          setEvents(eventsWithDate);
+          if (response.data.some((oneEvent) => moment(oneEvent.start) > moment())) {
+            setNoEvents(false);
+          }
+          else {
+            setNoEvents(true);
+          }
+          // setNoEvents(false);
+
+          if (response.data.length === 0) {
+            setNoEvents(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [champChoice]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios.post(
+      'http://localhost:8000/api/rentals',
+      {
+        vehicle: vehicle,
+        event: event,
+        price: price,
+        status: status,
+        description: description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+
+    )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   // useEffect(() => {
   //   if (isOpenCreationModal) {
@@ -82,19 +144,22 @@ function RentalCreation() {
               e.stopPropagation();
             }}
             >
-              <Form className="d-flex flex-column align-items-center bg-primary rounded-4 p-2 col-12">
+              <Form className="d-flex flex-column align-items-center bg-primary rounded-4 p-2 col-12" onSubmit={handleSubmit}>
 
                 <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
 
                   {myVehicles.length > 0 ? (
                     <>
                       <Form.Label>Véhicule</Form.Label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setVehicle(e.currentTarget.value)}
+                      >
                         <option>Sélectionnez un véhicule</option>
-                        {myVehicles.map((vehicle) => (
-                          <option value={vehicle.id} key={vehicle.id}>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{`${moment(vehicle.year).format('YYYY')} `}
-                            ({vehicle.category.map((category, index) => (
-                            index === vehicle.category.length - 1 ? `${category.name}`
+                        {myVehicles.map((oneVehicle) => (
+                          <option value={oneVehicle.id} key={oneVehicle.id}>{oneVehicle.brand.name}{oneVehicle.model !== null ? ` - ${oneVehicle.model} -` : ' - '}{`${moment(oneVehicle.year).format('YYYY')} `}
+                            ({oneVehicle.category.map((category, index) => (
+                            index === oneVehicle.category.length - 1 ? `${category.name}`
                               : `${category.name} / `
                           ))})
                           </option>
@@ -106,45 +171,99 @@ function RentalCreation() {
                 </Form.Group>
 
                 <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
-                  <Form.Label>Evènement</Form.Label>
+                  <Form.Label>Evènement
+                    {!privateEvent && fedeChoice !== null && (
+                    <Badge variant="secondary">{fedeChoice.alias}
+                      <X
+                        size="20"
+                        onClick={() => {
+                          setFedeChoice(null); setChampChoice(null); setNoEvents(true);
+                        }}
+                      />
+                    </Badge>
+                    )}
+                    {!privateEvent && champChoice !== null && (
+                    <Badge variant="secondary">{champChoice.alias}
+                      <X
+                        size="20"
+                        onClick={() => {
+                          setChampChoice(null);
+                          setEvent(null);
+                          setNoEvents(true);
+                        }}
+                      />
+                    </Badge>
+                    )}
 
-                  <Accordion>
-                    {federations.map((fede) => (
-                      <Accordion.Item eventKey={fede.id} key={fede.id}>
-                        <Accordion.Header>
-                          {fede.alias}
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <Accordion>
-                            {fede.championships.map((champ) => (
-                              <Accordion.Item eventKey={champ.id} key={champ.id}>
-                                <Accordion.Header>
-                                  {champ.alias}
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                  <Form.Group controlId="brandSelect" className="mb-3 col-12">
-                                    <Form.Control
-                                      type="text"
-                                      placeholder="Sélectionnez un évenement"
-                                      list={`eventsList${champ.alias}`} // Utilisez le datalist ici
-                                      value={event ? event.title : ''}
-                                      onChange={handleEventChange}
-                                    />
-                                    <datalist id={`eventsList${champ.alias}`}>
-                                      {champ.events.map((oneEvent) => (
-                                        <option key={oneEvent.id} value={oneEvent.title} />
-                                      ))}
-                                    </datalist>
-                                  </Form.Group>
-                                </Accordion.Body>
-                              </Accordion.Item>
-                            ))}
-                          </Accordion>
+                    {privateEvent && (
+                    <Badge variant="secondary">Evenement privé
+                      <X
+                        size="20"
+                        onClick={() => {
+                          setPrivateEvent(false);
+                          setChampChoice(null);
+                          setFedeChoice(null);
+                          setEvent(null);
+                          setNoEvents(true);
+                        }}
+                      />
+                    </Badge>
+                    )}
+                  </Form.Label>
 
-                        </Accordion.Body>
-                      </Accordion.Item>
+                  <Row className="text-center d-flex justify-content-around align-items-center">
+
+                    {fedeChoice === null && (
+                    <>{federations.map((fede) => (
+                      <Button type="button" variant="tertiary" className="mt-1 col-12 col-md-7" key={fede.id} onClick={() => setFedeChoice(fede)}>{fede.alias}</Button>
                     ))}
-                  </Accordion>
+                      <Button
+                        type="button"
+                        variant="tertiary"
+                        className="mt-1 col-12 col-md-7"
+                        onClick={() => {
+                          setFedeChoice({ id: 0 }); setChampChoice({ id: 0 });
+                          setPrivateEvent(true);
+                        }}
+                      >Evenement privé
+                      </Button>
+                    </>
+                    )}
+
+                    {fedeChoice !== null && fedeChoice.id !== 0
+                  && event === null
+                  && fedeChoice.championships.map((champ) => (
+                    <Button
+                      type="button"
+                      variant="tertiary"
+                      className="mt-1 col-12 col-md-7"
+                      key={champ.id}
+                      onClick={() => {
+                        setChampChoice(champ); setEvent(false);
+                      }}
+                    >{champ.alias}
+                    </Button>
+                  ))}
+                  </Row>
+
+                  {!noEvents
+                    && (
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={(e) => setEvent(e.target.value)}
+                    >
+                      <option>Sélectionnez un évènement</option>
+                      {events.map((oneEvent) => (
+                        <option
+                          value={oneEvent.id}
+                          key={oneEvent.id}
+                        >
+                          {oneEvent.title}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    )}
+                  {champChoice !== null && noEvents && <p>Pas d'évenement proposé</p>}
 
                 </Form.Group>
 
@@ -156,6 +275,7 @@ function RentalCreation() {
                   <Form.Control
                     type="number"
                     placeholder="prix"
+                    onChange={(e) => setPrice(parseFloat(e.currentTarget.value))}
 
                   />
                 </FloatingLabel>
@@ -169,6 +289,7 @@ function RentalCreation() {
                     type="textarea"
                     placeholder="description"
                     style={{ height: '100px' }}
+                    onChange={(e) => setDescription(e.currentTarget.value)}
 
                   />
                 </FloatingLabel>
@@ -180,6 +301,7 @@ function RentalCreation() {
                     type="switch"
                     id="custom-switch"
                     label="Rendre visible cette annonce"
+                    onChange={() => setStatus(status === 0 ? 1 : 0)}
                   />
 
                 </Form.Group>
