@@ -1,5 +1,5 @@
 import {
-  Accordion, Badge, Button, FloatingLabel, Form, Row, Spinner,
+  Accordion, Alert, Badge, Button, FloatingLabel, Form, Row, Spinner,
 } from 'react-bootstrap';
 import './RentalCreation.scss';
 import { useEffect, useState } from 'react';
@@ -70,31 +70,52 @@ function RentalCreation() {
     }
   }, [champChoice]);
 
+  const [wrong, setWrong] = useState([]);
+
+  const verification = () => {
+    let verif = true;
+    const error = [];
+    if (!vehicle) {
+      error.push('Vous devez choisir un véhicule');
+      verif = false;
+    }
+
+    if (!event) {
+      error.push('Vous devez choisir un évènement');
+      verif = false;
+    }
+
+    setWrong(error);
+    return verif;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post(
-      'http://localhost:8000/api/rentals',
-      {
-        vehicle: vehicle,
-        event: event,
-        price: price,
-        status: status,
-        description: description,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+    if (verification()) {
+      axios.post(
+        'http://localhost:8000/api/rentals',
+        {
+          vehicle: vehicle,
+          event: event,
+          price: price,
+          status: status,
+          description: description,
         },
-      },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
 
-    )
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      )
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   // useEffect(() => {
@@ -150,7 +171,7 @@ function RentalCreation() {
 
                   {myVehicles.length > 0 ? (
                     <>
-                      <Form.Label>Véhicule</Form.Label>
+                      <Form.Label>Véhicule *</Form.Label>
                       <Form.Select
                         aria-label="Default select example"
                         onChange={(e) => setVehicle(e.currentTarget.value)}
@@ -171,9 +192,9 @@ function RentalCreation() {
                 </Form.Group>
 
                 <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
-                  <Form.Label>Evènement
+                  <Form.Label>Evènement *
                     {!privateEvent && fedeChoice !== null && (
-                    <Badge variant="secondary">{fedeChoice.alias}
+                    <Badge bg="tertiary" className="me-2">{fedeChoice.alias}
                       <X
                         size="20"
                         onClick={() => {
@@ -183,7 +204,7 @@ function RentalCreation() {
                     </Badge>
                     )}
                     {!privateEvent && champChoice !== null && (
-                    <Badge variant="secondary">{champChoice.alias}
+                    <Badge bg="tertiary" className="me-2">{champChoice.alias}
                       <X
                         size="20"
                         onClick={() => {
@@ -196,7 +217,7 @@ function RentalCreation() {
                     )}
 
                     {privateEvent && (
-                    <Badge variant="secondary">Evenement privé
+                    <Badge bg="tertiary" className="me-2">Evenement privé
                       <X
                         size="20"
                         onClick={() => {
@@ -306,7 +327,15 @@ function RentalCreation() {
 
                 </Form.Group>
 
+                <p className="mb-3">* Champs obligatoires</p>
+
                 <Button type="submit" variant="secondary">Créer</Button>
+                {wrong.length > 0 && (
+                <Alert variant="danger" className="text-center mt-2 col-10">
+                  <Alert.Heading>Erreur{wrong.length > 1 ? 's' : ''}</Alert.Heading>
+                  {wrong.map((error) => (<p key={error}>{error}</p>))}
+                </Alert>
+                )}
 
               </Form>
 
