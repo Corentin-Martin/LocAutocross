@@ -4,23 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import moment from 'moment/moment';
 import './RentalComponent.scss';
+import { useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 
 function Rental() {
   const { rentalId } = useParams();
   const [rental, setRental] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const statusMatching = useSelector((state) => state.user.statusMatching);
 
   const navigate = useNavigate();
-
-  const statusMatching = {
-    0: ['Brouillon', '#fff'],
-    1: ['Disponible', '#00FF00'],
-    2: ['Interessé', '#FFFF00'],
-    3: ['En cours de réservation', '#ff8000'],
-    4: ['Réservation validée', '#FF0000'],
-    5: ['Archivé', '#fff'],
-  };
 
   useEffect(() => {
     axios.get(`http://localhost:8000/api/rentals/${rentalId}`)
