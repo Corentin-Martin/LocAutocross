@@ -111,7 +111,7 @@ class Rental
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Conversation::class, mappedBy="rental")
+     * @ORM\OneToMany(targetEntity=Conversation::class, mappedBy="rental", cascade={"remove"})
      */
     private $conversations;
 

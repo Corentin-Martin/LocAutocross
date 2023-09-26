@@ -47,7 +47,7 @@ class Conversation
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="conversation")
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="conversation", cascade={"remove"})
      * @Groups({"conversation"})
      */
     private $messages;

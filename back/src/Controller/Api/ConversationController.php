@@ -8,6 +8,7 @@ use App\Entity\Rental;
 use App\Entity\User;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
+use App\Repository\RentalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,8 +24,15 @@ class ConversationController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(ConversationRepository $conversationRepository): JsonResponse
+    public function browse(Request $request, ConversationRepository $conversationRepository, RentalRepository $rentalRepository): JsonResponse
     {
+
+        if (!is_null($request->query->get('rental'))) {
+            $rental = $rentalRepository->findBy(['id' => $request->query->get('rental')]);
+            $conversations = $conversationRepository->findBy(['rental' => $rental]);
+            return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                            : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+        }
 
         $conversationsWhereUserAsksAndDoesNotRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => false]);
         $conversationsWhereUserAsksAndRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => true]);
