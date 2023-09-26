@@ -27,6 +27,11 @@ class RentalController extends AbstractController
             $rentals = $rentalRepository->findBy([],['createdAt' => 'DESC'],4);
             return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
         }
+
+        if (!is_null($request->query->get('my'))) {
+            $rentals = $rentalRepository->findBy(["ownerUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+        }
         return (empty($rentalRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                                     : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rentals"]]);
     }
