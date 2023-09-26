@@ -1,14 +1,18 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './Header.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { useState } from 'react';
+import { ToggleOff } from 'react-bootstrap-icons';
+import { setToken, setUser, setUserConnected } from '../../../actions/user';
 
 function Header() {
   const isUserConnected = useSelector((state) => state.user.isUserConnected);
   const [showOffCanvas, setShowOffCanvas] = useState(false);
+
+  const dispatch = useDispatch();
 
   return (
     <div className="Header">
@@ -61,14 +65,29 @@ function Header() {
 
                   </NavDropdown>
                 ) : (
-                  <Nav.Link
-                    as={Link}
-                    to="/dashboard"
-                    onClick={() => {
-                      setShowOffCanvas(false);
-                    }}
-                  >Mon Bureau
-                  </Nav.Link>
+                  <NavDropdown
+                    title="Mon Bureau"
+                    id="offcanvasNavbarDropdown-expand-false"
+                  >
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/garage"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Mon garage
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/mes-locations"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Mes locations
+                    </NavDropdown.Item>
+
+                  </NavDropdown>
+
                 )}
                 <Nav.Link
                   as={Link}
@@ -110,6 +129,21 @@ function Header() {
                   }}
                 >Les locations
                 </Nav.Link>
+                {isUserConnected && (
+                <Nav.Link
+                  as={Link}
+                  to="/"
+                  onClick={() => {
+                    dispatch(setToken(null));
+                    dispatch(setUser(null));
+                    setShowOffCanvas(false);
+                    dispatch(setUserConnected(false));
+                    localStorage.removeItem('token');
+                  }}
+                >Deconnexion <ToggleOff size={16} />
+                </Nav.Link>
+                )}
+
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>

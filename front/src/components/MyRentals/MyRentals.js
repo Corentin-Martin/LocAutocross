@@ -48,7 +48,7 @@ function MyRentals() {
   }, [rentalDetail]);
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 col-lg-6 col-xl-4 mt-3">
+    <div className="d-flex flex-column align-items-center col-12 col-md-8 mt-3">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
@@ -63,11 +63,11 @@ function MyRentals() {
 
               && (
               <Accordion.Item key={pastOrFuture[0].id} eventKey={pastOrFuture[0].id}>
-                <Accordion.Header>{moment(pastOrFuture[0].event.start) < moment() ? `Evènement${pastOrFuture.length > 1 ? 's' : ''} passé${pastOrFuture.length > 1 ? 's' : ''}` : `Evènement${pastOrFuture.length > 1 ? 's' : ''} à venir`}</Accordion.Header>
+                <Accordion.Header>{moment(pastOrFuture[0].event.start) < moment() ? `${pastOrFuture.length > 1 ? 'Mes ' : 'Mon '}évènement${pastOrFuture.length > 1 ? 's' : ''} passé${pastOrFuture.length > 1 ? 's' : ''}` : `${pastOrFuture.length > 1 ? 'Mes ' : 'Mon '}évènement${pastOrFuture.length > 1 ? 's' : ''} à venir`}</Accordion.Header>
                 <Accordion.Body>
-                  <ListGroup defaultActiveKey={`#link${pastOrFuture[0].id}`} className="col-12">
+                  <ListGroup className="col-12">
                     {pastOrFuture.map((rent) => (
-                      <ListGroup.Item key={rent.id} action href={`#link${rent.id}`} className="d-flex justify-content-between" onClick={() => dispatch(setRental(rent))}>
+                      <ListGroup.Item key={rent.id} action className="d-flex justify-content-between bg-secondary" onClick={() => dispatch(setRental(rent))}>
                         <ul className="ms-2 me-3">
                           <li className="fw-bold">{moment(rent.event.start).format('DD/MM/YYYY')}</li>
                           <li className="fst-italic">{rent.event.track.city}</li>

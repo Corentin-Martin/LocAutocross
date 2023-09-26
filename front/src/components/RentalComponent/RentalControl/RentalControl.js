@@ -15,19 +15,21 @@ function RentalControl({ rental }) {
   const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/conversations?rental=${rental.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-      .then((res) => {
-        setConversations(res.data);
-        setIsLoading(false);
+    if (user !== null && user.roles.includes('ROLE_PRO')) {
+      axios.get(`http://localhost:8000/api/conversations?rental=${rental.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
+        .then((res) => {
+          setConversations(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, []);
 
   if (user === null || (!user.roles.includes('ROLE_PRO'))) {
     return null;

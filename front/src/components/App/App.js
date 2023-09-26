@@ -29,31 +29,33 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (localStorage.getItem('token') !== null) {
       dispatch(setToken(localStorage.getItem('token')));
       dispatch(setUserConnected(true));
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
-    axios.get(
-      'http://localhost:8000/api/vehicles?my',
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+    if (token !== null) {
+      axios.get(
+        'http://localhost:8000/api/vehicles?my',
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         },
-      },
-    )
-      .then((response) => {
-        dispatch(setMyVehicles(response.data));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+      )
+        .then((response) => {
+          dispatch(setMyVehicles(response.data));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [token]);
 
   useEffect(() => {
     if (token !== null) {

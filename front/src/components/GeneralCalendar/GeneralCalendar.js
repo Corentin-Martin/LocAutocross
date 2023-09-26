@@ -70,8 +70,6 @@ function GeneralCalendar() {
         }
       });
 
-      console.log(federations);
-
       const champ = (event.isOfficial) ? value : null;
 
       event.style = {

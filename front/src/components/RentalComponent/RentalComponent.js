@@ -1,29 +1,35 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Card, Col, Row, Spinner,
+  Card, Col, Row,
 } from 'react-bootstrap';
 import moment from 'moment/moment';
 import './RentalComponent.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { XCircleFill } from 'react-bootstrap-icons';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
+import { setRental } from '../../actions/dashboard';
 
-function RentalComponent() {
+function RentalComponent({ fromGestion }) {
   const rental = useSelector((state) => state.dashboard.rental);
 
   const statusMatching = useSelector((state) => state.user.statusMatching);
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   if (rental === null) {
     return null;
   }
 
   return (
-    <div className="col-12 col-lg-6 col-xl-8">
+    <div className="col-12 col-md-10">
       <Card style={{ width: '100%', position: 'relative' }} className="mt-3 text-center bg-secondary">
+        {fromGestion && (
+        <XCircleFill
+          size={24}
+          className="text-black VehicleDetail-CloseIcon"
+          onClick={() => dispatch(setRental(null))}
+        />
+        )}
         <Card.Header>
           <h2>{rental.event.title}</h2>
           <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY')}</p>

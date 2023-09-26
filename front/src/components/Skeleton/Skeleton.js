@@ -6,7 +6,7 @@ function Skeleton({ page }) {
   return (
     <div className="Skeleton">
       <Header />
-      {page}
+      <main className="Content">{page}</main>
       <Footer />
     </div>
   );
