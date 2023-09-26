@@ -2,6 +2,7 @@ import { Row } from 'react-bootstrap';
 import './RentalGestion.scss';
 import RentalCreation from '../../components/RentalCreation/RentalCreation';
 import MyRentals from '../../components/MyRentals/MyRentals';
+import RentalComponent from '../../components/RentalComponent/RentalComponent';
 
 function RentalGestion() {
   return (
@@ -12,6 +13,7 @@ function RentalGestion() {
       <Row>
 
         <MyRentals />
+        <RentalComponent />
       </Row>
     </Row>
   );

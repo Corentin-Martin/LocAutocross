@@ -1,16 +1,19 @@
 import {
-  Accordion, Badge, ListGroup, Spinner,
+  Accordion, ListGroup, Spinner,
 } from 'react-bootstrap';
 import './MyRentals.scss';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRental } from '../../actions/dashboard';
 
 function MyRentals() {
   const [isLoading, setIsLoading] = useState(true);
   const [myRentals, setMyRentals] = useState([]);
   const statusMatching = useSelector((state) => state.user.statusMatching);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios.get(
@@ -44,7 +47,7 @@ function MyRentals() {
   }, []);
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 col-lg-6 col-xl-4">
+    <div className="d-flex flex-column align-items-center col-12 col-lg-6 col-xl-4 mt-3">
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
@@ -63,7 +66,7 @@ function MyRentals() {
                 <Accordion.Body>
                   <ListGroup defaultActiveKey={`#link${pastOrFuture[0].id}`} className="col-12">
                     {pastOrFuture.map((rent) => (
-                      <ListGroup.Item key={rent.id} action href={`#link${rent.id}`} className="d-flex justify-content-between">
+                      <ListGroup.Item key={rent.id} action href={`#link${rent.id}`} className="d-flex justify-content-between" onClick={() => dispatch(setRental(rent))}>
                         <ul className="ms-2 me-3">
                           <li className="fw-bold">{moment(rent.event.start).format('DD/MM/YYYY')}</li>
                           <li className="fst-italic">{rent.event.track.city}</li>

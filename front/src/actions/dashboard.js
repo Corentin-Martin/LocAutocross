@@ -41,3 +41,11 @@ export const setMyVehicles = (myVehicles) => ({
     myVehicles: myVehicles,
   },
 });
+
+export const SET_RENTAL = 'SET_RENTAL';
+export const setRental = (rental) => ({
+  type: SET_RENTAL,
+  payload: {
+    rental: rental,
+  },
+});
