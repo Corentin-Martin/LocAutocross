@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import {
   Form, Button, FloatingLabel, Row, Alert,
 } from 'react-bootstrap';
-import { setUserConnected } from '../../actions/user';
+import { setToken, setUserConnected } from '../../actions/user';
 
 function Login() {
   const [mail, setMail] = useState('');
@@ -26,11 +26,13 @@ function Login() {
     })
       .then((res) => {
         localStorage.setItem('token', res.data.token);
+        dispatch(setToken(res.data.token));
         dispatch(setUserConnected(true));
         setWrongConnexion(false);
         navigate('/dashboard');
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         setWrongConnexion(true);
       });
   };

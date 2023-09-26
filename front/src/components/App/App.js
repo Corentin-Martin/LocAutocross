@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Dashboard from '../Dashboard/Dashboard';
 import Chat from '../Chat/Chat';
@@ -16,8 +16,10 @@ import Vehicles from '../../pages/Vehicles/Vehicles';
 import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import { setFederations } from '../../actions/generalCalendar';
 import { setMyVehicles } from '../../actions/dashboard';
+import { setToken, setUser, setUserConnected } from '../../actions/user';
 
 function App() {
+  const token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
   useEffect(() => {
     axios.get('http://localhost:8000/api/federations')
@@ -27,6 +29,13 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem('token') !== null) {
+      dispatch(setToken(localStorage.getItem('token')));
+      dispatch(setUserConnected(true));
+    }
   }, []);
 
   useEffect(() => {
@@ -45,6 +54,25 @@ function App() {
         console.error(err);
       });
   }, []);
+
+  useEffect(() => {
+    if (token !== null) {
+      axios.get(
+        'http://localhost:8000/api/user',
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      )
+        .then((response) => {
+          dispatch(setUser(response.data));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [token]);
   return (
     <Container>
       <div className="App">

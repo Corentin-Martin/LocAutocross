@@ -1,4 +1,4 @@
-import { SET_USER_CONNECTED } from '../actions/user';
+import { SET_TOKEN, SET_USER, SET_USER_CONNECTED } from '../actions/user';
 
 const initialState = {
   isUserConnected: false,
@@ -10,6 +10,8 @@ const initialState = {
     4: ['Réservation validée', '#FF0000'],
     5: ['Archivé', '#fff'],
   },
+  user: null,
+  token: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -27,6 +29,18 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         isUserConnected: action.payload.isUserConnected,
+      };
+
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload.user,
+      };
+
+    case SET_TOKEN:
+      return {
+        ...state,
+        token: action.payload.token,
       };
 
     default:
