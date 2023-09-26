@@ -24,7 +24,7 @@ class RentalController extends AbstractController
     public function browse(Request $request, RentalRepository $rentalRepository): JsonResponse
     {
         if (!is_null($request->query->get('last'))) {
-            $rentals = $rentalRepository->findBy([],['createdAt' => 'DESC'],4);
+            $rentals = $rentalRepository->findLastPublished();
             return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
         }
 
