@@ -3,11 +3,12 @@ import {
 } from 'react-bootstrap';
 import './RentalCreation.scss';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'react-bootstrap-icons';
 import axios from 'axios';
+import { setRental } from '../../actions/dashboard';
 
 function RentalCreation() {
   const myVehicles = useSelector((state) => state.dashboard.myVehicles);
@@ -35,6 +36,7 @@ function RentalCreation() {
   const [noEvents, setNoEvents] = useState(true);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (champChoice !== null) {
@@ -110,7 +112,7 @@ function RentalCreation() {
 
       )
         .then((response) => {
-          console.log(response.data);
+          dispatch(setRental(response.data));
         })
         .catch((err) => {
           console.error(err);

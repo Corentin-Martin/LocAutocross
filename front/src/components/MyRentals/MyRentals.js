@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setRental } from '../../actions/dashboard';
 
 function MyRentals() {
+  const rentalDetail = useSelector((state) => state.dashboard.rental);
   const [isLoading, setIsLoading] = useState(true);
   const [myRentals, setMyRentals] = useState([]);
   const statusMatching = useSelector((state) => state.user.statusMatching);
@@ -44,7 +45,7 @@ function MyRentals() {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [rentalDetail]);
 
   return (
     <div className="d-flex flex-column align-items-center col-12 col-lg-6 col-xl-4 mt-3">

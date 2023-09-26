@@ -8,6 +8,7 @@ import moment from 'moment/moment';
 import './RentalComponent.scss';
 import { useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
+import RentalControl from './RentalControl/RentalControl';
 
 function RentalComponent() {
   const rental = useSelector((state) => state.dashboard.rental);
@@ -48,8 +49,8 @@ function RentalComponent() {
           </Card.Title>
 
           <Row className="mt-3 d-flex justify-content-between">
-            <Col sm={12} md={6} className="mb-2">
-              <Card>
+            <Col sm={12} md={6} className="mb-2" style={{ flexGrow: '1' }}>
+              <Card style={{ width: '100%', height: '100%' }}>
                 <Card.Header>La location</Card.Header>
                 <Card.Body className="text-start">
 
@@ -79,6 +80,8 @@ function RentalComponent() {
                 </Card.Body>
               </Card>
             </Col>
+
+            <RentalControl rental={rental} />
           </Row>
         </Card.Body>
 

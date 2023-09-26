@@ -5,7 +5,7 @@ import { TrashFill } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMyVehicles, setVehicleForDetails } from '../../actions/dashboard';
+import { setMyVehicles, setRental, setVehicleForDetails } from '../../actions/dashboard';
 
 function DeleteModal({ type, idToDelete }) {
   const [show, setShow] = useState(false);
@@ -30,6 +30,7 @@ function DeleteModal({ type, idToDelete }) {
         dispatch(setVehicleForDetails(null));
         const newVehicles = vehicles.filter((vehicle) => vehicle.id !== idToDelete);
         dispatch(setMyVehicles(newVehicles));
+        dispatch(setRental(null));
         setShow(false);
       })
       .catch((err) => {
@@ -42,7 +43,7 @@ function DeleteModal({ type, idToDelete }) {
 
       <TrashFill
         size={24}
-        className="text-black"
+        className="text-black me-2"
         onClick={handleShow}
       />
 
