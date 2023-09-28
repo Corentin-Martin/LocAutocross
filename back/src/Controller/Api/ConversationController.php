@@ -8,6 +8,7 @@ use App\Entity\Rental;
 use App\Entity\User;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
+use App\Repository\RentalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,8 +24,15 @@ class ConversationController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(ConversationRepository $conversationRepository): JsonResponse
+    public function browse(Request $request, ConversationRepository $conversationRepository, RentalRepository $rentalRepository): JsonResponse
     {
+
+        if (!is_null($request->query->get('rental'))) {
+            $rental = $rentalRepository->findBy(['id' => $request->query->get('rental')]);
+            $conversations = $conversationRepository->findBy(['rental' => $rental]);
+            return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                            : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+        }
 
         $conversationsWhereUserAsksAndDoesNotRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => false]);
         $conversationsWhereUserAsksAndRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => true]);
@@ -41,7 +49,7 @@ class ConversationController extends AbstractController
         $conversations['read'] = array_unique($read);
 
         return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation_browse", "rental_browse", "user_browse", "message_read"]]);
+                                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
     }
 
     /**
@@ -69,7 +77,7 @@ class ConversationController extends AbstractController
 
         $conversationRepository->add($conversation, true);
 
-        return  $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation_browse", "rental_browse", "user_browse", "message_read"]]);
+        return  $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
     }
 
     /**
@@ -102,7 +110,7 @@ class ConversationController extends AbstractController
 
         $messageRepository->add($newMessage, true);
 
-        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message_read"]]);
+        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
     }
 
 }

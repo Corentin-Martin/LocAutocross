@@ -3,7 +3,9 @@ import RentalComponent from '../../components/RentalComponent/RentalComponent';
 
 function Rental() {
   return (
-    <RentalComponent />
+    <div className="d-flex justify-content-center">
+      <RentalComponent />
+    </div>
   );
 }
 

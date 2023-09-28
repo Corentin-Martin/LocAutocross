@@ -92,11 +92,11 @@ class EventController extends AbstractController
             
             $reunitedEvents = array_merge($events, $eventsForCategory);
             $finalEvents = array_unique($reunitedEvents);
-            return $this->json($finalEvents, Response::HTTP_OK, [], ["groups" => ["event_browse", "championship_browse", "category_championship_browse", "track_browse"]]);
+            return $this->json($finalEvents, Response::HTTP_OK, [], ["groups" => ["events"]]);
         }
 
         return (empty($eventRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($eventRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["event_browse", "championship_browse", "category_championship_browse", "track_browse"]]);
+                                                    : $this->json($eventRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["events"]]);
     }
 
     /**
@@ -105,7 +105,7 @@ class EventController extends AbstractController
     public function read(?Event $event): JsonResponse
     {
         return (is_null($event)) ? $this->json(["message" => "Cet évenement n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($event, Response::HTTP_OK, [], ["groups" => ["event_browse", "event_read", "championship_browse", "category_championship_browse", "track_browse", "track_read", "event_find", "vehicle_browse", "vehicle_read", "rental_found"]]);
+                                        : $this->json($event, Response::HTTP_OK, [], ["groups" => ["event"]]);
     }
 
     /**
@@ -124,7 +124,7 @@ class EventController extends AbstractController
 
         $eventRepository->add($newEvent, true);
 
-        return $this->json($newEvent, Response::HTTP_CREATED, [], ["groups" => ["event_browse", "event_read", "championship_browse", "category_championship_browse", "track_browse", "track_read"]]);
+        return $this->json($newEvent, Response::HTTP_CREATED, [], ["groups" => ["event"]]);
     }
 
     /**
@@ -145,7 +145,7 @@ class EventController extends AbstractController
 
         $eventRepository->add($event, true);
 
-        return $this->json($event, Response::HTTP_OK, [], ["groups"=> ["event_browse", "event_read", "championship_browse", "category_championship_browse", "track_browse", "track_read"]]);
+        return $this->json($event, Response::HTTP_OK, [], ["groups"=> ["event"]]);
     }
 
     /**

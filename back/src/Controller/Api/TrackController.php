@@ -22,7 +22,7 @@ class TrackController extends AbstractController
     public function browse(TrackRepository $trackRepository): JsonResponse
     {
         return (empty($trackRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                            : $this->json($trackRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["track_browse"]]);
+                                                            : $this->json($trackRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["tracks"]]);
     }
 
     /**
@@ -31,7 +31,7 @@ class TrackController extends AbstractController
     public function read(?Track $track): JsonResponse
     {
         return (is_null($track)) ? $this->json(["message" => "Ce championnat n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($track, Response::HTTP_OK, [], ["groups" => ["track_browse", "track_read"]]);
+                                        : $this->json($track, Response::HTTP_OK, [], ["groups" => ["track"]]);
     }
 
     /**
@@ -44,6 +44,6 @@ class TrackController extends AbstractController
 
         $trackRepository->add($newTrack, true);
 
-        return $this->json($newTrack, Response::HTTP_CREATED, [], ["groups" => ["track_browse", "track_read"]]);
+        return $this->json($newTrack, Response::HTTP_CREATED, [], ["groups" => ["track"]]);
     }
 }

@@ -3,10 +3,13 @@ import Card from 'react-bootstrap/Card';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
+import { setRental } from '../../actions/dashboard';
 
 function RentalExtract({ rental }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <Card style={{ width: '100%', height: '100%', textAlign: 'center' }} className="bg-secondary m-1">
       <Card.Body>
@@ -23,7 +26,15 @@ function RentalExtract({ rental }) {
           index === rental.vehicle.category.length - 1 ? (` ${category.name}`) : (` ${category.name} /`)
         ))}
         </Card.Subtitle>
-        <Button variant="tertiary" onClick={() => navigate(`/location/${rental.id}`)} className="mt-3">En savoir plus</Button>
+        <Button
+          variant="tertiary"
+          onClick={() => {
+            dispatch(setRental(rental));
+            navigate(`/location/${rental.id}`);
+          }}
+          className="mt-3"
+        >En savoir plus
+        </Button>
       </Card.Body>
     </Card>
   );

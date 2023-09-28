@@ -18,6 +18,13 @@ class Championship
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"championships"})
+     * @Groups({"championship"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
      * @Groups({"championship_browse"})
      * @Groups({"federation_read"})
      * @Groups({"rental_found"})
@@ -26,6 +33,13 @@ class Championship
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"championships"})
+     * @Groups({"championship"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
      * @Groups({"championship_browse"})
      * @Groups({"federation_read"})
      * @Groups({"rental_found"})
@@ -34,6 +48,13 @@ class Championship
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"championships"})
+     * @Groups({"championship"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
      * @Groups({"championship_browse"})
      * @Groups({"federation_read"})
      * @Groups({"rental_found"})
@@ -53,20 +74,26 @@ class Championship
     /**
      * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="championships")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"championship_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"championship"})
+     * @Groups({"rentals"})
      */
     private $federation;
 
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="championship")
-     * @Groups({"championship_read"})
+     * @Groups({"federations"})
+     * @Groups({"championship"})
      */
     private $events;
 
     /**
      * @ORM\Column(type="string", length=7, nullable=true)
-     * @Groups({"championship_browse"})
+     * @Groups({"championships"})
+     * @Groups({"championship"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $color;
 

@@ -24,11 +24,16 @@ class RentalController extends AbstractController
     public function browse(Request $request, RentalRepository $rentalRepository): JsonResponse
     {
         if (!is_null($request->query->get('last'))) {
-            $rentals = $rentalRepository->findBy([],['createdAt' => 'DESC'],4);
-            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "rental_found", "event_browse"]]);
+            $rentals = $rentalRepository->findLastPublished();
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+        }
+
+        if (!is_null($request->query->get('my'))) {
+            $rentals = $rentalRepository->findBy(["ownerUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
         }
         return (empty($rentalRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "rental_found", "event_browse"]]);
+                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rentals"]]);
     }
 
     /**
@@ -37,7 +42,7 @@ class RentalController extends AbstractController
     public function read(?Rental $rental): JsonResponse
     {
         return (is_null($rental)) ? $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($rental, Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "rental_found", "event_browse"]]);
+                                        : $this->json($rental, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
     }
 
     /**
@@ -56,7 +61,7 @@ class RentalController extends AbstractController
 
         $rentalRepository->add($newRental, true);
 
-        return $this->json($newRental, Response::HTTP_CREATED, [], ["groups" => ["rental_browse", "rental_read", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        return $this->json($newRental, Response::HTTP_CREATED, [], ["groups" => ["rentals"]]);
     }
 
     /**
@@ -77,7 +82,7 @@ class RentalController extends AbstractController
 
         $rentalRepository->add($rental, true);
 
-        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
     }
 
     /**
@@ -128,6 +133,6 @@ class RentalController extends AbstractController
 
         $rentalRepository->add($rental, true);
 
-        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
     }
 }

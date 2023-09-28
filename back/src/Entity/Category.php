@@ -18,17 +18,31 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"category_browse"})
-     * @Groups({"federation_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"category"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"disciplines"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"category_browse"})
-     * @Groups({"federation_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"category"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"disciplines"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $name;
 
@@ -44,13 +58,16 @@ class Category
 
     /**
      * @ORM\ManyToMany(targetEntity=Vehicle::class, mappedBy="category")
-     * @Groups({"category_read"})
+     * @Groups({"category"})
      */
     private $vehicles;
 
     /**
      * @ORM\ManyToOne(targetEntity=Discipline::class, inversedBy="categories")
-     * @Groups({"category_browse"})
+     * @Groups({"category"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
      */
     private $discipline;
 

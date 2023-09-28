@@ -1,96 +1,99 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+import {
+  Card, Col, Row,
+} from 'react-bootstrap';
 import moment from 'moment/moment';
 import './RentalComponent.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { XCircleFill } from 'react-bootstrap-icons';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
+import RentalControl from './RentalControl/RentalControl';
+import { setRental } from '../../actions/dashboard';
 
-function Rental() {
-  const { rentalId } = useParams();
-  const [rental, setRental] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+function RentalComponent({ fromGestion }) {
+  const rental = useSelector((state) => state.dashboard.rental);
 
-  const navigate = useNavigate();
+  const statusMatching = useSelector((state) => state.user.statusMatching);
 
-  const statusMatching = {
-    0: ['Brouillon', '#fff'],
-    1: ['Disponible', '#00FF00'],
-    2: ['Interessé', '#FFFF00'],
-    3: ['En cours de réservation', '#ff8000'],
-    4: ['Réservation validée', '#FF0000'],
-    5: ['Archivé', '#fff'],
-  };
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios.get(`http://localhost:8000/api/rentals/${rentalId}`)
-      .then((response) => {
-        setRental(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  if (rental === null) {
+    return null;
+  }
 
   return (
-    <div className="Rental">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
-        <div className="Rental-Box">
-          <div onClick={() => (navigate('/'))} className="Rental-Box-Event">
-            <h2>{rental.event.title}</h2>
-            <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
-            <p>Date de fin : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
-            {rental.event.championship !== null
+    <div className="col-12 col-md-10">
+      <Card style={{ width: '100%', position: 'relative' }} className="mt-3 text-center bg-secondary">
+        {fromGestion && (
+        <XCircleFill
+          size={24}
+          className="text-black VehicleDetail-CloseIcon"
+          onClick={() => dispatch(setRental(null))}
+        />
+        )}
+        <Card.Header>
+          <h2>{rental.event.title}</h2>
+          <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
+          <p>Date de fin : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
+          {rental.event.championship !== null
               && (
               <p>Championnat : {`${rental.event.championship.alias} `}
                 - {rental.event.championship.federation.alias}
               </p>
               )}
-          </div>
-          <h2 className="Rental-Box-Title">{`${rental.vehicle.brand.name} - `}
-            <span style={{ backgroundColor: statusMatching[rental.status][1] }}>
+        </Card.Header>
+
+        <Card.Body>
+          <Card.Img
+            style={{ maxWidth: '70%' }}
+            src={rental.vehicle.picture !== null ? `http://localhost:8000/${rental.vehicle.picture}` : defaultKart}
+            alt={rental.vehicle.model}
+          />
+          <Card.Title className="mt-3">{`${rental.vehicle.brand.name} - `}
+            <span className="badge text-black rounded" style={{ backgroundColor: statusMatching[rental.status][1] }}>
               {statusMatching[rental.status][0]}
             </span>
-          </h2>
-          <img className="Rental-Box-Image" src={rental.vehicle.picture ?? defaultKart} alt="vehicule" />
-          <div className="Rental-Box-Infos">
-            <div className="Rental-Box-Infos-Element">
-              <h3 className="Rental-Box-Infos-Element-Title">La location</h3>
-              <div className="Rental-Box-Infos-Element-Sub">
+          </Card.Title>
 
-                <p>Tarif : {rental.price ? `${rental.price}€` : 'Non renseigné'}</p>
-                <p>Loueur : {rental.ownerUser.pseudo}</p>
-                <p>{rental.description ?? 'Aucunes informations supplémentaires'}</p>
-              </div>
-            </div>
-            <div className="Rental-Box-Infos-Element">
-              <h3 className="Rental-Box-Infos-Element-Title">Le véhicule</h3>
-              <div className="Rental-Box-Infos-Element-Sub">
-                <p> Catégorie{rental.vehicle.category.length > 1 ? 's : ' : ' : '}
-                  {rental.vehicle.category.map((category, index) => (
-                    (index === rental.vehicle.category.length - 1)
-                      ? `${category.name}`
-                      : `${category.name} / `
-                  ))}
-                </p>
-                <p>Modèle : {rental.vehicle.model ?? 'Non renseigné'}</p>
-                <p>Année : {moment(rental.vehicle.year).format('YYYY')}</p>
-                <p>Moteur : {rental.vehicle.engine}</p>
-                <p>Amortisseur : {rental.vehicle.shocks ?? 'Non renseigné'}</p>
-                <p>Infos : {rental.vehicle.description ?? '/'}</p>
-              </div>
-            </div>
-          </div>
+          <Row className="mt-3 d-flex justify-content-between">
+            <Col sm={12} md={6} className="mb-2" style={{ flexGrow: '1' }}>
+              <Card style={{ width: '100%', height: '100%' }}>
+                <Card.Header>La location</Card.Header>
+                <Card.Body className="text-start">
 
-        </div>
-      )}
+                  <Card.Text>Tarif : {rental.price ? `${rental.price}€` : 'Non renseigné'}</Card.Text>
+                  <Card.Text>Loueur : {rental.ownerUser.pseudo}</Card.Text>
+                  <Card.Text>Informations : {rental.description ?? 'Aucunes informations supplémentaires'}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col sm={12} md={6} className="mb-2">
+              <Card>
+                <Card.Header>Le véhicule</Card.Header>
+                <Card.Body className="text-start">
+
+                  <Card.Text>Catégorie{rental.vehicle.category.length > 1 ? 's : ' : ' : '}
+                    {rental.vehicle.category.map((category, index) => (
+                      (index === rental.vehicle.category.length - 1)
+                        ? `${category.name}`
+                        : `${category.name} / `
+                    ))}
+                  </Card.Text>
+                  <Card.Text>Modèle : {rental.vehicle.model ?? 'Non renseigné'}</Card.Text>
+                  <Card.Text>Année : {moment(rental.vehicle.year).format('YYYY')}</Card.Text>
+                  <Card.Text>Moteur : {rental.vehicle.engine}</Card.Text>
+                  <Card.Text>Amortisseur : {rental.vehicle.shocks ?? 'Non renseigné'}</Card.Text>
+                  <Card.Text>Infos : {rental.vehicle.description ?? '/'}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <RentalControl rental={rental} />
+          </Row>
+        </Card.Body>
+
+      </Card>
     </div>
   );
 }
 
-export default Rental;
+export default RentalComponent;

@@ -6,7 +6,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { setUserConnected } from '../../actions/user';
+import { setToken, setUserConnected } from '../../actions/user';
 
 function Registration() {
   const dispatch = useDispatch();
@@ -85,6 +85,7 @@ function Registration() {
       })
         .then((res) => {
           localStorage.setItem('token', res.data.token);
+          dispatch(setToken(res.data.token));
           dispatch(setUserConnected(true));
           setWrongConnexion(false);
           navigate('/dashboard');

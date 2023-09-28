@@ -32,7 +32,7 @@ class UserController extends AbstractController
 
         $userRepository->add($newUser, true);
 
-        return $this->json($newUser, Response::HTTP_CREATED, [], ["groups" => ["user_browse"]]);
+        return $this->json($newUser, Response::HTTP_CREATED, [], ["groups" => ["user"]]);
     }
 
     /**
@@ -42,7 +42,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
 
-        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user_browse"]]);
+        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user"]]);
     }
 
     /**
@@ -57,7 +57,7 @@ class UserController extends AbstractController
 
         $userRepository->add($user, true);
 
-        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user_browse"]]);
+        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user"]]);
     }
 }
 

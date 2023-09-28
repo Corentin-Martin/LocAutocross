@@ -16,19 +16,22 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"message_read"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"message_read"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"message_read"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $createdAt;
 
@@ -46,7 +49,8 @@ class Message
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"message_read"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $user;
 

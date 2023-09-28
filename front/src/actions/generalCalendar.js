@@ -25,3 +25,11 @@ export const setSelectedEvent = (event) => ({
     selectedEvent: event,
   },
 });
+
+export const SET_FEDERATIONS = 'SET_FEDERATIONS';
+export const setFederations = (federations) => ({
+  type: SET_FEDERATIONS,
+  payload: {
+    federations: federations,
+  },
+});

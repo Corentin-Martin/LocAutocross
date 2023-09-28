@@ -22,23 +22,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"user_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"rental_found"})
+     * @Groups({"user"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"rental_found"})
+     * @Groups({"user"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"user_browse"})
+     * @Groups({"user"})
+     * @Groups({"conversation"})
      */
     private $roles = [];
 
@@ -50,25 +57,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"rental_found"})
+     * @Groups({"user"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"rental_found"})
+     * @Groups({"user"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
-     * @Groups({"event_find"})
-     * @Groups({"rental_found"})
+     * @Groups({"user"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
      */
     private $lastname;
 

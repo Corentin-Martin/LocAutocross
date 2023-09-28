@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import {
   setIdToEdit,
-  setMyVehicles, setOpenCreation, setVehicleForDetails,
+  setOpenCreation, setVehicleForDetails,
 } from '../../actions/dashboard';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
@@ -19,22 +19,10 @@ function MyVehicles() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(
-      'http://localhost:8000/api/vehicles?my',
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
-    )
-      .then((response) => {
-        dispatch(setMyVehicles(response.data));
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+    if (vehicles) {
+      setIsLoading(false);
+    }
+  }, [vehicles]);
 
   const [index, setIndex] = useState(0);
 

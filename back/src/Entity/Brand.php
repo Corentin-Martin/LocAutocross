@@ -18,15 +18,29 @@ class Brand
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"brand_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"brands"})
+     * @Groups({"brand"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"category"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"brand_browse"})
-     * @Groups({"rental_found"})
+     * @Groups({"brands"})
+     * @Groups({"brand"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"category"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $name;
 
@@ -42,7 +56,7 @@ class Brand
 
     /**
      * @ORM\OneToMany(targetEntity=Vehicle::class, mappedBy="brand")
-     * @Groups({"brand_read"})
+     * @Groups({"brand"})
      */
     private $vehicles;
 
