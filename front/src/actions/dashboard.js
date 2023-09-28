@@ -49,3 +49,11 @@ export const setRental = (rental) => ({
     rental: rental,
   },
 });
+
+export const SET_CONVERSATION = 'SET_CONVERSATION';
+export const setConversation = (conversation) => ({
+  type: SET_CONVERSATION,
+  payload: {
+    conversation: conversation,
+  },
+});

@@ -1,25 +1,33 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
+import { useEffect, useRef, useState } from 'react';
 import './Chat.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  Button, Form, InputGroup, Spinner,
+} from 'react-bootstrap';
+import { XCircleFill } from 'react-bootstrap-icons';
+import { setConversation } from '../../actions/dashboard';
+import Message from './Message/Message';
 
 function Chat() {
-  const { id } = useParams();
-  const [conversation, setConversation] = useState('');
+  const [conversation, setLocalConversation] = useState(
+    useSelector((state) => state.dashboard.conversation),
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState('');
+  const [chatBoxHeight, setChatBoxHeight] = useState('50vh');
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const chatBoxRef = useRef();
 
   const getMessages = () => {
-    axios.get(`http://localhost:8000/api/conversations/${id}`, {
+    axios.get(`http://localhost:8000/api/conversations/${conversation.id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
       .then((response) => {
-        setConversation(response.data);
+        setLocalConversation(response.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -36,13 +44,30 @@ function Chat() {
         clearInterval(intervalMessages);
       };
     },
-    [],
+    [conversation],
   );
 
+  const setAvailableHeight = () => {
+    const conversationTitleHeight = (document.querySelector('.ConversationTitle').offsetHeight / window.innerHeight) * 100;
+    const messageFormHeight = document.querySelector('.MessageForm') !== null ? (document.querySelector('.MessageForm').offsetHeight / window.innerHeight) * 100 : 0;
+    const headerHeight = (document.querySelector('.Header').offsetHeight / window.innerHeight) * 100;
+    const footerHeight = (document.querySelector('.Footer').offsetHeight / window.innerHeight) * 100;
+    setChatBoxHeight(
+      100 - headerHeight - footerHeight - conversationTitleHeight - messageFormHeight,
+
+    );
+  };
+
+  useEffect(() => {
+    setAvailableHeight();
+    window.addEventListener('resize', setAvailableHeight);
+  }, []);
+
   const handleSubmit = (event) => {
+    setIsLoading(true);
     event.preventDefault();
     axios.post(
-      `http://localhost:8000/api/messages/${id}`,
+      `http://localhost:8000/api/messages/${conversation.id}`,
       {
         content: content,
       },
@@ -55,6 +80,8 @@ function Chat() {
     )
       .then(() => {
         setContent('');
+        // setTimeout(() => setIsLoading(false), 2000);
+        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
       })
       .catch((err) => {
         console.error(err);
@@ -62,37 +89,58 @@ function Chat() {
   };
 
   return (
-    <div>
-      {isLoading ? <p>Chargement... </p>
+    <div className="d-flex flex-column align-items-center col-12 col-lg-6 mt-3" style={{ position: 'relative' }}>
+      {isLoading ? (
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </Spinner>
+      )
         : (
           <>
-            {conversation.messages.map((message) => (
-              <div className="Chat-Message" key={message.id}>
-                <p>De : {message.user.pseudo} - Le : {moment(message.createdAt).format('DD/MM/YYYY HH:mm:ss')}</p>
-                <p>Message : {message.content}</p>
-              </div>
-            ))}
+            <div
+              className="XButton"
+              style={{
+                position: 'absolute', top: '0', right: '4%', zIndex: '5',
+              }}
+            >
+              <XCircleFill
+                size={24}
+                onClick={() => dispatch(setConversation(null))}
+                className="m-2"
+              />
+            </div>
+            <div
+              style={{
+                width: '100%', height: `${chatBoxHeight - 8}vh`, overflow: 'auto', position: 'relative', scrollTop: '100%',
+              }}
+              className="d-flex flex-column"
+              ref={chatBoxRef}
+            >
+              {conversation.messages.map((message) => (
+                <Message key={message.id} message={message} />
+              ))}
+            </div>
           </>
         )}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          onChange={(event) => {
-            setContent(event.currentTarget.value);
-          }}
-          type="text"
-          value={content}
-          placeholder="Votre message..."
-        />
-        <button type="submit">Envoyer votre message</button>
-      </form>
-      <button
-        type="button"
-        onClick={() => {
-          navigate('/');
-        }}
-      >Go
-      </button>
+      <Form onSubmit={handleSubmit} className="MessageForm mt-3 col-12 d-flex flex-column justify-content-center align-items-center">
+
+        <InputGroup>
+          <InputGroup.Text>Votre message</InputGroup.Text>
+          <Form.Control
+            as="textarea"
+            aria-label="Votre message"
+            onChange={(event) => {
+              setContent(event.currentTarget.value);
+            }}
+            value={content}
+          />
+        </InputGroup>
+
+        <Button type="submit" className="mt-2 col-8">Envoyer</Button>
+
+      </Form>
+
     </div>
 
   );

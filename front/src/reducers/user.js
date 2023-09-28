@@ -1,4 +1,6 @@
-import { SET_TOKEN, SET_USER, SET_USER_CONNECTED } from '../actions/user';
+import {
+  SET_MAIN_HEIGHT, SET_TOKEN, SET_USER, SET_USER_CONNECTED,
+} from '../actions/user';
 
 const initialState = {
   isUserConnected: false,
@@ -12,6 +14,7 @@ const initialState = {
   },
   user: null,
   token: null,
+  mainHeight: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -41,6 +44,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         token: action.payload.token,
+      };
+
+    case SET_MAIN_HEIGHT:
+      return {
+        ...state,
+        mainHeight: action.payload.mainHeight,
       };
 
     default:

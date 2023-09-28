@@ -2,16 +2,20 @@ import { ListGroup } from 'react-bootstrap';
 import './ConversationPreview.scss';
 import { Eye } from 'react-bootstrap-icons';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setConversation } from '../../../actions/dashboard';
 
 function ConversationPreview({ conv }) {
   const user = useSelector((state) => state.user.user);
+
+  const dispatch = useDispatch();
+
   return (
-    <ListGroup.Item className="bg-secondary d-flex flex-column" style={{ cursor: 'pointer' }}>
+    <ListGroup.Item className="bg-secondary d-flex flex-column" style={{ cursor: 'pointer' }} onClick={() => dispatch(setConversation(conv))}>
       <div>
-        <span className="fw-bold">{(conv.interestedUser === user)
+        <span className="fw-bold">{(conv.interestedUser.id === user.id)
           ? `${conv.rental.ownerUser.pseudo} ` : `${conv.interestedUser.pseudo} `}
-        </span>- Dernier message reçu le <span className="fst-italic">{moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')}</span>
+        </span>- Dernier message {conv.messages[conv.messages.length - 1].user.id === user.id ? 'envoyé' : 'reçu'} le <span className="fst-italic">{moment(conv.messages[conv.messages.length - 1].createdAt).format('DD/MM/YYYY à HH:mm')}</span>
       </div>
       <div>
         <span className="text-decoration-underline">Evènement</span> : {conv.rental.event.title} - {conv.rental.event.track.city} - {moment(conv.rental.event.start).format('DD/MM/YYYY')}
