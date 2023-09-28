@@ -189,7 +189,7 @@ function RentalCreation() {
                         ))}
                       </Form.Select>
                     </>
-                  ) : <Button type="button" className="col-12" variant="danger" onClick={() => navigate('/garage')}>Vous devez d'abord créer un véhicule</Button>}
+                  ) : <Button type="button" className="col-12" variant="danger" onClick={() => navigate('/mon-garage')}>Vous devez d'abord créer un véhicule</Button>}
 
                 </Form.Group>
 
