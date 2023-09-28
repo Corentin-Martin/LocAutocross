@@ -40,11 +40,62 @@ class ConversationController extends AbstractController
         $conversationsWhereUserIsOwnerAndDoesNotRead = $conversationRepository->findByOwnerUser($this->getUser(), false);
         $conversationsWhereUserIsOwnerAndRead = $conversationRepository->findByOwnerUser($this->getUser(), true);
 
-        $unread =  array_merge($conversationsWhereUserAsksAndDoesNotRead, $conversationsWhereUserIsOwnerAndDoesNotRead);
+        $unread = array_merge($conversationsWhereUserAsksAndDoesNotRead, $conversationsWhereUserIsOwnerAndDoesNotRead);
 
+        $unreadedConversationsWithLastMessage = [];
+
+        foreach ($unread as $conv) {
+            $messages = $conv->getMessages()->getValues();
+
+            $lastMessage = end($messages);
+            
+            $unreadedConversationsWithLastMessage[] = [
+                'conversation' => $conv,
+                'lastMessage' => $lastMessage,
+            ];
+        }
+        
+        usort($unreadedConversationsWithLastMessage, function ($a, $b) {
+            $lastMessageA = $a['lastMessage'];
+            $lastMessageB = $b['lastMessage'];
+
+            return $lastMessageB->getCreatedAt() <=> $lastMessageA->getCreatedAt();
+            
+        });
+
+        $unreadOk = [];
+        foreach ($unreadedConversationsWithLastMessage as $ok) {
+            $unreadOk[] = $ok['conversation'];
+        }
+        
         $read = array_merge($conversationsWhereUserAsksAndRead, $conversationsWhereUserIsOwnerAndRead);
 
-        $conversations = ['unread' => array_unique($unread), 'read' => array_unique($read)];
+        $readedConversationsWithLastMessage = [];
+
+        foreach ($read as $conv) {
+            $messages = $conv->getMessages()->getValues();
+
+            $lastMessage = end($messages);
+            
+            $readedConversationsWithLastMessage[] = [
+                'conversation' => $conv,
+                'lastMessage' => $lastMessage,
+            ];
+        }
+
+        usort($readedConversationsWithLastMessage, function ($a, $b) {
+            $lastMessageA = $a['lastMessage'];
+            $lastMessageB = $b['lastMessage'];
+            
+            return $lastMessageB->getCreatedAt() <=> $lastMessageA->getCreatedAt();
+        });
+
+        $readOk = [];
+        foreach ($readedConversationsWithLastMessage as $ok) {
+            $readOk[] = $ok['conversation'];
+        }
+
+        $conversations = ['unread' => array_unique($unreadOk), 'read' => array_unique($readOk)];
 
 
         return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
