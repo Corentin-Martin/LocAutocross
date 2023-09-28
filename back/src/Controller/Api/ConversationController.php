@@ -24,7 +24,7 @@ class ConversationController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(Request $request, ConversationRepository $conversationRepository, RentalRepository $rentalRepository): JsonResponse
+    public function browse(Request $request, ConversationRepository $conversationRepository, ?RentalRepository $rentalRepository): JsonResponse
     {
 
         if (!is_null($request->query->get('rental'))) {
@@ -40,16 +40,15 @@ class ConversationController extends AbstractController
         $conversationsWhereUserIsOwnerAndDoesNotRead = $conversationRepository->findByOwnerUser($this->getUser(), false);
         $conversationsWhereUserIsOwnerAndRead = $conversationRepository->findByOwnerUser($this->getUser(), true);
 
-        $conversations = [];
-
         $unread =  array_merge($conversationsWhereUserAsksAndDoesNotRead, $conversationsWhereUserIsOwnerAndDoesNotRead);
-        $conversations['unread'] = array_unique($unread);
 
         $read = array_merge($conversationsWhereUserAsksAndRead, $conversationsWhereUserIsOwnerAndRead);
-        $conversations['read'] = array_unique($read);
+
+        $conversations = ['unread' => array_unique($unread), 'read' => array_unique($read)];
+
 
         return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+                                        : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
     }
 
     /**
