@@ -2,17 +2,22 @@ import {
   Card, Col, ListGroup, Spinner,
 } from 'react-bootstrap';
 import './RentalControl.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 import DeleteModal from '../../DeleteModal/DeleteModal';
+import { setConversation } from '../../../actions/dashboard';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user !== null && user.roles.includes('ROLE_PRO')) {
@@ -54,7 +59,15 @@ function RentalControl({ rental }) {
               {conversations.length > 0 && (
               <ListGroup>
                 {conversations.map((conv) => (
-                  <ListGroup.Item key={conv.id}><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser === 0 ? 'red' : 'green') }}>{conv.isReadByOwnerUser === 0 ? 'Non lue' : 'Lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')} </ListGroup.Item>
+                  <ListGroup.Item
+                    key={conv.id}
+                    onClick={() => {
+                      dispatch(setConversation(conv));
+                      navigate('/mes-conversations');
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser === 0 ? 'red' : 'green') }}>{conv.isReadByOwnerUser === 0 ? 'Non lue' : 'Lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')}
+                  </ListGroup.Item>
                 ))}
               </ListGroup>
               )}
