@@ -24,7 +24,8 @@ function Conversation() {
         <div className="Conversation-over992 align-self-start col-md-6">
           <MyConversations />
         </div>
-        {conversation !== null && <Chat />}
+        {conversation !== null
+        && <div className="col-12 col-lg-6"><Chat /></div>}
       </Row>
 
     </Row>

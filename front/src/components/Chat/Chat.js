@@ -9,7 +9,7 @@ import { XCircleFill } from 'react-bootstrap-icons';
 import { setConversation } from '../../actions/dashboard';
 import Message from './Message/Message';
 
-function Chat() {
+function Chat({ noCloseButton = false }) {
   const [conversation, setLocalConversation] = useState(
     useSelector((state) => state.dashboard.conversation),
   );
@@ -52,7 +52,7 @@ function Chat() {
   );
 
   const setAvailableHeight = () => {
-    const conversationTitleHeight = (document.querySelector('.ConversationTitle').offsetHeight / window.innerHeight) * 100;
+    const conversationTitleHeight = document.querySelector('.ConversationTitle') !== null ? (document.querySelector('.ConversationTitle').offsetHeight / window.innerHeight) * 100 : 0;
     const messageFormHeight = document.querySelector('.MessageForm') !== null ? (document.querySelector('.MessageForm').offsetHeight / window.innerHeight) * 100 : 0;
     const headerHeight = (document.querySelector('.Header').offsetHeight / window.innerHeight) * 100;
     const footerHeight = (document.querySelector('.Footer').offsetHeight / window.innerHeight) * 100;
@@ -93,7 +93,7 @@ function Chat() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 col-lg-6 mt-3" style={{ position: 'relative' }}>
+    <div className="d-flex flex-column align-items-center col-12 mt-3" style={{ position: 'relative' }}>
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
@@ -101,6 +101,7 @@ function Chat() {
       )
         : (
           <>
+            {!noCloseButton && (
             <div
               className="XButton"
               style={{
@@ -113,6 +114,8 @@ function Chat() {
                 className="m-2"
               />
             </div>
+            )}
+
             <div
               style={{
                 width: '100%', height: `${chatBoxHeight - 8}vh`, overflow: 'auto', position: 'relative', scrollTop: '100%',
