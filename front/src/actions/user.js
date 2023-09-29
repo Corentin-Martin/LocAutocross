@@ -21,3 +21,11 @@ export const setToken = (token) => ({
     token: token,
   },
 });
+
+export const SET_MAIN_HEIGHT = 'SET_MAIN_HEIGHT';
+export const setMainHeight = (height) => ({
+  type: SET_MAIN_HEIGHT,
+  payload: {
+    mainHeight: height,
+  },
+});

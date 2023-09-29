@@ -29,7 +29,7 @@ function Login() {
         dispatch(setToken(res.data.token));
         dispatch(setUserConnected(true));
         setWrongConnexion(false);
-        navigate('/garage');
+        navigate('/mon-garage');
       })
       .catch((err) => {
         console.error(err);

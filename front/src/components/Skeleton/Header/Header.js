@@ -71,7 +71,7 @@ function Header() {
                   >
                     <NavDropdown.Item
                       as={Link}
-                      to="/garage"
+                      to="/mon-garage"
                       onClick={() => {
                         setShowOffCanvas(false);
                       }}
@@ -84,6 +84,14 @@ function Header() {
                         setShowOffCanvas(false);
                       }}
                     >Mes locations
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/mes-conversations"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Mes conversations
                     </NavDropdown.Item>
 
                   </NavDropdown>

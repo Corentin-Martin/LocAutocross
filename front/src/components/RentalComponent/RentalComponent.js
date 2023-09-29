@@ -5,6 +5,7 @@ import moment from 'moment/moment';
 import './RentalComponent.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { XCircleFill } from 'react-bootstrap-icons';
+import { useEffect } from 'react';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import { setRental } from '../../actions/dashboard';
@@ -15,6 +16,10 @@ function RentalComponent({ fromGestion }) {
   const statusMatching = useSelector((state) => state.user.statusMatching);
 
   const dispatch = useDispatch();
+
+  useEffect(() => () => {
+    dispatch(setRental(null));
+  }, []);
 
   if (rental === null) {
     return null;

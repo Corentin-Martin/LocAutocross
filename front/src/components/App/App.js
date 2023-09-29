@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import Dashboard from '../Dashboard/Dashboard';
 import Chat from '../Chat/Chat';
 import './App.scss';
 import Skeleton from '../Skeleton/Skeleton';
@@ -17,6 +16,7 @@ import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import { setFederations } from '../../actions/generalCalendar';
 import { setMyVehicles } from '../../actions/dashboard';
 import { setToken, setUser, setUserConnected } from '../../actions/user';
+import Conversation from '../../pages/Conversation/Conversation';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -103,15 +103,18 @@ function App() {
 
           {/* PROTECTED */}
           <Route
-            path="/garage"
+            path="/mon-garage"
             element={(<Skeleton page={<Vehicles />} />)}
           />
           <Route
             path="/mes-locations"
             element={(<Skeleton page={<RentalGestion />} />)}
           />
+          <Route
+            path="/mes-conversations"
+            element={(<Skeleton page={<Conversation />} />)}
+          />
 
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="conversation/:id" element={<Chat />} />
         </Routes>
       </div>
