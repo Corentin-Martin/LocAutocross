@@ -19,8 +19,14 @@ class BrandController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(BrandRepository $brandRepository): JsonResponse
+    public function browse(Request $request, BrandRepository $brandRepository): JsonResponse
     {
+        if (!is_null($request->query->get('name'))) {
+            $brand = $brandRepository->findOneBy(['name' => $request->query->get('name')]);
+
+            return (is_null($brand))    ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                        : $this->json($brand, Response::HTTP_OK, [], ["groups" => ["brand"]]);
+        }
         return (empty($brandRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                                     : $this->json($brandRepository->findBy([], ["name" => 'ASC']), Response::HTTP_OK, [], ["groups" => ["brands"]]);
     }
