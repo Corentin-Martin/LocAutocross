@@ -35,7 +35,7 @@ function RentalControl({ rental }) {
     }
   }, []);
 
-  if (user === null || (!user.roles.includes('ROLE_PRO'))) {
+  if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
     return null;
   }
 
