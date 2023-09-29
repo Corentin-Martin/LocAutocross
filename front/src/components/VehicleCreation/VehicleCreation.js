@@ -11,6 +11,7 @@ import {
   setIdToEdit, setMyVehicles, setOpenCreation, setVehicleForDetails,
 } from '../../actions/dashboard';
 import Checkbox from './Checkbox/Checkbox';
+import BrandCreation from '../BrandCreation/BrandCreation';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
@@ -32,6 +33,7 @@ function VehicleCreation() {
   const [year, setYear] = useState('2023-01-01');
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [categories, setCategories] = useState([]);
+  const newBrand = useSelector((state) => state.dashboard.newBrand);
 
   const dispatch = useDispatch();
 
@@ -85,7 +87,7 @@ function VehicleCreation() {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [newBrand]);
 
   const [wrong, setWrong] = useState([]);
 
@@ -215,6 +217,12 @@ function VehicleCreation() {
   const [match, setMatch] = useState(false);
   const [brandSearch, setBrandSearch] = useState('');
 
+  useEffect(() => {
+    if (newBrand != null) {
+      setBrand(newBrand);
+    }
+  }, [newBrand]);
+
   const handleBrandChange = (e) => {
     setBrandSearch(e.target.value);
     const selectedBrand = brands.find((oneBrand) => oneBrand.name === e.target.value);
@@ -282,6 +290,13 @@ function VehicleCreation() {
     }
   }, [vehicle]);
 
+  const [showBrandCreation, setShowBrandCreation] = useState(false);
+
+  const handleNewBrand = () => {
+    setShowBrandCreation(true);
+    setTimeout(() => setShowBrandCreation(false), 1500);
+  };
+
   return (
     <div className="d-flex flex-column align-items-center">
       {isLoading ? (
@@ -308,6 +323,7 @@ function VehicleCreation() {
               e.stopPropagation();
             }}
             >
+              {showBrandCreation && <BrandCreation showBrandCreation={showBrandCreation} />}
               <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
                 <Form.Group controlId="pictureSelect" className="mb-3 col-10">
                   <Form.Label>Photo</Form.Label>
@@ -335,7 +351,7 @@ function VehicleCreation() {
                   <Form.Control
                     type="text"
                     placeholder="Sélectionnez une marque"
-                    list="brandsList" // Utilisez le datalist ici
+                    list="brandsList"
                     value={brand ? brand.name : brandSearch}
                     onChange={handleBrandChange}
                   />
@@ -345,7 +361,15 @@ function VehicleCreation() {
                     ))}
                   </datalist>
                   {!match && !brand && brandSearch !== '' && (
-                  <div className="text-danger mt-2 text-center">Aucune correspondance trouvée. <span className="badge bg-primary text-black p-1" style={{ cursor: 'pointer' }}>Voulez-vous ajouter une nouvelle marque ?</span></div>
+                  <div className="text-danger mt-2 text-center">
+                    Aucune correspondance trouvée.
+                    <span
+                      className="badge bg-primary text-black p-1"
+                      style={{ cursor: 'pointer' }}
+                      onClick={handleNewBrand}
+                    >Voulez-vous ajouter une nouvelle marque ?
+                    </span>
+                  </div>
                   )}
                 </Form.Group>
 

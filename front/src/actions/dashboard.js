@@ -57,3 +57,11 @@ export const setConversation = (conversation) => ({
     conversation: conversation,
   },
 });
+
+export const SET_NEW_BRAND = 'SET_NEW_BRAND';
+export const setNewBrand = (newBrand) => ({
+  type: SET_NEW_BRAND,
+  payload: {
+    newBrand: newBrand,
+  },
+});

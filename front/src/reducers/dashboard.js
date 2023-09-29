@@ -1,7 +1,7 @@
 import {
   SET_CONVERSATION,
   SET_ID_VEHICLE_TO_EDIT,
-  SET_MY_VEHICLES, SET_OPEN_CREATION, SET_RENTAL, SET_VEHICLE,
+  SET_MY_VEHICLES, SET_NEW_BRAND, SET_OPEN_CREATION, SET_RENTAL, SET_VEHICLE,
 } from '../actions/dashboard';
 
 const initialState = {
@@ -11,6 +11,7 @@ const initialState = {
   idToEdit: null,
   rental: null,
   conversation: null,
+  newBrand: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -58,6 +59,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         conversation: action.payload.conversation,
+      };
+
+    case SET_NEW_BRAND:
+      return {
+        ...state,
+        newBrand: action.payload.newBrand,
       };
 
     default:
