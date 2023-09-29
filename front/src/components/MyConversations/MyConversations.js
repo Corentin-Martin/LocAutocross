@@ -23,7 +23,7 @@ function MyConversations() {
       .catch((err) => {
         console.error(err);
       });
-  }, [conversation]);
+  }, [conversation === null]);
 
   return (
     <div className="d-flex flex-column align-items-center col-12 mt-3">

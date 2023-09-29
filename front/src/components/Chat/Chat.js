@@ -10,9 +10,8 @@ import { setConversation } from '../../actions/dashboard';
 import Message from './Message/Message';
 
 function Chat({ noCloseButton = false }) {
-  const [conversation, setLocalConversation] = useState(
-    useSelector((state) => state.dashboard.conversation),
-  );
+  const conversation = useSelector((state) => state.dashboard.conversation);
+  const [localConv, setLocalConv] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState('');
   const [chatBoxHeight, setChatBoxHeight] = useState('50vh');
@@ -27,7 +26,7 @@ function Chat({ noCloseButton = false }) {
       },
     })
       .then((response) => {
-        setLocalConversation(response.data);
+        setLocalConv(response.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -41,8 +40,8 @@ function Chat({ noCloseButton = false }) {
 
   useEffect(
     () => {
-      getMessages();
-      const intervalMessages = setInterval(getMessages, 2500);
+      setIsLoading(true);
+      const intervalMessages = setInterval(getMessages, 1500);
 
       return () => {
         clearInterval(intervalMessages);
@@ -53,11 +52,10 @@ function Chat({ noCloseButton = false }) {
 
   const setAvailableHeight = () => {
     const conversationTitleHeight = document.querySelector('.ConversationTitle') !== null ? (document.querySelector('.ConversationTitle').offsetHeight / window.innerHeight) * 100 : 0;
-    const messageFormHeight = document.querySelector('.MessageForm') !== null ? (document.querySelector('.MessageForm').offsetHeight / window.innerHeight) * 100 : 0;
     const headerHeight = (document.querySelector('.Header').offsetHeight / window.innerHeight) * 100;
     const footerHeight = (document.querySelector('.Footer').offsetHeight / window.innerHeight) * 100;
     setChatBoxHeight(
-      100 - headerHeight - footerHeight - conversationTitleHeight - messageFormHeight,
+      100 - headerHeight - footerHeight - conversationTitleHeight,
 
     );
   };
@@ -84,7 +82,6 @@ function Chat({ noCloseButton = false }) {
     )
       .then(() => {
         setContent('');
-        // setTimeout(() => setIsLoading(false), 2000);
         chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
       })
       .catch((err) => {
@@ -93,11 +90,13 @@ function Chat({ noCloseButton = false }) {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center col-12 mt-3" style={{ position: 'relative' }}>
+    <div className="d-flex flex-column align-items-center col-12 mt-3" style={{ height: `${chatBoxHeight - 8}vh`, position: 'relative' }}>
       {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
+        <div className="d-flex flex-column justify-content-center align-items-center" style={{ flexGrow: '1' }}>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Chargement...</span>
+          </Spinner>
+        </div>
       )
         : (
           <>
@@ -118,12 +117,12 @@ function Chat({ noCloseButton = false }) {
 
             <div
               style={{
-                width: '100%', height: `${chatBoxHeight - 8}vh`, overflow: 'auto', position: 'relative', scrollTop: '100%',
+                width: '100%', overflow: 'auto', position: 'relative', scrollTop: '100%', flexGrow: '1',
               }}
               className="d-flex flex-column"
               ref={chatBoxRef}
             >
-              {conversation.messages.map((message) => (
+              {localConv.messages.map((message) => (
                 <Message key={message.id} message={message} />
               ))}
             </div>
