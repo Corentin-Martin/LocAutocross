@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './VehicleCreation.scss';
 import {
   Form, FloatingLabel, Spinner, Button, Accordion, Alert,
@@ -92,7 +92,8 @@ function VehicleCreation() {
   const verification = () => {
     let verif = true;
     const error = [];
-    if (brands.filter((brandFilter) => brandFilter.id === brand.id).length !== 1) {
+    if (brand === null
+      || (brands.filter((brandFilter) => brandFilter.id === brand.id).length !== 1)) {
       error.push('La marque du véhicule est obligatoire');
       verif = false;
     }
@@ -210,12 +211,28 @@ function VehicleCreation() {
     setPicture(base64);
   };
 
+  const dataRef = useRef();
+  const [match, setMatch] = useState(false);
+  const [brandSearch, setBrandSearch] = useState('');
+
   const handleBrandChange = (e) => {
-    setBrand(e.target.value);
+    setBrandSearch(e.target.value);
     const selectedBrand = brands.find((oneBrand) => oneBrand.name === e.target.value);
+
+    for (let i = 0; i < dataRef.current.options.length; i += 1) {
+      if (dataRef.current.options[i].value.trim().toUpperCase()
+        .includes(e.target.value.trim().toUpperCase())) {
+        setMatch(true);
+        break;
+      }
+      setMatch(false);
+    }
 
     if (selectedBrand) {
       setBrand(selectedBrand);
+    }
+    else {
+      setBrand(null);
     }
   };
 
@@ -319,14 +336,17 @@ function VehicleCreation() {
                     type="text"
                     placeholder="Sélectionnez une marque"
                     list="brandsList" // Utilisez le datalist ici
-                    value={brand ? brand.name : ''}
+                    value={brand ? brand.name : brandSearch}
                     onChange={handleBrandChange}
                   />
-                  <datalist id="brandsList">
+                  <datalist id="brandsList" ref={dataRef}>
                     {brands.map((oneBrand) => (
                       <option key={oneBrand.id} value={oneBrand.name} />
                     ))}
                   </datalist>
+                  {!match && !brand && brandSearch !== '' && (
+                  <div className="text-danger mt-2 text-center">Aucune correspondance trouvée. <span className="badge bg-primary text-black p-1" style={{ cursor: 'pointer' }}>Voulez-vous ajouter une nouvelle marque ?</span></div>
+                  )}
                 </Form.Group>
 
                 <FloatingLabel
