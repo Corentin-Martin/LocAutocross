@@ -163,4 +163,20 @@ class ConversationController extends AbstractController
         return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
     }
 
+    /**
+     * @Route("/location/{id}", name="browseOne", requirements={"id"="\d+"}, methods={"GET"})
+     */
+    public function browseOne(?Rental $rental, ConversationRepository $conversationRepository): JsonResponse
+    {
+        if (is_null($rental))
+        {
+            return $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, []);
+        }
+        $conversation = $conversationRepository->findOneBy(["rental" => $rental, "interestedUser" => $this->getUser()]);
+
+        return is_null($conversation)   ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                        : $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+
+    }
+
 }
