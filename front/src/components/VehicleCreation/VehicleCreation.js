@@ -8,7 +8,7 @@ import { PlusCircleFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import {
-  setIdToEdit, setMyVehicles, setOpenCreation, setVehicleForDetails,
+  setIdToEdit, setMyVehicles, setOpenBrandCreation, setOpenCreation, setVehicleForDetails,
 } from '../../actions/dashboard';
 import Checkbox from './Checkbox/Checkbox';
 import BrandCreation from '../BrandCreation/BrandCreation';
@@ -290,12 +290,7 @@ function VehicleCreation() {
     }
   }, [vehicle]);
 
-  const [showBrandCreation, setShowBrandCreation] = useState(false);
-
-  const handleNewBrand = () => {
-    setShowBrandCreation(true);
-    setTimeout(() => setShowBrandCreation(false), 1500);
-  };
+  const openBrandCreation = useSelector((state) => state.dashboard.openBrandCreation);
 
   return (
     <div className="d-flex flex-column align-items-center">
@@ -323,7 +318,7 @@ function VehicleCreation() {
               e.stopPropagation();
             }}
             >
-              {showBrandCreation && <BrandCreation showBrandCreation={showBrandCreation} />}
+              {openBrandCreation && <BrandCreation />}
               <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
                 <Form.Group controlId="pictureSelect" className="mb-3 col-10">
                   <Form.Label>Photo</Form.Label>
@@ -366,7 +361,7 @@ function VehicleCreation() {
                     <span
                       className="badge bg-primary text-black p-1"
                       style={{ cursor: 'pointer' }}
-                      onClick={handleNewBrand}
+                      onClick={() => dispatch(setOpenBrandCreation(true))}
                     >Voulez-vous ajouter une nouvelle marque ?
                     </span>
                   </div>

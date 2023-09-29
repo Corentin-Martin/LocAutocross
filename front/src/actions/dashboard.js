@@ -65,3 +65,11 @@ export const setNewBrand = (newBrand) => ({
     newBrand: newBrand,
   },
 });
+
+export const SET_OPEN_BRAND_CREATION = 'SET_OPEN_BRAND_CREATION';
+export const setOpenBrandCreation = (bool) => ({
+  type: SET_OPEN_BRAND_CREATION,
+  payload: {
+    openBrandCreation: bool,
+  },
+});

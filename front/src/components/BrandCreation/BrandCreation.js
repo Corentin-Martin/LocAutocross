@@ -2,20 +2,42 @@ import {
   Button, FloatingLabel, Form, Modal,
 } from 'react-bootstrap';
 import './BrandCreation.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setNewBrand } from '../../actions/dashboard';
+import { setNewBrand, setOpenBrandCreation } from '../../actions/dashboard';
 
-function BrandCreation({ showBrandCreation }) {
+function BrandCreation() {
   const [brandName, setBrandName] = useState('');
-  const [show, setShow] = useState(showBrandCreation);
+  const [brandExist, setBrandExist] = useState(false);
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setBrandExist(false);
+    axios.get(
+      `http://localhost:8000/api/brands?name=${brandName}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      },
+
+    )
+      .then((response) => {
+        if (response.status !== 204) {
+          setBrandExist(true);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [brandName]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (brandName !== '') {
+    if (brandName !== '' && !brandExist) {
       axios.post(
         'http://localhost:8000/api/brands',
         {
@@ -29,7 +51,7 @@ function BrandCreation({ showBrandCreation }) {
 
       )
         .then((response) => {
-          setShow(false);
+          dispatch(setOpenBrandCreation(false));
           dispatch(setNewBrand(response.data));
         })
         .catch((err) => {
@@ -39,7 +61,7 @@ function BrandCreation({ showBrandCreation }) {
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
+    <Modal show onHide={() => dispatch(setOpenBrandCreation(false))}>
       <Modal.Header closeButton>
         <Modal.Title>Nouvelle marque</Modal.Title>
       </Modal.Header>
@@ -52,7 +74,15 @@ function BrandCreation({ showBrandCreation }) {
           >
             <Form.Control type="text" placeholder="Peugeot" onChange={(e) => setBrandName(e.currentTarget.value)} value={brandName} />
           </FloatingLabel>
-          <Button type="submit">Créer</Button>
+          {brandExist
+          && (
+          <div className="text-danger mt-2 text-center">
+            Cette marque existe déjà.
+          </div>
+          )}
+
+          {!brandExist
+          && <Button type="submit">Créer</Button>}
         </Form>
       </Modal.Body>
 
