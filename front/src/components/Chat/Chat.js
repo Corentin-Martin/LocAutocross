@@ -35,6 +35,10 @@ function Chat() {
       });
   };
 
+  useEffect(() => () => {
+    dispatch(setConversation(null));
+  }, []);
+
   useEffect(
     () => {
       getMessages();
