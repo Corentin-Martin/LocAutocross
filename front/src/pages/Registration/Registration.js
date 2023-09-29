@@ -4,13 +4,14 @@ import {
   Form, Button, FloatingLabel, Row, Alert, Modal, Badge,
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { setToken, setUserConnected } from '../../actions/user';
+import { setToken, setUser, setUserConnected } from '../../actions/user';
 
 function Registration() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [mail, setMail] = useState(null);
   const [pseudo, setPseudo] = useState(null);
@@ -87,8 +88,15 @@ function Registration() {
           localStorage.setItem('token', res.data.token);
           dispatch(setToken(res.data.token));
           dispatch(setUserConnected(true));
+          dispatch(setUser(res.data.user));
           setWrongConnexion(false);
-          navigate('/dashboard');
+
+          if (location.state !== null) {
+            navigate(`/location/${location.state.rental.id}`);
+          }
+          else {
+            navigate('/mes-conversations');
+          }
         })
         .catch((error) => {
           console.error(error);

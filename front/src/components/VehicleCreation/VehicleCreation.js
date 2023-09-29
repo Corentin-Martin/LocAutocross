@@ -332,7 +332,7 @@ function VehicleCreation() {
                 </Form.Group>
 
                 <Form.Group controlId="yearSelect" className="mb-3 col-10">
-                  <Form.Label className="text-center">Année</Form.Label>
+                  <Form.Label className="text-center">Année *</Form.Label>
                   <Form.Control
                     type="number"
                     placeholder="Sélectionnez l'année"
@@ -342,7 +342,7 @@ function VehicleCreation() {
                 </Form.Group>
 
                 <Form.Group controlId="brandSelect" className="mb-3 col-10">
-                  <Form.Label>Marque</Form.Label>
+                  <Form.Label>Marque *</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Sélectionnez une marque"
@@ -385,7 +385,7 @@ function VehicleCreation() {
 
                 <FloatingLabel
                   controlId="floatingInput2"
-                  label="Moteur"
+                  label="Moteur *"
                   className="mb-3 col-10"
                 >
                   <Form.Control
@@ -430,7 +430,7 @@ function VehicleCreation() {
                 </FloatingLabel>
 
                 <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
-                  <Form.Label>Catégorie(s)</Form.Label>
+                  <Form.Label>Catégorie(s) *</Form.Label>
 
                   <Accordion>
                     {disciplines.map((discipline) => (
@@ -454,6 +454,8 @@ function VehicleCreation() {
                   </Accordion>
 
                 </Form.Group>
+
+                <p className="mb-3">* Champs obligatoires</p>
 
                 <Button type="submit">{!vehicleToEdit ? 'Créer' : 'Modifier'}</Button>
                 {wrong.length > 0 && (

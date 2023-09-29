@@ -34,6 +34,10 @@ function MyConversations() {
       )
         : (
           <div className="col-12">
+            {((conversations.unread.length > 0 && conversations.read.length > 0)
+            || (conversations.unread.length > 0 && conversations.read.length === 0)
+            || (conversations.unread.length === 0 && conversations.read.length > 0))
+            && (
             <Accordion defaultActiveKey={Object.entries(conversations)[0][1].length > 0 ? Object.entries(conversations)[0][1][0].id : '0'} className="col-12">
               {(Object.entries(conversations).map((readOrUnread) => (
                 <div key={readOrUnread}>
@@ -46,9 +50,7 @@ function MyConversations() {
                         <Accordion.Body>
                           <ListGroup className="col-12">
                             {readOrUnread[1].map((conv) => (
-
                               <ConversationPreview key={conv.id} conv={conv} />
-
                             ))}
                           </ListGroup>
                         </Accordion.Body>
@@ -63,8 +65,9 @@ function MyConversations() {
 
               )))}
             </Accordion>
+            )}
             {(conversations.unread.length === 0 && conversations.read.length === 0)
-            && <p>Vous n'avez encore jamais entamé de conversation</p>}
+            && <p className="text-center">Vous n'avez encore jamais entamé de conversation</p>}
           </div>
         )}
     </div>

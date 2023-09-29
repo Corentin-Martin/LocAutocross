@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Login.scss';
 import { useDispatch } from 'react-redux';
 import {
   Form, Button, FloatingLabel, Row, Alert,
 } from 'react-bootstrap';
 import { setToken, setUserConnected } from '../../actions/user';
+import { setRental } from '../../actions/dashboard';
 
 function Login() {
   const [mail, setMail] = useState('');
@@ -17,6 +18,13 @@ function Login() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state !== null) {
+      dispatch(setRental(location.state.rental));
+    }
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -29,7 +37,7 @@ function Login() {
         dispatch(setToken(res.data.token));
         dispatch(setUserConnected(true));
         setWrongConnexion(false);
-        navigate('/mon-garage');
+        navigate(-1);
       })
       .catch((err) => {
         console.error(err);
@@ -77,6 +85,7 @@ function Login() {
           Se connecter
         </Button>
       </Form>
+      <p className="text-center mt-3">Vous n'avez pas encore de compte ? <span className="badge bg-primary" onClick={() => navigate('/inscription', location.state !== null ? { state: { rental: location.state.rental } } : '')}>Inscrivez-vous</span></p>
     </Row>
   );
 }
