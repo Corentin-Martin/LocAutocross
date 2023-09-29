@@ -72,7 +72,7 @@ function RentalControl({ rental }) {
                         handleShow();
                       }}
                       style={{ cursor: 'pointer' }}
-                    ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser === 0 ? 'red' : 'green') }}>{conv.isReadByOwnerUser === 0 ? 'Non lue' : 'Lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')}
+                    ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser ? 'green' : 'red') }}>{conv.isReadByOwnerUser ? 'Lue' : 'Non lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')}
                     </ListGroup.Item>
                   ))}
                 </ListGroup>
@@ -85,7 +85,7 @@ function RentalControl({ rental }) {
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton />
             <Modal.Body>
-              <Chat noCloseButton />
+              <Chat test />
             </Modal.Body>
           </Modal>
         </>
