@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setModalCalendarIsOpen } from '../../../actions/generalCalendar';
 import './RentalList.scss';
+import { setRental } from '../../../actions/dashboard';
 
 function RentalList({ rentals }) {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ function RentalList({ rentals }) {
                 className="RentalList-Li"
                 onClick={(() => {
                   navigate(`/location/${rental.id}`);
+                  { /* TO DO ENVOYER EVENT */ }
+                  dispatch(setRental(rental));
                   dispatch(setModalCalendarIsOpen(false));
                 })}
                 key={rental.id}
