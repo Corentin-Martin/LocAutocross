@@ -30,8 +30,33 @@ class ConversationController extends AbstractController
         if (!is_null($request->query->get('rental'))) {
             $rental = $rentalRepository->findBy(['id' => $request->query->get('rental')]);
             $conversations = $conversationRepository->findBy(['rental' => $rental]);
-            return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                            : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+
+            foreach ($conversations as $conv) {
+                $messages = $conv->getMessages()->getValues();
+    
+                $lastMessage = end($messages);
+                
+                $conversationsWithLastMessage[] = [
+                    'conversation' => $conv,
+                    'lastMessage' => $lastMessage,
+                ];
+            }
+            
+            usort($conversationsWithLastMessage, function ($a, $b) {
+                $lastMessageA = $a['lastMessage'];
+                $lastMessageB = $b['lastMessage'];
+    
+                return $lastMessageB->getCreatedAt() <=> $lastMessageA->getCreatedAt();
+                
+            });
+    
+            $conversationsOk = [];
+            foreach ($conversationsWithLastMessage as $ok) {
+                $conversationsOk[] = $ok['conversation'];
+            }
+
+            return (empty($conversationsOk))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                            : $this->json($conversationsOk, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
         }
 
         $conversationsWhereUserAsksAndDoesNotRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => false]);
@@ -143,10 +168,18 @@ class ConversationController extends AbstractController
 
         if (is_null($conversation)) {
             $conversation = new Conversation;
-            $conversation->setRental($rental)
-                         ->setInterestedUser($user)
-                         ->setIsReadByInterestedUser(true)
-                         ->setIsReadByOwnerUser(false);
+
+            if ($user === $rental->getOwnerUser()) {
+                $conversation->setRental($rental)
+                             ->setInterestedUser($rental->getTenantUser())
+                             ->setIsReadByInterestedUser(false)
+                             ->setIsReadByOwnerUser(true);
+            } else {
+                $conversation->setRental($rental)
+                             ->setInterestedUser($user)
+                             ->setIsReadByInterestedUser(true)
+                             ->setIsReadByOwnerUser(false);
+            }
 
             $conversationRepository->add($conversation, true);
 
