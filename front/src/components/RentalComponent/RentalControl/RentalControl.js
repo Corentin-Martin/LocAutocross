@@ -1,4 +1,5 @@
 import {
+  Button,
   Card, Col, ListGroup, Spinner,
 } from 'react-bootstrap';
 import './RentalControl.scss';
@@ -11,11 +12,14 @@ import DeleteModal from '../../DeleteModal/DeleteModal';
 import { setConversation } from '../../../actions/dashboard';
 
 import ModalChat from '../../ModalChat/ModalChat';
+import ReservationAction from './ReservationAction/ReservationAction';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
+  const [associateConv, setAssociateConv] = useState({});
+  const conversation = useSelector((state) => state.dashboard.conversation);
 
   const dispatch = useDispatch();
 
@@ -28,13 +32,23 @@ function RentalControl({ rental }) {
       })
         .then((res) => {
           setConversations(res.data);
+
+          const convAssociate = res.data.filter(
+            (conv) => conv.interestedUser.id === rental.tenantUser.id,
+          );
+
+          setAssociateConv({
+            exists: convAssociate.length > 0,
+            conv: convAssociate,
+          });
+
           setIsLoading(false);
         })
         .catch((err) => {
           console.error(err);
         });
     }
-  }, []);
+  }, [conversation]);
 
   if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
     return null;
@@ -62,6 +76,13 @@ function RentalControl({ rental }) {
                   <Card.Text className="d-flex align-items-center" style={{ cursor: 'pointer' }}><PencilSquare size={24} className="me-2" /> Editer</Card.Text>
                   <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}><DeleteModal type="rentals" idToDelete={rental.id} /></Card.Text>
                 </div>
+
+                <ReservationAction
+                  rental={rental}
+                  associateConv={associateConv}
+                  handleShow={handleShow}
+                />
+
                 <Card.Text>Conversation{conversations.length > 1 ? 's' : ''} : {conversations.length}</Card.Text>
                 {conversations.length > 0 && (
                 <ListGroup>
@@ -73,7 +94,7 @@ function RentalControl({ rental }) {
                         handleShow();
                       }}
                       style={{ cursor: 'pointer' }}
-                    ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser ? 'green' : 'red') }}>{conv.isReadByOwnerUser ? 'Lue' : 'Non lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')}
+                    ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser ? 'green' : 'red') }}>{conv.isReadByOwnerUser ? 'Lue' : 'Non lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[conv.messages.length - 1].createdAt).format('DD/MM/YYYY à HH:mm')}
                     </ListGroup.Item>
                   ))}
                 </ListGroup>

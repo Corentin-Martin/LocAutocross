@@ -11,7 +11,7 @@ $theme-colors: (
   'secondary': vars.$secondary,
   'tertiary': vars.$tertiary,
   'success' : green,
-  'danger' : red
+  'danger' : red,
   );
 
 @import '~bootstrap/scss/bootstrap';

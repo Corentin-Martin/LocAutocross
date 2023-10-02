@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
-import { setConversation, setRental } from '../../../actions/dashboard';
+import { setConversation } from '../../../actions/dashboard';
 import ModalChat from '../../ModalChat/ModalChat';
 import UserReservationControl from './UserReservationControl/UserReservationControl';
 
@@ -77,7 +77,8 @@ function RentalUserbox({ rental }) {
                     <div className="badge rounded bg-primary col-8">{localConversation.isReadByInterestedUser ? 'Ecrire' : 'Voir'}</div>
                   </div>
                 ) : (
-                  <Button type="button" onClick={() => handleShow()}>Envoyer un message au propriétaire</Button>
+                  rental.status !== '4'
+                  && <Button type="button" onClick={() => handleShow()}>Envoyer un message au propriétaire</Button>
                 )}
 
                 <UserReservationControl rental={rental} />
