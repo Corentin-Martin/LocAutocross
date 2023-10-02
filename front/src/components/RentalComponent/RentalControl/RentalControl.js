@@ -1,6 +1,5 @@
 import {
-  Button,
-  Card, Col, ListGroup, Spinner,
+  Card, Col, ListGroup, Modal, Spinner,
 } from 'react-bootstrap';
 import './RentalControl.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +12,7 @@ import { setConversation } from '../../../actions/dashboard';
 
 import ModalChat from '../../ModalChat/ModalChat';
 import ReservationAction from './ReservationAction/ReservationAction';
+import RentalCreation from '../../RentalCreation/RentalCreation';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -59,6 +59,10 @@ function RentalControl({ rental }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
+
   return (
     <div>
       {isLoading ? (
@@ -82,7 +86,7 @@ function RentalControl({ rental }) {
                     <>
                       <div className="d-flex justify-content-between mb-2">
 
-                        <Card.Text className="d-flex align-items-center" style={{ cursor: 'pointer' }}><PencilSquare size={24} className="me-2" /> Editer</Card.Text>
+                        <Card.Text className="d-flex align-items-center" style={{ cursor: 'pointer' }} onClick={() => handleShowEdit()}><PencilSquare size={24} className="me-2" /> Editer</Card.Text>
                         <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}><DeleteModal type="rentals" idToDelete={rental.id} /></Card.Text>
                       </div>
 
@@ -116,6 +120,13 @@ function RentalControl({ rental }) {
           </Col>
 
           <ModalChat show={show} handleClose={handleClose} />
+
+          <Modal show={showEdit} onHide={handleCloseEdit}>
+            <Modal.Header closeButton />
+            <Modal.Body>
+              <RentalCreation rental={rental} />
+            </Modal.Body>
+          </Modal>
         </>
       )}
     </div>
