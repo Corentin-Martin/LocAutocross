@@ -7,8 +7,8 @@ import { setRental } from '../../../../../actions/dashboard';
 function UserReservationButton({ rentalId, status }) {
   const dispatch = useDispatch();
   const match = {
-    1: ['Plus intéressé', 'red'],
-    2: ['Se postionner comme intéressé', '#FFFF00'],
+    1: ['Je ne suis plus intéressé', 'red'],
+    2: ['Je suis interressé', '#FFFF00'],
     3: ['Envoyer une demande de réservation', '#ff8000'],
   };
   const handleChangeStatus = (newStatus) => {
