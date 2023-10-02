@@ -1,13 +1,14 @@
 import {
-  Card, Col, ListGroup, Modal, Spinner,
+  Card, Col, Spinner,
 } from 'react-bootstrap';
 import './RentalUserbox.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
-import { Chat } from 'react-bootstrap-icons';
+
 import { setConversation } from '../../../actions/dashboard';
+import ModalChat from '../../ModalChat/ModalChat';
 
 function RentalUserbox({ rental }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -68,13 +69,7 @@ function RentalUserbox({ rental }) {
               </Card.Body>
             </Card>
           </Col>
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton />
-            <Modal.Body>
-              <Chat test />
-              {/* TODO RESOUDRE PROBLEME PASSAGE ATTRIBUTE CI DESSUS */}
-            </Modal.Body>
-          </Modal>
+          <ModalChat show={show} handleClose={handleClose} />
         </>
       )}
     </div>

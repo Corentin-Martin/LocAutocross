@@ -1,5 +1,5 @@
 import {
-  Card, Col, ListGroup, Modal, Spinner,
+  Card, Col, ListGroup, Spinner,
 } from 'react-bootstrap';
 import './RentalControl.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,8 @@ import axios from 'axios';
 import moment from 'moment';
 import DeleteModal from '../../DeleteModal/DeleteModal';
 import { setConversation } from '../../../actions/dashboard';
-import Chat from '../../Chat/Chat';
+
+import ModalChat from '../../ModalChat/ModalChat';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -82,12 +83,7 @@ function RentalControl({ rental }) {
             </Card>
           </Col>
 
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton />
-            <Modal.Body>
-              <Chat test />
-            </Modal.Body>
-          </Modal>
+          <ModalChat show={show} handleClose={handleClose} />
         </>
       )}
     </div>

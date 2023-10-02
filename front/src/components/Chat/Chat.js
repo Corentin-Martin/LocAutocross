@@ -9,8 +9,7 @@ import { XCircleFill } from 'react-bootstrap-icons';
 import { setConversation } from '../../actions/dashboard';
 import Message from './Message/Message';
 
-function Chat({ test }) {
-  console.log(test);
+function Chat({ noCloseButton }) {
   const conversation = useSelector((state) => state.dashboard.conversation);
   const [localConv, setLocalConv] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -101,7 +100,7 @@ function Chat({ test }) {
       )
         : (
           <>
-            {!test && (
+            {!noCloseButton && (
             <div
               className="XButton"
               style={{
@@ -154,7 +153,7 @@ function Chat({ test }) {
 }
 
 Chat.defaultProps = {
-  test: false,
+  noCloseButton: false,
 };
 
 export default Chat;
