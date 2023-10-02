@@ -160,7 +160,9 @@ class ConversationController extends AbstractController
 
         $messageRepository->add($newMessage, true);
 
-        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
+        $toSend = ["conversation" => $conversation, "message" => $newMessage];
+
+        return $this->json($toSend, Response::HTTP_CREATED, [], ["groups" => ["message", "conversation"]]);
     }
 
     /**

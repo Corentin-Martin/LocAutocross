@@ -47,7 +47,7 @@ class RentalRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
         ->where('r.status BETWEEN :minStatus AND :maxStatus')
         ->setParameter('minStatus', 1)
-        ->setParameter('maxStatus', 2)
+        ->setParameter('maxStatus', 4)
         ->orderBy('r.createdAt', 'DESC')
         ->setMaxResults(4)
         ->getQuery()

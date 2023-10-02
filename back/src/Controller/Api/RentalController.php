@@ -129,7 +129,12 @@ class RentalController extends AbstractController
             return $this->json(["message" => "L'utilisateur ne peut pas modifier ces informations"], Response::HTTP_FORBIDDEN, []);
         }
 
-        $rental->setTenantUser($user);
+        if($requestInArray["status"] == 1) {
+            $rental->setTenantUser(null);
+        } else {
+
+            $rental->setTenantUser($user);
+        }
 
         $rentalRepository->add($rental, true);
 
