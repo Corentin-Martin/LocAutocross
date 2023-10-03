@@ -33,9 +33,9 @@ function RentalControl({ rental }) {
         .then((res) => {
           setConversations(res.data);
 
-          const convAssociate = res.data.filter(
-            (conv) => conv.interestedUser.id === rental.tenantUser.id,
-          );
+          const convAssociate = (rental.tenantUser !== null)
+            ? res.data.filter((conv) => conv.interestedUser.id === rental.tenantUser.id)
+            : [];
 
           setAssociateConv({
             exists: convAssociate.length > 0,
@@ -62,6 +62,10 @@ function RentalControl({ rental }) {
   const [showEdit, setShowEdit] = useState(false);
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = () => setShowEdit(true);
+
+  useEffect(() => {
+    setShowEdit(false);
+  }, [rental]);
 
   return (
     <div>

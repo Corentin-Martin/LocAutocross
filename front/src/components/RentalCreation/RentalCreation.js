@@ -40,8 +40,8 @@ function RentalCreation({ rental }) {
 
   useEffect(() => {
     if (rental !== null) {
-      setVehicle(rental.vehicle);
-      setEvent(rental.event);
+      setVehicle(rental.vehicle.id);
+      setEvent(rental.event.id);
       setPrice(rental.price);
       setDescription(rental.description);
       setStatus(parseInt(rental.status, 10));
@@ -142,7 +142,8 @@ function RentalCreation({ rental }) {
           });
       }
       else {
-        console.log(event, price, status, description, vehicle);
+        const tenantUser = (status === 0) ? null : rental.tenantUser.id;
+
         axios.put(
           `http://localhost:8000/api/rentals/${rental.id}`,
           {
@@ -151,6 +152,7 @@ function RentalCreation({ rental }) {
             price: price,
             status: status,
             description: description,
+            tenantUser: tenantUser,
           },
           {
             headers: {
@@ -202,7 +204,7 @@ function RentalCreation({ rental }) {
                     <>
                       <Form.Label>Véhicule *</Form.Label>
                       <Form.Select
-                        defaultValue={vehicle !== null ? vehicle.id : ''}
+                        defaultValue={vehicle ?? ''}
                         aria-label="Default select example"
                         onChange={(e) => setVehicle(e.currentTarget.value)}
                       >
@@ -303,7 +305,7 @@ function RentalCreation({ rental }) {
                   {!noEvents
                     && (
                     <Form.Select
-                      defaultValue={event !== null ? event.id : ''}
+                      defaultValue={event ?? ''}
                       aria-label="Default select example"
                       onChange={(e) => setEvent(e.target.value)}
                     >
@@ -364,13 +366,15 @@ function RentalCreation({ rental }) {
                   )}
 
                   {rental !== null && rental.status < 4 && (
-                  <Form.Check // prettier-ignore
-                    type="switch"
-                    id="custom-switch"
-                    label="Masquer cette annonce"
-                    onChange={() => setStatus(status !== 0 ? 0 : rental.status)}
-                  />
+                    <Form.Check // prettier-ignore
+                      type="switch"
+                      id="custom-switch"
+                      label="Masquer cette annonce"
+                      onChange={() => setStatus(status !== 0 ? 0 : parseInt(rental.status, 10))}
+                    />
                   )}
+                  {(rental !== null && status === 0 && rental.tenantUser !== null)
+                    && <p className="alert alert-danger text-center">Attention, si vous masquez cette annonce. La réservation ou demande de réservation associée sera supprimée.</p>}
 
                 </Form.Group>
 
