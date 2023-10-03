@@ -33,6 +33,10 @@ function RentalControl({ rental }) {
         .then((res) => {
           setConversations(res.data);
 
+          if (res.data === '') {
+            res.data = [];
+          }
+
           const convAssociate = (rental.tenantUser !== null)
             ? res.data.filter((conv) => conv.interestedUser.id === rental.tenantUser.id)
             : [];
