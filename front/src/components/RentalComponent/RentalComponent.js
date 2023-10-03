@@ -1,4 +1,5 @@
 import {
+  Button,
   Card, Col, Row,
 } from 'react-bootstrap';
 import moment from 'moment/moment';
@@ -6,16 +7,20 @@ import './RentalComponent.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { XCircleFill } from 'react-bootstrap-icons';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import { setRental } from '../../actions/dashboard';
+import RentalUserbox from './RentalUserbox/RentalUserbox';
 
 function RentalComponent({ fromGestion }) {
   const rental = useSelector((state) => state.dashboard.rental);
+  const user = useSelector((state) => state.user.user);
 
   const statusMatching = useSelector((state) => state.user.statusMatching);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => () => {
     dispatch(setRental(null));
@@ -93,6 +98,18 @@ function RentalComponent({ fromGestion }) {
             </Col>
 
             <RentalControl rental={rental} />
+            <RentalUserbox rental={rental} />
+            {user === null && (
+            <Button
+              type="button"
+              className="col-12 text-light"
+              variant="danger"
+              onClick={() => {
+                navigate('/connexion', { state: { rental: rental } });
+              }}
+            >Pour plus de renseignements ou pour réserver, veuillez vous connecter
+            </Button>
+            )}
           </Row>
         </Card.Body>
 

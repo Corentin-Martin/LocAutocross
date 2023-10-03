@@ -9,8 +9,9 @@ import { XCircleFill } from 'react-bootstrap-icons';
 import { setConversation } from '../../actions/dashboard';
 import Message from './Message/Message';
 
-function Chat({ noCloseButton = false }) {
+function Chat({ noCloseButton }) {
   const conversation = useSelector((state) => state.dashboard.conversation);
+  const rental = useSelector((state) => state.dashboard.rental);
   const [localConv, setLocalConv] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState('');
@@ -40,9 +41,14 @@ function Chat({ noCloseButton = false }) {
 
   useEffect(
     () => {
+      if (conversation === null) {
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(true);
       const intervalMessages = setInterval(getMessages, 1500);
 
+      // eslint-disable-next-line consistent-return
       return () => {
         clearInterval(intervalMessages);
       };
@@ -68,25 +74,48 @@ function Chat({ noCloseButton = false }) {
   const handleSubmit = (event) => {
     setIsLoading(true);
     event.preventDefault();
-    axios.post(
-      `http://localhost:8000/api/messages/${conversation.id}`,
-      {
-        content: content,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+    if (conversation !== null) {
+      axios.post(
+        `http://localhost:8000/api/messages/${conversation.id}`,
+        {
+          content: content,
         },
-      },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
 
-    )
-      .then(() => {
-        setContent('');
-        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      )
+        .then(() => {
+          setContent('');
+          chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+    else {
+      axios.post(
+        `http://localhost:8000/api/conversations/location/${rental.id}`,
+        {
+          content: content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+
+      )
+        .then((response) => {
+          setContent('');
+          dispatch(setConversation(response.data.conversation));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   return (
@@ -122,7 +151,7 @@ function Chat({ noCloseButton = false }) {
               className="d-flex flex-column"
               ref={chatBoxRef}
             >
-              {localConv.messages.map((message) => (
+              {localConv !== null && localConv.messages.map((message) => (
                 <Message key={message.id} message={message} />
               ))}
             </div>
@@ -151,5 +180,9 @@ function Chat({ noCloseButton = false }) {
 
   );
 }
+
+Chat.defaultProps = {
+  noCloseButton: false,
+};
 
 export default Chat;

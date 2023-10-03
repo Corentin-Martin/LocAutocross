@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import Chat from '../Chat/Chat';
 import './App.scss';
 import Skeleton from '../Skeleton/Skeleton';
 import Homepage from '../../pages/Homepage/Homepage';
@@ -17,9 +16,11 @@ import { setFederations } from '../../actions/generalCalendar';
 import { setMyVehicles } from '../../actions/dashboard';
 import { setToken, setUser, setUserConnected } from '../../actions/user';
 import Conversation from '../../pages/Conversation/Conversation';
+import ProtectedRoute from '../../utils/ProtectedRoute';
 
 function App() {
   const token = useSelector((state) => state.user.token);
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   useEffect(() => {
     axios.get('http://localhost:8000/api/federations')
@@ -102,20 +103,23 @@ function App() {
           />
 
           {/* PROTECTED */}
-          <Route
-            path="/mon-garage"
-            element={(<Skeleton page={<Vehicles />} />)}
-          />
-          <Route
-            path="/mes-locations"
-            element={(<Skeleton page={<RentalGestion />} />)}
-          />
-          <Route
-            path="/mes-conversations"
-            element={(<Skeleton page={<Conversation />} />)}
-          />
+          <Route element={<ProtectedRoute user={user} pro />}>
+            <Route
+              path="/mon-garage"
+              element={(<Skeleton page={<Vehicles />} />)}
+            />
+            <Route
+              path="/mes-locations"
+              element={(<Skeleton page={<RentalGestion />} />)}
+            />
+          </Route>
+          <Route element={<ProtectedRoute user={user} />}>
+            <Route
+              path="/mes-conversations"
+              element={(<Skeleton page={<Conversation />} />)}
+            />
+          </Route>
 
-          <Route path="conversation/:id" element={<Chat />} />
         </Routes>
       </div>
     </Container>

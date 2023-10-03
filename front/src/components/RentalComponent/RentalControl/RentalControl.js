@@ -9,12 +9,17 @@ import axios from 'axios';
 import moment from 'moment';
 import DeleteModal from '../../DeleteModal/DeleteModal';
 import { setConversation } from '../../../actions/dashboard';
-import Chat from '../../Chat/Chat';
+
+import ModalChat from '../../ModalChat/ModalChat';
+import ReservationAction from './ReservationAction/ReservationAction';
+import RentalCreation from '../../RentalCreation/RentalCreation';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
+  const [associateConv, setAssociateConv] = useState({});
+  const conversation = useSelector((state) => state.dashboard.conversation);
 
   const dispatch = useDispatch();
 
@@ -27,13 +32,23 @@ function RentalControl({ rental }) {
       })
         .then((res) => {
           setConversations(res.data);
+
+          const convAssociate = (rental.tenantUser !== null)
+            ? res.data.filter((conv) => conv.interestedUser.id === rental.tenantUser.id)
+            : [];
+
+          setAssociateConv({
+            exists: convAssociate.length > 0,
+            conv: convAssociate,
+          });
+
           setIsLoading(false);
         })
         .catch((err) => {
           console.error(err);
         });
     }
-  }, []);
+  }, [conversation]);
 
   if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
     return null;
@@ -43,6 +58,14 @@ function RentalControl({ rental }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const handleShowEdit = () => setShowEdit(true);
+
+  useEffect(() => {
+    setShowEdit(false);
+  }, [rental]);
 
   return (
     <div>
@@ -56,36 +79,56 @@ function RentalControl({ rental }) {
             <Card>
               <Card.Header>PANNEAU D'ADMINISTRATION</Card.Header>
               <Card.Body className="text-start">
-                <div className="d-flex justify-content-between mb-2">
+                {moment(rental.event.start) < moment()
+                  ? (
+                    <div className="alert alert-danger text-center">
+                      <Card.Text>L'évènement est terminé. Aucune action possible.</Card.Text>
+                      <Card.Text>{rental.status === '4' ? `Vous avez loué à ${rental.tenantUser.pseudo} pour cette épreuve.` : 'Pas de location effectuée.'}</Card.Text>
+                    </div>
+                  )
+                  : (
+                    <>
+                      <div className="d-flex justify-content-between mb-2">
 
-                  <Card.Text className="d-flex align-items-center" style={{ cursor: 'pointer' }}><PencilSquare size={24} className="me-2" /> Editer</Card.Text>
-                  <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}><DeleteModal type="rentals" idToDelete={rental.id} /></Card.Text>
-                </div>
-                <Card.Text>Conversation{conversations.length > 1 ? 's' : ''} : {conversations.length}</Card.Text>
-                {conversations.length > 0 && (
-                <ListGroup>
-                  {conversations.map((conv) => (
-                    <ListGroup.Item
-                      key={conv.id}
-                      onClick={() => {
-                        dispatch(setConversation(conv));
-                        handleShow();
-                      }}
-                      style={{ cursor: 'pointer' }}
-                    ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser === 0 ? 'red' : 'green') }}>{conv.isReadByOwnerUser === 0 ? 'Non lue' : 'Lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[0].createdAt).format('DD/MM/YYYY à HH:mm')}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-                )}
+                        <Card.Text className="d-flex align-items-center" style={{ cursor: 'pointer' }} onClick={() => handleShowEdit()}><PencilSquare size={24} className="me-2" /> Editer</Card.Text>
+                        <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}><DeleteModal type="rentals" idToDelete={rental.id} /></Card.Text>
+                      </div>
+
+                      <ReservationAction
+                        rental={rental}
+                        associateConv={associateConv}
+                        handleShow={handleShow}
+                      />
+
+                      <Card.Text>Conversation{conversations.length > 1 ? 's' : ''} : {conversations.length}</Card.Text>
+                      {conversations.length > 0 && (
+                      <ListGroup>
+                        {conversations.map((conv) => (
+                          <ListGroup.Item
+                            key={conv.id}
+                            onClick={() => {
+                              dispatch(setConversation(conv));
+                              handleShow();
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser ? 'green' : 'red') }}>{conv.isReadByOwnerUser ? 'Lue' : 'Non lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[conv.messages.length - 1].createdAt).format('DD/MM/YYYY à HH:mm')}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                      )}
+                    </>
+                  )}
 
               </Card.Body>
             </Card>
           </Col>
 
-          <Modal show={show} onHide={handleClose}>
+          <ModalChat show={show} handleClose={handleClose} />
+
+          <Modal show={showEdit} onHide={handleCloseEdit}>
             <Modal.Header closeButton />
             <Modal.Body>
-              <Chat noCloseButton />
+              <RentalCreation rental={rental} />
             </Modal.Body>
           </Modal>
         </>

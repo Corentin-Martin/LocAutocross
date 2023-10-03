@@ -11,6 +11,7 @@ import { setToken, setUser, setUserConnected } from '../../../actions/user';
 function Header() {
   const isUserConnected = useSelector((state) => state.user.isUserConnected);
   const [showOffCanvas, setShowOffCanvas] = useState(false);
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
 
@@ -69,22 +70,27 @@ function Header() {
                     title="Mon Bureau"
                     id="offcanvasNavbarDropdown-expand-false"
                   >
-                    <NavDropdown.Item
-                      as={Link}
-                      to="/mon-garage"
-                      onClick={() => {
-                        setShowOffCanvas(false);
-                      }}
-                    >Mon garage
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      as={Link}
-                      to="/mes-locations"
-                      onClick={() => {
-                        setShowOffCanvas(false);
-                      }}
-                    >Mes locations
-                    </NavDropdown.Item>
+                    {user !== null && user.roles.includes('ROLE_PRO')
+                    && (
+                    <>
+                      <NavDropdown.Item
+                        as={Link}
+                        to="/mon-garage"
+                        onClick={() => {
+                          setShowOffCanvas(false);
+                        }}
+                      >Mon garage
+                      </NavDropdown.Item>
+                      <NavDropdown.Item
+                        as={Link}
+                        to="/mes-locations"
+                        onClick={() => {
+                          setShowOffCanvas(false);
+                        }}
+                      >Mes locations
+                      </NavDropdown.Item>
+                    </>
+                    )}
                     <NavDropdown.Item
                       as={Link}
                       to="/mes-conversations"

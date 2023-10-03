@@ -10,7 +10,7 @@ import { X } from 'react-bootstrap-icons';
 import axios from 'axios';
 import { setRental } from '../../actions/dashboard';
 
-function RentalCreation() {
+function RentalCreation({ rental }) {
   const myVehicles = useSelector((state) => state.dashboard.myVehicles);
   const federations = useSelector((state) => state.generalCalendar.federations);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +39,28 @@ function RentalCreation() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (rental !== null) {
+      setVehicle(rental.vehicle.id);
+      setEvent(rental.event.id);
+      setPrice(rental.price);
+      setDescription(rental.description);
+      setStatus(parseInt(rental.status, 10));
+      setOpenItem('0');
+
+      if (!rental.event.isOfficial) {
+        setPrivateEvent(true);
+      }
+      else {
+        setFedeChoice(...federations.filter(
+          (fd) => fd.id === rental.event.championship.federation.id,
+        ));
+
+        setChampChoice(rental.event.championship);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (champChoice !== null) {
       axios.get(`http://localhost:8000/api/events?championship[]=${champChoice.id}`)
         .then((response) => {
@@ -60,7 +82,6 @@ function RentalCreation() {
           else {
             setNoEvents(true);
           }
-          // setNoEvents(false);
 
           if (response.data.length === 0) {
             setNoEvents(true);
@@ -95,52 +116,61 @@ function RentalCreation() {
     e.preventDefault();
 
     if (verification()) {
-      axios.post(
-        'http://localhost:8000/api/rentals',
-        {
-          vehicle: vehicle,
-          event: event,
-          price: price,
-          status: status,
-          description: description,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+      if (rental === null) {
+        axios.post(
+          'http://localhost:8000/api/rentals',
+          {
+            vehicle: vehicle,
+            event: event,
+            price: price,
+            status: status,
+            description: description,
           },
-        },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          },
 
-      )
-        .then((response) => {
-          dispatch(setRental(response.data));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+        )
+          .then((response) => {
+            dispatch(setRental(response.data));
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+      else {
+        const existUser = (rental.tenantUser !== null ? rental.tenantUser.id : null);
+
+        const tenantUser = (status === 0) ? null : existUser;
+
+        axios.put(
+          `http://localhost:8000/api/rentals/${rental.id}`,
+          {
+            vehicle: vehicle,
+            event: event,
+            price: price,
+            status: status,
+            description: description,
+            tenantUser: tenantUser,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          },
+
+        )
+          .then((response) => {
+            dispatch(setRental(response.data));
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
   };
-
-  // useEffect(() => {
-  //   if (isOpenCreationModal) {
-  //     setOpenItem('0');
-  //   }
-  //   else {
-  //     setOpenItem(null);
-  //     setVehicleToEdit(null);
-
-  //     dispatch(setIdToEdit(null));
-
-  //     setModel('');
-  //     setBrand('');
-  //     setEngine('');
-  //     setShocks('');
-  //     setDescription('');
-  //     setPicture('');
-  //     setYear('2023-01-01');
-  //     setCategories([]);
-  //     setWrong([]);
-  //   }
-  // }, [isOpenCreationModal]);
 
   const handleAccordionToggle = (eventKey) => {
     setOpenItem(openItem === eventKey ? null : eventKey);
@@ -161,7 +191,7 @@ function RentalCreation() {
 
           <Accordion.Item eventKey="0" onClick={() => handleAccordionToggle('0')}>
             <Accordion.Header className="text-center bg-secondary">
-              Créer une nouvelle proposition de location
+              {rental === null ? 'Créer une nouvelle proposition de location' : 'Editer cette proposition de location'}
             </Accordion.Header>
             <Accordion.Body onClick={(e) => {
               e.stopPropagation();
@@ -175,6 +205,7 @@ function RentalCreation() {
                     <>
                       <Form.Label>Véhicule *</Form.Label>
                       <Form.Select
+                        defaultValue={vehicle ?? ''}
                         aria-label="Default select example"
                         onChange={(e) => setVehicle(e.currentTarget.value)}
                       >
@@ -200,7 +231,10 @@ function RentalCreation() {
                       <X
                         size="20"
                         onClick={() => {
-                          setFedeChoice(null); setChampChoice(null); setNoEvents(true);
+                          setFedeChoice(null);
+                          setChampChoice(null);
+                          setNoEvents(true);
+                          setEvent(null);
                         }}
                       />
                     </Badge>
@@ -272,6 +306,7 @@ function RentalCreation() {
                   {!noEvents
                     && (
                     <Form.Select
+                      defaultValue={event ?? ''}
                       aria-label="Default select example"
                       onChange={(e) => setEvent(e.target.value)}
                     >
@@ -298,6 +333,7 @@ function RentalCreation() {
                   <Form.Control
                     type="number"
                     placeholder="prix"
+                    value={price ?? ''}
                     onChange={(e) => setPrice(parseFloat(e.currentTarget.value))}
 
                   />
@@ -311,6 +347,7 @@ function RentalCreation() {
                   <Form.Control
                     type="textarea"
                     placeholder="description"
+                    value={description ?? ''}
                     style={{ height: '100px' }}
                     onChange={(e) => setDescription(e.currentTarget.value)}
 
@@ -320,18 +357,31 @@ function RentalCreation() {
                 <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
                   <Form.Label>Statut</Form.Label>
 
+                  {(rental === null || (rental !== null && rental.status === '0')) && (
                   <Form.Check // prettier-ignore
                     type="switch"
                     id="custom-switch"
                     label="Rendre visible cette annonce"
                     onChange={() => setStatus(status === 0 ? 1 : 0)}
                   />
+                  )}
+
+                  {rental !== null && rental.status < 4 && rental.status > 0 && (
+                    <Form.Check // prettier-ignore
+                      type="switch"
+                      id="custom-switch"
+                      label="Masquer cette annonce"
+                      onChange={() => setStatus(status !== 0 ? 0 : parseInt(rental.status, 10))}
+                    />
+                  )}
+                  {(rental !== null && status === 0 && rental.tenantUser !== null)
+                    && <p className="alert alert-danger text-center">Attention, si vous masquez cette annonce. La réservation ou demande de réservation associée sera supprimée.</p>}
 
                 </Form.Group>
 
                 <p className="mb-3">* Champs obligatoires</p>
 
-                <Button type="submit" variant="secondary">Créer</Button>
+                <Button type="submit" variant="secondary">{rental === null ? 'Créer' : 'Modifier'}</Button>
                 {wrong.length > 0 && (
                 <Alert variant="danger" className="text-center mt-2 col-10">
                   <Alert.Heading>Erreur{wrong.length > 1 ? 's' : ''}</Alert.Heading>
@@ -351,4 +401,7 @@ function RentalCreation() {
   );
 }
 
+RentalCreation.defaultProps = {
+  rental: null,
+};
 export default RentalCreation;

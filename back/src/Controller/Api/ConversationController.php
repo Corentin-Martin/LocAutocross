@@ -30,8 +30,41 @@ class ConversationController extends AbstractController
         if (!is_null($request->query->get('rental'))) {
             $rental = $rentalRepository->findBy(['id' => $request->query->get('rental')]);
             $conversations = $conversationRepository->findBy(['rental' => $rental]);
-            return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                            : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+
+
+            if (!empty($conversations)) {
+                
+                foreach ($conversations as $conv) {
+                    $messages = $conv->getMessages()->getValues();
+        
+                    $lastMessage = end($messages);
+                    
+                    $conversationsWithLastMessage[] = [
+                        'conversation' => $conv,
+                        'lastMessage' => $lastMessage,
+                    ];
+                }
+                
+                usort($conversationsWithLastMessage, function ($a, $b) {
+                    $lastMessageA = $a['lastMessage'];
+                    $lastMessageB = $b['lastMessage'];
+        
+                    return $lastMessageB->getCreatedAt() <=> $lastMessageA->getCreatedAt();
+                    
+                });
+        
+                $conversationsOk = [];
+                foreach ($conversationsWithLastMessage as $ok) {
+                    $conversationsOk[] = $ok['conversation'];
+                }
+
+            } else {
+                $conversationsOk = [];
+            }
+
+
+            return (empty($conversationsOk))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                            : $this->json($conversationsOk, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
         }
 
         $conversationsWhereUserAsksAndDoesNotRead = $conversationRepository->findBy(['interestedUser' => $this->getUser(), 'isReadByInterestedUser' => false]);
@@ -143,10 +176,18 @@ class ConversationController extends AbstractController
 
         if (is_null($conversation)) {
             $conversation = new Conversation;
-            $conversation->setRental($rental)
-                         ->setInterestedUser($user)
-                         ->setIsReadByInterestedUser(true)
-                         ->setIsReadByOwnerUser(false);
+
+            if ($user === $rental->getOwnerUser()) {
+                $conversation->setRental($rental)
+                             ->setInterestedUser($rental->getTenantUser())
+                             ->setIsReadByInterestedUser(false)
+                             ->setIsReadByOwnerUser(true);
+            } else {
+                $conversation->setRental($rental)
+                             ->setInterestedUser($user)
+                             ->setIsReadByInterestedUser(true)
+                             ->setIsReadByOwnerUser(false);
+            }
 
             $conversationRepository->add($conversation, true);
 
@@ -160,7 +201,25 @@ class ConversationController extends AbstractController
 
         $messageRepository->add($newMessage, true);
 
-        return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
+        $toSend = ["conversation" => $conversation, "message" => $newMessage];
+
+        return $this->json($toSend, Response::HTTP_CREATED, [], ["groups" => ["message", "conversation"]]);
+    }
+
+    /**
+     * @Route("/location/{id}", name="browseOne", requirements={"id"="\d+"}, methods={"GET"})
+     */
+    public function browseOne(?Rental $rental, ConversationRepository $conversationRepository): JsonResponse
+    {
+        if (is_null($rental))
+        {
+            return $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, []);
+        }
+        $conversation = $conversationRepository->findOneBy(["rental" => $rental, "interestedUser" => $this->getUser()]);
+
+        return is_null($conversation)   ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                        : $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
+
     }
 
 }

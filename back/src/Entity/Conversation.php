@@ -54,11 +54,13 @@ class Conversation
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"conversation"})
      */
     private $isReadByInterestedUser;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"conversation"})
      */
     private $isReadByOwnerUser;
 

@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ class UserController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface): JsonResponse
+    public function add(Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface, JWTTokenManagerInterface $JWTTokenManagerInterface): JsonResponse
     {
 
         /** @var User */
@@ -32,7 +33,9 @@ class UserController extends AbstractController
 
         $userRepository->add($newUser, true);
 
-        return $this->json($newUser, Response::HTTP_CREATED, [], ["groups" => ["user"]]);
+        $token = $JWTTokenManagerInterface->create($newUser);
+
+        return $this->json(["user" => $newUser, "token" => $token], Response::HTTP_CREATED, [], ["groups" => ["user"]]);
     }
 
     /**
