@@ -31,29 +31,37 @@ class ConversationController extends AbstractController
             $rental = $rentalRepository->findBy(['id' => $request->query->get('rental')]);
             $conversations = $conversationRepository->findBy(['rental' => $rental]);
 
-            foreach ($conversations as $conv) {
-                $messages = $conv->getMessages()->getValues();
-    
-                $lastMessage = end($messages);
+
+            if (!empty($conversations)) {
                 
-                $conversationsWithLastMessage[] = [
-                    'conversation' => $conv,
-                    'lastMessage' => $lastMessage,
-                ];
-            }
-            
-            usort($conversationsWithLastMessage, function ($a, $b) {
-                $lastMessageA = $a['lastMessage'];
-                $lastMessageB = $b['lastMessage'];
-    
-                return $lastMessageB->getCreatedAt() <=> $lastMessageA->getCreatedAt();
+                foreach ($conversations as $conv) {
+                    $messages = $conv->getMessages()->getValues();
+        
+                    $lastMessage = end($messages);
+                    
+                    $conversationsWithLastMessage[] = [
+                        'conversation' => $conv,
+                        'lastMessage' => $lastMessage,
+                    ];
+                }
                 
-            });
-    
-            $conversationsOk = [];
-            foreach ($conversationsWithLastMessage as $ok) {
-                $conversationsOk[] = $ok['conversation'];
+                usort($conversationsWithLastMessage, function ($a, $b) {
+                    $lastMessageA = $a['lastMessage'];
+                    $lastMessageB = $b['lastMessage'];
+        
+                    return $lastMessageB->getCreatedAt() <=> $lastMessageA->getCreatedAt();
+                    
+                });
+        
+                $conversationsOk = [];
+                foreach ($conversationsWithLastMessage as $ok) {
+                    $conversationsOk[] = $ok['conversation'];
+                }
+
+            } else {
+                $conversationsOk = [];
             }
+
 
             return (empty($conversationsOk))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                             : $this->json($conversationsOk, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
