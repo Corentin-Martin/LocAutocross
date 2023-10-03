@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Rental;
 use App\Entity\User;
 use App\Repository\RentalRepository;
+use App\Services\EmailSender;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -106,7 +107,7 @@ class RentalController extends AbstractController
     /**
      * @Route("/book/{id}", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
      */
-    public function book(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository) : JsonResponse
+    public function book(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository, EmailSender $emailSender) : JsonResponse
     {
 
         /** @var User */
@@ -137,6 +138,8 @@ class RentalController extends AbstractController
         }
 
         $rentalRepository->add($rental, true);
+
+        $emailSender->sendBookUpdate($rental);
 
         return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
     }

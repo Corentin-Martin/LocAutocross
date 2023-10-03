@@ -36,6 +36,8 @@ class UserController extends AbstractController
 
         $token = $JWTTokenManagerInterface->create($newUser);
 
+        $emailSender->sendNotificationEmail($newUser, 'Bienvenue !');
+
         return $this->json(["user" => $newUser, "token" => $token], Response::HTTP_CREATED, [], ["groups" => ["user"]]);
     }
 
