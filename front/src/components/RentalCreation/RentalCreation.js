@@ -82,7 +82,6 @@ function RentalCreation({ rental }) {
           else {
             setNoEvents(true);
           }
-          // setNoEvents(false);
 
           if (response.data.length === 0) {
             setNoEvents(true);
@@ -142,7 +141,9 @@ function RentalCreation({ rental }) {
           });
       }
       else {
-        const tenantUser = (status === 0) ? null : rental.tenantUser.id;
+        const existUser = (rental.tenantUser !== null ? rental.tenantUser.id : null);
+
+        const tenantUser = (status === 0) ? null : existUser;
 
         axios.put(
           `http://localhost:8000/api/rentals/${rental.id}`,
@@ -356,7 +357,7 @@ function RentalCreation({ rental }) {
                 <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
                   <Form.Label>Statut</Form.Label>
 
-                  {rental === null && (
+                  {(rental === null || (rental !== null && rental.status === '0')) && (
                   <Form.Check // prettier-ignore
                     type="switch"
                     id="custom-switch"
@@ -365,7 +366,7 @@ function RentalCreation({ rental }) {
                   />
                   )}
 
-                  {rental !== null && rental.status < 4 && (
+                  {rental !== null && rental.status < 4 && rental.status > 0 && (
                     <Form.Check // prettier-ignore
                       type="switch"
                       id="custom-switch"

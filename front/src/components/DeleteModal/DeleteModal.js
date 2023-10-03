@@ -5,6 +5,7 @@ import { TrashFill } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setMyVehicles, setRental, setVehicleForDetails } from '../../actions/dashboard';
 
 function DeleteModal({ type, idToDelete }) {
@@ -15,6 +16,7 @@ function DeleteModal({ type, idToDelete }) {
   const handleShow = () => setShow(true);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDelete = () => {
     axios.delete(
@@ -32,6 +34,10 @@ function DeleteModal({ type, idToDelete }) {
         dispatch(setMyVehicles(newVehicles));
         dispatch(setRental(null));
         setShow(false);
+
+        if (type === 'rentals') {
+          navigate('/mes-locations');
+        }
       })
       .catch((err) => {
         console.error(err);
