@@ -52,11 +52,7 @@ function RentalControl({ rental }) {
           console.error(err);
         });
     }
-  }, [conversation]);
-
-  if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
-    return null;
-  }
+  }, [conversation, user]);
 
   const [show, setShow] = useState(false);
 
@@ -70,6 +66,10 @@ function RentalControl({ rental }) {
   useEffect(() => {
     setShowEdit(false);
   }, [rental]);
+
+  if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
+    return null;
+  }
 
   return (
     <div>

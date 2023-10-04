@@ -99,17 +99,18 @@ function RentalComponent({ fromGestion }) {
 
             <RentalControl rental={rental} />
             <RentalUserbox rental={rental} />
-            {user === null && (
-            <Button
-              type="button"
-              className="col-12 text-light"
-              variant="danger"
-              onClick={() => {
-                navigate('/connexion', { state: { rental: rental } });
-              }}
-            >Pour plus de renseignements ou pour réserver, veuillez vous connecter
-            </Button>
-            )}
+            {(user === null && rental.status < 4)
+              && (
+              <Button
+                type="button"
+                className="col-12 text-light"
+                variant="danger"
+                onClick={() => {
+                  navigate('/connexion', { state: { rental: rental } });
+                }}
+              >Pour plus de renseignements ou pour réserver, veuillez vous connecter
+              </Button>
+              )}
           </Row>
         </Card.Body>
 

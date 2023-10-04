@@ -35,7 +35,7 @@ function RentalUserbox({ rental }) {
           console.error(err);
         });
     }
-  }, [conversation]);
+  }, [conversation, user]);
 
   const [show, setShow] = useState(false);
 
