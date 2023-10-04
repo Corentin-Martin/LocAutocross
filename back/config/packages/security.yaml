@@ -27,7 +27,10 @@ security:
         api:
             pattern:   ^/api
             stateless: true
+            entry_point: jwt
             jwt: ~
+            refresh_jwt:
+                check_path: /api/token/refresh
 
         main:
             lazy: true
@@ -44,6 +47,7 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/token/refresh,  roles: PUBLIC_ACCESS                                                }
         - { path: ^/api/login,          roles: PUBLIC_ACCESS                                                }
         - { path: ^/api/reset-password, roles: PUBLIC_ACCESS,                                               }
         - { path: ^/api/user,           roles: PUBLIC_ACCESS,           methods: [POST]                     }
