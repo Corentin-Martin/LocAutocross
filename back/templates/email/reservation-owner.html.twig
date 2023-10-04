@@ -1,0 +1,38 @@
+<div>
+<h1>Réservation validée</h1>
+<p>Bonjour {{rental.ownerUser.pseudo}}, vous venez de valider une réservation !</p>
+
+<h3>Récap : </h3>
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Epreuve</div>
+      {{rental.event.title}} - {{rental.event.track.city}}
+    </div>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Dates</div>
+      <p>Début : {{rental.event.start|date("d/m/Y H:i")}}</p>
+      <p>Fin : {{rental.event.end|date("d/m/Y H:i")}}</p>
+    </div>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Véhicule</div>
+      <p>{{rental.vehicle.brand.name}}{% if rental.vehicle.model is not null %} - {{rental.vehicle.model}} -{% endif %} {{rental.vehicle.year|date("Y")}}</p>
+    </div>
+  </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+      <div class="fw-bold">Locataire</div>
+      <p>Pseudo : {{rental.tenantUser.pseudo}}</p>
+      <p>Prénom : {{rental.tenantUser.firstname}}</p>
+      <p>Nom de famille : {{rental.tenantUser.lastname}}</p>
+      <p>Adresse mail : {{rental.tenantUser.email}}</p>
+    </div>
+  </li>
+</ul>
+
+<p>Bisous</p>
+</div>

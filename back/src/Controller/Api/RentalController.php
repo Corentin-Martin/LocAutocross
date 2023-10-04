@@ -68,7 +68,7 @@ class RentalController extends AbstractController
     /**
      * @Route("/{id}", name="edit", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
      */
-    public function edit(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository): JsonResponse
+    public function edit(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository, EmailSender $emailSender): JsonResponse
     {
 
         if (is_null($rental)) {
@@ -82,6 +82,10 @@ class RentalController extends AbstractController
         $serializerInterface->deserialize($request->getContent(), Rental::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $rental]);
 
         $rentalRepository->add($rental, true);
+
+        if ($rental->getStatus() === '4') {
+            $emailSender->sendReservationMail($rental);
+        }
 
         return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
     }

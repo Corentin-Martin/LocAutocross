@@ -185,7 +185,7 @@ class ConversationController extends AbstractController
                              ->setIsReadByOwnerUser(true);
 
                 // TODO GERER NOTIF NEW CONV BY PROPRIO
-                $emailSender->sendNotifNewConv();
+                $emailSender->sendNotifNewConv($rental, true);
             } else {
                 $conversation->setRental($rental)
                              ->setInterestedUser($user)
@@ -193,6 +193,7 @@ class ConversationController extends AbstractController
                              ->setIsReadByOwnerUser(false);
 
                 // TODO GERER NOTIF NEW CONV BY INTERESSE
+                $emailSender->sendNotifNewConv($rental);
             }
 
             $conversationRepository->add($conversation, true);
