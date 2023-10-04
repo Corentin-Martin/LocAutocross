@@ -45,6 +45,7 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login,          roles: PUBLIC_ACCESS                                                }
+        - { path: ^/api/reset-password, roles: PUBLIC_ACCESS,                                               }
         - { path: ^/api/user,           roles: PUBLIC_ACCESS,           methods: [POST]                     }
         - { path: ^/api/brands,         roles: PUBLIC_ACCESS,           methods: [GET]                      }
         - { path: ^/api/categories,     roles: PUBLIC_ACCESS,           methods: [GET]                      }
