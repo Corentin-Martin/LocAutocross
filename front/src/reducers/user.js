@@ -1,5 +1,5 @@
 import {
-  SET_MAIN_HEIGHT, SET_TOKEN, SET_USER, SET_USER_CONNECTED,
+  SET_MAIN_HEIGHT, SET_RESET_TOKEN, SET_TOKEN, SET_USER, SET_USER_CONNECTED,
 } from '../actions/user';
 
 const initialState = {
@@ -15,6 +15,7 @@ const initialState = {
   user: null,
   token: null,
   mainHeight: null,
+  resetToken: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -52,6 +53,11 @@ function reducer(state = initialState, action = {}) {
         mainHeight: action.payload.mainHeight,
       };
 
+    case SET_RESET_TOKEN:
+      return {
+        ...state,
+        resetToken: action.payload.resetToken,
+      };
     default:
       return state;
   }

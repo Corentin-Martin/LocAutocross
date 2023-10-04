@@ -29,3 +29,11 @@ export const setMainHeight = (height) => ({
     mainHeight: height,
   },
 });
+
+export const SET_RESET_TOKEN = 'SET_RESET_TOKEN';
+export const setResetToken = (token) => ({
+  type: SET_RESET_TOKEN,
+  payload: {
+    resetToken: token,
+  },
+});

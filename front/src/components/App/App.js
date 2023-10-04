@@ -17,6 +17,7 @@ import { setMyVehicles } from '../../actions/dashboard';
 import { setToken, setUser, setUserConnected } from '../../actions/user';
 import Conversation from '../../pages/Conversation/Conversation';
 import ProtectedRoute from '../../utils/ProtectedRoute';
+import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -96,6 +97,10 @@ function App() {
           <Route
             path="/connexion"
             element={(<Skeleton page={<Login />} />)}
+          />
+          <Route
+            path="/reset/:token?"
+            element={(<Skeleton page={<ResetPassword />} />)}
           />
           <Route
             path="/inscription"
