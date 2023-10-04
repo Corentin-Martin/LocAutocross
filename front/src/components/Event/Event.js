@@ -2,10 +2,10 @@ import './Event.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Row, Col } from 'react-bootstrap';
 import RentalList from './RentalList/RentalList';
 import { setModalCalendarIsOpen } from '../../actions/generalCalendar';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function Event() {
   const selectedEvent = useSelector((state) => state.generalCalendar.selectedEvent);
@@ -21,7 +21,7 @@ function Event() {
 
   useEffect(() => {
     if (selectedEvent.championship !== null) {
-      axios.get(`http://localhost:8000/api/championships/${selectedEvent.championship.id}`)
+      AxiosPublic.get(`championships/${selectedEvent.championship.id}`)
         .then((response) => {
           setFederation(response.data.federation);
         })

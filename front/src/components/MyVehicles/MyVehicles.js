@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import './MyVehicles.scss';
-import axios from 'axios';
 import { Carousel, Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import { PencilSquare, ThreeDots } from 'react-bootstrap-icons';
@@ -11,6 +10,7 @@ import {
   setOpenCreation, setVehicleForDetails,
 } from '../../actions/dashboard';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function MyVehicles() {
   const vehicles = useSelector((state) => state.dashboard.myVehicles);
@@ -31,14 +31,7 @@ function MyVehicles() {
   };
 
   const handleSeeDetails = (id) => {
-    axios.get(
-      `http://localhost:8000/api/vehicles/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
-    )
+    AxiosPrivate.get(`vehicles/${id}`)
       .then((response) => {
         dispatch(setVehicleForDetails(response.data));
       })

@@ -4,11 +4,11 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import Password from '../../components/Password/Password';
 import {
   setResetToken, setToken, setUser, setUserConnected,
 } from '../../actions/user';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function ResetPassword() {
   const { token } = useParams();
@@ -31,7 +31,7 @@ function ResetPassword() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (password !== null) {
-      axios.post('http://localhost:8000/api/reset-password/reset', { token: resetToken, password: password })
+      AxiosPublic.post('reset-password/reset', { token: resetToken, password: password })
         .then((res) => {
           if (res.status === 200) {
             localStorage.setItem('token', res.data.token);

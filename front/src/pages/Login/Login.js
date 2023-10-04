@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Login.scss';
@@ -9,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import { setToken, setUserConnected } from '../../actions/user';
 import { setRental } from '../../actions/dashboard';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function Login() {
   const [mail, setMail] = useState('');
@@ -28,12 +27,13 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:8000/api/login_check', {
+    AxiosPublic.post('login_check', {
       email: mail,
       password: password,
     })
       .then((res) => {
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('refresh_token', res.data.refresh_token);
         dispatch(setToken(res.data.token));
         dispatch(setUserConnected(true));
         setWrongConnexion(false);
@@ -54,7 +54,7 @@ function Login() {
 
   const handleResetSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:8000/api/reset-password', { email: mailToReset })
+    AxiosPublic.post('reset-password', { email: mailToReset })
       .then((resp) => {
         if (resp.status === 200) {
           setMailToReset('');

@@ -1,8 +1,7 @@
-import axios from 'axios';
-
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { setRental } from '../../../../../actions/dashboard';
+import AxiosPrivate from '../../../../../utils/AxiosPrivate';
 
 function UserReservationButton({ rentalId, status }) {
   const dispatch = useDispatch();
@@ -12,12 +11,8 @@ function UserReservationButton({ rentalId, status }) {
     3: ['Envoyer une demande de réservation', '#ff8000'],
   };
   const handleChangeStatus = (newStatus) => {
-    axios.put(`http://localhost:8000/api/rentals/book/${rentalId}`, {
+    AxiosPrivate.put(`rentals/book/${rentalId}`, {
       status: newStatus,
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then((res) => {
         dispatch(setRental(res.data));

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './MyConversations.scss';
 import { Accordion, ListGroup, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import ConversationPreview from './ConversationPreview/ConversationPreview';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function MyConversations() {
   const [conversations, setConversations] = useState('');
@@ -11,11 +11,7 @@ function MyConversations() {
   const conversation = useSelector((state) => state.dashboard.conversation);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/conversations', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    AxiosPrivate.get('conversations')
       .then((response) => {
         setConversations(response.data);
         setIsLoading(false);

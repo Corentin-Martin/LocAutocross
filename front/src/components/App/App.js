@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import './App.scss';
@@ -18,18 +17,20 @@ import { setToken, setUser, setUserConnected } from '../../actions/user';
 import Conversation from '../../pages/Conversation/Conversation';
 import ProtectedRoute from '../../utils/ProtectedRoute';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
+import AxiosPublic from '../../utils/AxiosPublic';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function App() {
   const token = useSelector((state) => state.user.token);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    axios.get('http://localhost:8000/api/federations')
+    AxiosPublic.get('federations')
       .then((response) => {
         dispatch(setFederations(response.data));
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }, [token]);
 
@@ -38,18 +39,11 @@ function App() {
       dispatch(setToken(localStorage.getItem('token')));
       dispatch(setUserConnected(true));
     }
-  }, [token]);
+  }, [token, localStorage.getItem('token')]);
 
   useEffect(() => {
     if (token !== null) {
-      axios.get(
-        'http://localhost:8000/api/vehicles?my',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      AxiosPrivate.get('vehicles?my')
         .then((response) => {
           dispatch(setMyVehicles(response.data));
         })
@@ -61,14 +55,7 @@ function App() {
 
   useEffect(() => {
     if (token !== null) {
-      axios.get(
-        'http://localhost:8000/api/user',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      AxiosPrivate.get('user')
         .then((response) => {
           dispatch(setUser(response.data));
         })
@@ -77,6 +64,7 @@ function App() {
         });
     }
   }, [token]);
+
   return (
     <Container>
       <div className="App">

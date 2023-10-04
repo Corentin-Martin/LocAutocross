@@ -1,11 +1,11 @@
 import './Rental.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import RentalComponent from '../../components/RentalComponent/RentalComponent';
 import { setRental } from '../../actions/dashboard';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function Rental() {
   const rental = useSelector((state) => state.dashboard.rental);
@@ -15,9 +15,7 @@ function Rental() {
 
   useEffect(() => {
     if (rental === null) {
-      axios.get(
-        `http://localhost:8000/api/rentals/${rentalId}`,
-      )
+      AxiosPublic.get(`rentals/${rentalId}`)
         .then((response) => {
           dispatch(setRental(response.data));
           setIsLoading(false);

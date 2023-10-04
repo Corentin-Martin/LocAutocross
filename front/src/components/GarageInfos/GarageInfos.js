@@ -3,8 +3,8 @@ import './GarageInfos.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import axios from 'axios';
 import { EyeFill } from 'react-bootstrap-icons';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 import { setVehicleForDetails } from '../../actions/dashboard';
 
 function GarageInfos() {
@@ -43,13 +43,8 @@ function GarageInfos() {
   }, [vehicles]);
 
   const handleShowVehicle = (id) => {
-    axios.get(
-      `http://localhost:8000/api/vehicles/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
+    AxiosPrivate.get(
+      `vehicles/${id}`,
     )
       .then((response) => {
         dispatch(setVehicleForDetails(response.data));

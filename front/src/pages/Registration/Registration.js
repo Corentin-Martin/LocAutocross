@@ -5,9 +5,9 @@ import {
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { setToken, setUser, setUserConnected } from '../../actions/user';
 import Password from '../../components/Password/Password';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function Registration() {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ function Registration() {
       setWrongConnexion(true);
     }
     else {
-      axios.post('http://localhost:8000/api/user', {
+      AxiosPublic.post('user', {
         email: mail,
         password: password,
         pseudo: pseudo,
