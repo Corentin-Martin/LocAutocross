@@ -39,7 +39,7 @@ function App() {
       dispatch(setToken(localStorage.getItem('token')));
       dispatch(setUserConnected(true));
     }
-  }, [token, localStorage.getItem('token')]);
+  }, [token]);
 
   useEffect(() => {
     if (token !== null) {

@@ -1,7 +1,5 @@
 import axios from 'axios';
-import refreshTokenFn, { memoizedRefreshToken } from './RefreshToken';
 import RefreshToken from './RefreshToken';
-import AxiosPublic from './AxiosPublic';
 
 axios.defaults.baseURL = 'http://localhost:8000/api/';
 
@@ -28,26 +26,21 @@ axios.interceptors.response.use(
 
     if (error?.response?.status === 401 && !config?.sent) {
       config.sent = true;
+      try {
+        const newToken = await RefreshToken();
 
-      /* TODO GERER ERREUR */
-      AxiosPublic.post('token/refresh', {
-        refresh_token: localStorage.getItem('refresh_token'),
-      })
-        .then((response) => {
-          localStorage.setItem('refresh_token', response.data.refresh_token);
-          localStorage.setItem('token', response.data.token);
-
+        if (newToken) {
           config.headers = {
             ...config.headers,
-            authorization: `Bearer ${response.data.token}`,
+            authorization: `Bearer ${newToken}`,
           };
-        })
-        .catch(() => {
-          localStorage.removeItem('refresh_token');
-          localStorage.removeItem('token');
-        });
+        }
 
-      return axios(config);
+        return axios(config);
+      }
+      catch (refreshError) {
+        console.error('Erreur lors du rafraîchissement du token :', refreshError);
+      }
     }
     return Promise.reject(error);
   },

@@ -1,43 +1,28 @@
-import mem from 'mem';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import AxiosPublic from './AxiosPublic';
-import { setToken } from '../actions/user';
 
-function RefreshToken() {
-  const [newToken, setNewToken] = useState(null);
-  useEffect(() => {
-    AxiosPublic.post('token/refresh', {
-      refresh_token: localStorage.getItem('refresh_token'),
-    })
-      .then((response) => {
-        localStorage.setItem('refresh_token', response.data.refresh_token);
-        localStorage.setItem('token', response.data.token);
-        setNewToken(response.data.token);
-      })
-      .catch(() => {
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('token');
-      });
-  }, []);
+// eslint-disable-next-line consistent-return
+const RefreshToken = async () => {
+  const refreshToken = localStorage.getItem('refresh_token');
 
-  return newToken;
-}
+  try {
+    const response = await AxiosPublic.post('/token/refresh', {
+      refresh_token: refreshToken,
+    });
+
+    if (!response.data.token) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
+    }
+
+    localStorage.setItem('refresh_token', response.data.refresh_token);
+    localStorage.setItem('token', response.data.token);
+
+    return response.data.token;
+  }
+  catch (error) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+  }
+};
 
 export default RefreshToken;
-// const refreshTokenFn = async () => {
-//   AxiosPublic.post('token/refresh', {
-//     refresh_token: localStorage.getItem('refresh_token'),
-//   })
-//     .then((response) => {
-//       localStorage.setItem('refresh_token', response.data.refresh_token);
-//       localStorage.setItem('token', response.data.token);
-//     })
-//     .catch(() => {
-//       localStorage.removeItem('refresh_token');
-//       localStorage.removeItem('token');
-//     });
-//   return response.data.token;
-// };
-
-// export default refreshTokenFn;
