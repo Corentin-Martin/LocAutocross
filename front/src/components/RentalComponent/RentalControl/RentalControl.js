@@ -5,7 +5,6 @@ import './RentalControl.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import moment from 'moment';
 import DeleteModal from '../../DeleteModal/DeleteModal';
 import { setConversation } from '../../../actions/dashboard';
@@ -13,6 +12,7 @@ import { setConversation } from '../../../actions/dashboard';
 import ModalChat from '../../ModalChat/ModalChat';
 import ReservationAction from './ReservationAction/ReservationAction';
 import RentalCreation from '../../RentalCreation/RentalCreation';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -25,13 +25,13 @@ function RentalControl({ rental }) {
 
   useEffect(() => {
     if (user !== null && user.roles.includes('ROLE_PRO')) {
-      axios.get(`http://localhost:8000/api/conversations?rental=${rental.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      AxiosPrivate.get(`conversations?rental=${rental.id}`)
         .then((res) => {
           setConversations(res.data);
+
+          if (res.data === '') {
+            res.data = [];
+          }
 
           const convAssociate = (rental.tenantUser !== null)
             ? res.data.filter((conv) => conv.interestedUser.id === rental.tenantUser.id)
@@ -48,11 +48,7 @@ function RentalControl({ rental }) {
           console.error(err);
         });
     }
-  }, [conversation]);
-
-  if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
-    return null;
-  }
+  }, [conversation, user]);
 
   const [show, setShow] = useState(false);
 
@@ -66,6 +62,10 @@ function RentalControl({ rental }) {
   useEffect(() => {
     setShowEdit(false);
   }, [rental]);
+
+  if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
+    return null;
+  }
 
   return (
     <div>

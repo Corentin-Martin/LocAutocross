@@ -1,4 +1,3 @@
-import axios from 'axios';
 import './DeleteModal.scss';
 import { useState } from 'react';
 import { TrashFill } from 'react-bootstrap-icons';
@@ -7,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setMyVehicles, setRental, setVehicleForDetails } from '../../actions/dashboard';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function DeleteModal({ type, idToDelete }) {
   const [show, setShow] = useState(false);
@@ -19,15 +19,7 @@ function DeleteModal({ type, idToDelete }) {
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    axios.delete(
-      `http://localhost:8000/api/${type}/${idToDelete}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
-
-    )
+    AxiosPrivate.delete(`${type}/${idToDelete}`)
       .then(() => {
         dispatch(setVehicleForDetails(null));
         const newVehicles = vehicles.filter((vehicle) => vehicle.id !== idToDelete);

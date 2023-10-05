@@ -3,9 +3,10 @@ import {
 } from 'react-bootstrap';
 import './BrandCreation.scss';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setNewBrand, setOpenBrandCreation } from '../../actions/dashboard';
+import AxiosPublic from '../../utils/AxiosPublic';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function BrandCreation() {
   const [brandName, setBrandName] = useState('');
@@ -15,16 +16,7 @@ function BrandCreation() {
 
   useEffect(() => {
     setBrandExist(false);
-    axios.get(
-      `http://localhost:8000/api/brands?name=${brandName}`,
-
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
-
-    )
+    AxiosPublic.get(`brands?name=${brandName}`)
       .then((response) => {
         if (response.status !== 204) {
           setBrandExist(true);
@@ -38,18 +30,7 @@ function BrandCreation() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (brandName !== '' && !brandExist) {
-      axios.post(
-        'http://localhost:8000/api/brands',
-        {
-          name: brandName,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-
-      )
+      AxiosPrivate.post('brands', { name: brandName })
         .then((response) => {
           dispatch(setOpenBrandCreation(false));
           dispatch(setNewBrand(response.data));

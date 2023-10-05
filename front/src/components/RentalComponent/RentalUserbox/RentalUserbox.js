@@ -5,12 +5,11 @@ import {
 import './RentalUserbox.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import moment from 'moment';
-
 import { setConversation } from '../../../actions/dashboard';
 import ModalChat from '../../ModalChat/ModalChat';
 import UserReservationControl from './UserReservationControl/UserReservationControl';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
 
 function RentalUserbox({ rental }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,11 +21,7 @@ function RentalUserbox({ rental }) {
 
   useEffect(() => {
     if (user !== null) {
-      axios.get(`http://localhost:8000/api/conversations/location/${rental.id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      AxiosPrivate.get(`conversations/location/${rental.id}`)
         .then((res) => {
           setlocalConversation(res.data);
           setIsLoading(false);
@@ -35,7 +30,7 @@ function RentalUserbox({ rental }) {
           console.error(err);
         });
     }
-  }, [conversation]);
+  }, [conversation, user]);
 
   const [show, setShow] = useState(false);
 

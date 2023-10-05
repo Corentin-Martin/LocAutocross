@@ -1,6 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import axios from 'axios';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { Container, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import './App.scss';
@@ -14,21 +13,29 @@ import Vehicles from '../../pages/Vehicles/Vehicles';
 import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import { setFederations } from '../../actions/generalCalendar';
 import { setMyVehicles } from '../../actions/dashboard';
-import { setToken, setUser, setUserConnected } from '../../actions/user';
+import {
+  setConversations, setToken, setUser, setUserConnected,
+} from '../../actions/user';
 import Conversation from '../../pages/Conversation/Conversation';
 import ProtectedRoute from '../../utils/ProtectedRoute';
+import ResetPassword from '../../pages/ResetPassword/ResetPassword';
+import AxiosPublic from '../../utils/AxiosPublic';
+import AxiosPrivate from '../../utils/AxiosPrivate';
+import Events from '../../pages/Events/Events';
 
 function App() {
   const token = useSelector((state) => state.user.token);
   const user = useSelector((state) => state.user.user);
+  const conversation = useSelector((state) => state.dashboard.conversation);
+
   const dispatch = useDispatch();
   useEffect(() => {
-    axios.get('http://localhost:8000/api/federations')
+    AxiosPublic.get('federations')
       .then((response) => {
         dispatch(setFederations(response.data));
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }, [token]);
 
@@ -41,14 +48,7 @@ function App() {
 
   useEffect(() => {
     if (token !== null) {
-      axios.get(
-        'http://localhost:8000/api/vehicles?my',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      AxiosPrivate.get('vehicles?my')
         .then((response) => {
           dispatch(setMyVehicles(response.data));
         })
@@ -60,14 +60,7 @@ function App() {
 
   useEffect(() => {
     if (token !== null) {
-      axios.get(
-        'http://localhost:8000/api/user',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      AxiosPrivate.get('user')
         .then((response) => {
           dispatch(setUser(response.data));
         })
@@ -76,6 +69,31 @@ function App() {
         });
     }
   }, [token]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (token !== null) {
+      AxiosPrivate.get('conversations')
+        .then((response) => {
+          dispatch(setConversations(response.data));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [token, conversation === null, location.pathname]);
+
+  if (token !== null && user === null) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center" style={{ flexGrow: '1' }}>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </Spinner>
+      </div>
+    );
+  }
+
   return (
     <Container>
       <div className="App">
@@ -98,6 +116,10 @@ function App() {
             element={(<Skeleton page={<Login />} />)}
           />
           <Route
+            path="/reset/:token?"
+            element={(<Skeleton page={<ResetPassword />} />)}
+          />
+          <Route
             path="/inscription"
             element={(<Skeleton page={<Registration />} />)}
           />
@@ -111,6 +133,10 @@ function App() {
             <Route
               path="/mes-locations"
               element={(<Skeleton page={<RentalGestion />} />)}
+            />
+            <Route
+              path="/mes-evenements"
+              element={(<Skeleton page={<Events />} />)}
             />
           </Route>
           <Route element={<ProtectedRoute user={user} />}>

@@ -1,18 +1,18 @@
 import {
   Card, Spinner, Stack, Button, Row, Col,
 } from 'react-bootstrap';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Welcome from '../../components/Welcome/Welcome';
 import './Homepage.scss';
 import RentalExtract from '../../components/RentalExtract/RentalExtract';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function Homepage() {
   const [newRentals, setNewRentals] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/rentals?last')
+    AxiosPublic.get('rentals?last')
       .then((response) => {
         setNewRentals(response.data);
         setIsLoading(false);

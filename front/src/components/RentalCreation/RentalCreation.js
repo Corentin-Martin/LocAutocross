@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'react-bootstrap-icons';
-import axios from 'axios';
 import { setRental } from '../../actions/dashboard';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function RentalCreation({ rental }) {
   const myVehicles = useSelector((state) => state.dashboard.myVehicles);
@@ -62,7 +62,7 @@ function RentalCreation({ rental }) {
 
   useEffect(() => {
     if (champChoice !== null) {
-      axios.get(`http://localhost:8000/api/events?championship[]=${champChoice.id}`)
+      AxiosPrivate.get(`events?championship[]=${champChoice.id}`)
         .then((response) => {
           let eventsWithDate = [];
 
@@ -117,8 +117,8 @@ function RentalCreation({ rental }) {
 
     if (verification()) {
       if (rental === null) {
-        axios.post(
-          'http://localhost:8000/api/rentals',
+        AxiosPrivate.post(
+          'rentals',
           {
             vehicle: vehicle,
             event: event,
@@ -126,12 +126,6 @@ function RentalCreation({ rental }) {
             status: status,
             description: description,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          },
-
         )
           .then((response) => {
             dispatch(setRental(response.data));
@@ -145,8 +139,8 @@ function RentalCreation({ rental }) {
 
         const tenantUser = (status === 0) ? null : existUser;
 
-        axios.put(
-          `http://localhost:8000/api/rentals/${rental.id}`,
+        AxiosPrivate.put(
+          `rentals/${rental.id}`,
           {
             vehicle: vehicle,
             event: event,
@@ -155,12 +149,6 @@ function RentalCreation({ rental }) {
             description: description,
             tenantUser: tenantUser,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          },
-
         )
           .then((response) => {
             dispatch(setRental(response.data));

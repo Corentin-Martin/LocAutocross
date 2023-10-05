@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Repository\ConversationRepository;
 use App\Repository\MessageRepository;
 use App\Repository\RentalRepository;
+use App\Services\EmailSender;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -166,7 +167,7 @@ class ConversationController extends AbstractController
     /**
      * @Route("/location/{id}", name="add", requirements={"id"="\d+"}, methods={"POST"})
      */
-    public function add(?Rental $rental, Request $request, SerializerInterface $serializerInterface, ConversationRepository $conversationRepository, MessageRepository $messageRepository): JsonResponse
+    public function add(?Rental $rental, Request $request, SerializerInterface $serializerInterface, ConversationRepository $conversationRepository, MessageRepository $messageRepository, EmailSender $emailSender): JsonResponse
     {
 
         /** @var User */
@@ -182,11 +183,17 @@ class ConversationController extends AbstractController
                              ->setInterestedUser($rental->getTenantUser())
                              ->setIsReadByInterestedUser(false)
                              ->setIsReadByOwnerUser(true);
+
+                // TODO GERER NOTIF NEW CONV BY PROPRIO
+                $emailSender->sendNotifNewConv($rental, true);
             } else {
                 $conversation->setRental($rental)
                              ->setInterestedUser($user)
                              ->setIsReadByInterestedUser(true)
                              ->setIsReadByOwnerUser(false);
+
+                // TODO GERER NOTIF NEW CONV BY INTERESSE
+                $emailSender->sendNotifNewConv($rental);
             }
 
             $conversationRepository->add($conversation, true);

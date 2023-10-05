@@ -5,13 +5,13 @@ import {
   useCallback,
   useEffect, useState,
 } from 'react';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactSelect from 'react-select';
 import {
   Container, Row, Col, Alert, Button, Offcanvas, Spinner,
 } from 'react-bootstrap';
 import { setModalCalendarIsOpen, setSelectedEvent } from '../../actions/generalCalendar';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function GeneralCalendar() {
   moment.locale('fr-FR');
@@ -34,7 +34,7 @@ function GeneralCalendar() {
 
   const onSelectEvent = useCallback((calEvent) => {
     if (calEvent && calEvent.id) {
-      axios.get(`http://localhost:8000/api/events/${calEvent.id}`)
+      AxiosPublic.get(`events/${calEvent.id}`)
         .then((response) => {
           const newEvent = {
             ...response.data,
@@ -84,7 +84,7 @@ function GeneralCalendar() {
   useEffect(() => {
     const queryString = search.join('&');
 
-    axios.get(`http://localhost:8000/api/events?${queryString}`)
+    AxiosPublic.get(`events?${queryString}`)
       .then((response) => {
         let eventsWithDate = [];
 

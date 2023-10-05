@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import './Chat.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +7,7 @@ import {
 import { XCircleFill } from 'react-bootstrap-icons';
 import { setConversation } from '../../actions/dashboard';
 import Message from './Message/Message';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function Chat({ noCloseButton }) {
   const conversation = useSelector((state) => state.dashboard.conversation);
@@ -21,11 +21,7 @@ function Chat({ noCloseButton }) {
   const chatBoxRef = useRef();
 
   const getMessages = () => {
-    axios.get(`http://localhost:8000/api/conversations/${conversation.id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    AxiosPrivate.get(`conversations/${conversation.id}`)
       .then((response) => {
         setLocalConv(response.data);
         setIsLoading(false);
@@ -75,15 +71,10 @@ function Chat({ noCloseButton }) {
     setIsLoading(true);
     event.preventDefault();
     if (conversation !== null) {
-      axios.post(
-        `http://localhost:8000/api/messages/${conversation.id}`,
+      AxiosPrivate.post(
+        `messages/${conversation.id}`,
         {
           content: content,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
         },
 
       )
@@ -96,17 +87,11 @@ function Chat({ noCloseButton }) {
         });
     }
     else {
-      axios.post(
-        `http://localhost:8000/api/conversations/location/${rental.id}`,
+      AxiosPrivate.post(
+        `conversations/location/${rental.id}`,
         {
           content: content,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-
       )
         .then((response) => {
           setContent('');

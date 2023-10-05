@@ -89,6 +89,14 @@ function Header() {
                         }}
                       >Mes locations
                       </NavDropdown.Item>
+                      <NavDropdown.Item
+                        as={Link}
+                        to="/mes-evenements"
+                        onClick={() => {
+                          setShowOffCanvas(false);
+                        }}
+                      >Mes évenèments
+                      </NavDropdown.Item>
                     </>
                     )}
                     <NavDropdown.Item

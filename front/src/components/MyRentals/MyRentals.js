@@ -3,10 +3,10 @@ import {
 } from 'react-bootstrap';
 import './MyRentals.scss';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRental } from '../../actions/dashboard';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function MyRentals() {
   const rentalDetail = useSelector((state) => state.dashboard.rental);
@@ -17,14 +17,7 @@ function MyRentals() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(
-      'http://localhost:8000/api/rentals?my',
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      },
-    )
+    AxiosPrivate.get('rentals?my')
       .then((response) => {
         const past = [];
         const future = [];

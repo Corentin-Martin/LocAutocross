@@ -1,18 +1,14 @@
 import { Button, Card } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import { setConversation, setRental } from '../../../../actions/dashboard';
+import AxiosPrivate from '../../../../utils/AxiosPrivate';
 
 function ReservationAction({ rental, associateConv, handleShow }) {
   const dispatch = useDispatch();
 
   const handleValidatation = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:8000/api/rentals/${rental.id}`, { status: 4 }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
+    AxiosPrivate.put(`rentals/${rental.id}`, { status: 4 })
       .then((res) => {
         dispatch(setRental(res.data));
       })

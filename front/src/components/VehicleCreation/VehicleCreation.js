@@ -3,7 +3,6 @@ import './VehicleCreation.scss';
 import {
   Form, FloatingLabel, Spinner, Button, Accordion, Alert,
 } from 'react-bootstrap';
-import axios from 'axios';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -12,6 +11,8 @@ import {
 } from '../../actions/dashboard';
 import Checkbox from './Checkbox/Checkbox';
 import BrandCreation from '../BrandCreation/BrandCreation';
+import AxiosPrivate from '../../utils/AxiosPrivate';
+import AxiosPublic from '../../utils/AxiosPublic';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
@@ -44,14 +45,7 @@ function VehicleCreation() {
       setIsLoading(false);
     }
     else {
-      axios.get(
-        `http://localhost:8000/api/vehicles/${idToEdit}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        },
-      )
+      AxiosPrivate.get(`vehicles/${idToEdit}`)
         .then((response) => {
           setVehicleToEdit(response.data);
           setIsLoading(false);
@@ -71,11 +65,11 @@ function VehicleCreation() {
   }, [idToEdit]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/brands')
+    AxiosPublic.get('brands')
       .then((resp) => {
         setBrands(resp.data);
 
-        axios.get('http://localhost:8000/api/disciplines')
+        AxiosPublic.get('disciplines')
           .then((response) => {
             setDisciplines(response.data);
             setIsLoading(false);
@@ -125,8 +119,8 @@ function VehicleCreation() {
       const shocksToSend = (!shocks ? null : shocks);
 
       if (idToEdit === null) {
-        axios.post(
-          'http://localhost:8000/api/vehicles',
+        AxiosPrivate.post(
+          'vehicles',
           {
             model: modelToSend,
             brand: brand.id,
@@ -137,12 +131,6 @@ function VehicleCreation() {
             year: year,
             category: categories,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          },
-
         )
           .then((response) => {
             setIsLoading(false);
@@ -155,8 +143,8 @@ function VehicleCreation() {
           });
       }
       else {
-        axios.put(
-          `http://localhost:8000/api/vehicles/${idToEdit}`,
+        AxiosPrivate.put(
+          `vehicles/${idToEdit}`,
           {
             model: modelToSend,
             brand: brand.id,
@@ -167,12 +155,6 @@ function VehicleCreation() {
             year: year,
             category: categories,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          },
-
         )
           .then((response) => {
             setIsLoading(false);
