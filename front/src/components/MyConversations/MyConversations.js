@@ -1,25 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './MyConversations.scss';
 import { Accordion, ListGroup, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import ConversationPreview from './ConversationPreview/ConversationPreview';
-import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function MyConversations() {
-  const [conversations, setConversations] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const conversation = useSelector((state) => state.dashboard.conversation);
-
-  useEffect(() => {
-    AxiosPrivate.get('conversations')
-      .then((response) => {
-        setConversations(response.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [conversation === null]);
+  const conversations = useSelector((state) => state.user.conversations);
+  // const [conversations, setConversations] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  // const conversation = useSelector((state) => state.dashboard.conversation);
 
   return (
     <div className="d-flex flex-column align-items-center col-12 mt-3">

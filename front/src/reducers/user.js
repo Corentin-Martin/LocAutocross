@@ -1,4 +1,5 @@
 import {
+  SET_CONVERSATIONS,
   SET_MAIN_HEIGHT, SET_RESET_TOKEN, SET_TOKEN, SET_USER, SET_USER_CONNECTED,
 } from '../actions/user';
 
@@ -16,6 +17,7 @@ const initialState = {
   token: null,
   mainHeight: null,
   resetToken: null,
+  conversations: '',
 };
 
 function reducer(state = initialState, action = {}) {
@@ -57,6 +59,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         resetToken: action.payload.resetToken,
+      };
+
+    case SET_CONVERSATIONS:
+      return {
+        ...state,
+        conversations: action.payload.conversations,
       };
     default:
       return state;

@@ -13,7 +13,9 @@ import Vehicles from '../../pages/Vehicles/Vehicles';
 import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import { setFederations } from '../../actions/generalCalendar';
 import { setMyVehicles } from '../../actions/dashboard';
-import { setToken, setUser, setUserConnected } from '../../actions/user';
+import {
+  setConversations, setToken, setUser, setUserConnected,
+} from '../../actions/user';
 import Conversation from '../../pages/Conversation/Conversation';
 import ProtectedRoute from '../../utils/ProtectedRoute';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
@@ -23,6 +25,8 @@ import AxiosPrivate from '../../utils/AxiosPrivate';
 function App() {
   const token = useSelector((state) => state.user.token);
   const user = useSelector((state) => state.user.user);
+  const conversation = useSelector((state) => state.dashboard.conversation);
+
   const dispatch = useDispatch();
   useEffect(() => {
     AxiosPublic.get('federations')
@@ -64,6 +68,16 @@ function App() {
         });
     }
   }, [token]);
+
+  useEffect(() => {
+    AxiosPrivate.get('conversations')
+      .then((response) => {
+        dispatch(setConversations(response.data));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [token, conversation === null]);
 
   return (
     <Container>
