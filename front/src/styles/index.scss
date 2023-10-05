@@ -1,0 +1,36 @@
+@use 'reset';
+@use 'vars';
+
+@import url(https://fonts.bunny.net/css?family=reem-kufi-fun:400,500,600,700);
+
+$body-bg: vars.$background;
+$body-color: vars.$text;
+
+$theme-colors: (
+  'primary': vars.$primary,
+  'secondary': vars.$secondary,
+  'tertiary': vars.$tertiary,
+  'success' : green,
+  'danger' : red,
+  );
+
+@import '~bootstrap/scss/bootstrap';
+
+body {
+  font-family: 'Reem Kufi Fun', sans-serif;
+  // background-color: vars.$background;
+
+}
+
+
+/* 
+  // or you can import your own font
+  @font-face {
+    font-family: 'Roboto';
+    src: url('../assets/fonts/Roboto-Regular.ttf');
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+*/

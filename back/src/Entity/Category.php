@@ -18,17 +18,31 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"category_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"category"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"disciplines"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"category_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"category"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"disciplines"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $name;
 
@@ -43,16 +57,19 @@ class Category
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Federation::class, inversedBy="categories")
-     * @Groups({"category_browse"})
-     */
-    private $federation;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Vehicle::class, mappedBy="category")
-     * @Groups({"category_read"})
+     * @Groups({"category"})
      */
     private $vehicles;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Discipline::class, inversedBy="categories")
+     * @Groups({"category"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     */
+    private $discipline;
 
     public function __construct()
     {
@@ -96,18 +113,6 @@ class Category
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getFederation(): ?Federation
-    {
-        return $this->federation;
-    }
-
-    public function setFederation(?Federation $federation): self
-    {
-        $this->federation = $federation;
 
         return $this;
     }
@@ -157,5 +162,17 @@ class Category
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function getDiscipline(): ?Discipline
+    {
+        return $this->discipline;
+    }
+
+    public function setDiscipline(?Discipline $discipline): self
+    {
+        $this->discipline = $discipline;
+
+        return $this;
     }
 }

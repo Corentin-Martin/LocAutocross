@@ -18,79 +18,138 @@ class Vehicle
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"vehicle_browse"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"category"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"vehicle_browse"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"category"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $year;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $engine;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"vehicle_read"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $shocks;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"vehicle_browse"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $picture;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="vehicle")
+     * @Groups({"vehicle"})
      */
     private $rentals;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="vehicles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"federations"})
      */
     private $ownerUser;
 
     /**
      * @ORM\ManyToOne(targetEntity=Brand::class, inversedBy="vehicles")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"vehicle_browse"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"category"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $brand;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="vehicles")
-     * @Groups({"vehicle_browse"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $category;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"vehicle_browse"})
+     * @Groups({"vehicles"})
+     * @Groups({"vehicle"})
+     * @Groups({"brand"})
+     * @Groups({"category"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $model;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActiv;
 
     public function __construct()
     {
@@ -242,11 +301,10 @@ class Vehicle
     }
 
     /**
-     * @return Collection<int, Category>
      */
-    public function getCategory(): Collection
+    public function getCategory()
     {
-        return $this->category;
+        return $this->category->getValues();
     }
 
     public function addCategory(Category $category): self
@@ -293,6 +351,18 @@ class Vehicle
     public function setModel(?string $model): self
     {
         $this->model = $model;
+
+        return $this;
+    }
+
+    public function isIsActiv(): ?bool
+    {
+        return $this->isActiv;
+    }
+
+    public function setIsActiv(bool $isActiv): self
+    {
+        $this->isActiv = $isActiv;
 
         return $this;
     }

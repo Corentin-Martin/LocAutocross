@@ -18,22 +18,31 @@ class Federation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"federation_browse"})
-     * @Groups({"category_championship_browse"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"championship"})
+     * @Groups({"disciplines"})
+     * @Groups({"rentals"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"federation_browse"})
-     * @Groups({"category_championship_browse"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"championship"})
+     * @Groups({"disciplines"})
+     * @Groups({"rentals"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=20)
-     * @Groups({"federation_browse"})
-     * @Groups({"category_championship_browse"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
+     * @Groups({"championship"})
+     * @Groups({"disciplines"})
+     * @Groups({"rentals"})
      */
     private $alias;
 
@@ -49,20 +58,22 @@ class Federation
 
     /**
      * @ORM\OneToMany(targetEntity=Championship::class, mappedBy="federation")
-     * @Groups({"federation_read"})
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
     private $championships;
 
     /**
-     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="federation")
-     * @Groups({"federation_read"})
+     * @ORM\OneToMany(targetEntity=Discipline::class, mappedBy="federation")
+     * @Groups({"federations"})
+     * @Groups({"federation"})
      */
-    private $categories;
+    private $disciplines;
 
     public function __construct()
     {
         $this->championships = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->disciplines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,36 +160,6 @@ class Federation
     }
 
     /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-            $category->setFederation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getFederation() === $this) {
-                $category->setFederation(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Gets triggered only on insert
 
      * @ORM\PrePersist
@@ -196,5 +177,35 @@ class Federation
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    /**
+     * @return Collection<int, Discipline>
+     */
+    public function getDisciplines(): Collection
+    {
+        return $this->disciplines;
+    }
+
+    public function addDiscipline(Discipline $discipline): self
+    {
+        if (!$this->disciplines->contains($discipline)) {
+            $this->disciplines[] = $discipline;
+            $discipline->setFederation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscipline(Discipline $discipline): self
+    {
+        if ($this->disciplines->removeElement($discipline)) {
+            // set the owning side to null (unless already changed)
+            if ($discipline->getFederation() === $this) {
+                $discipline->setFederation(null);
+            }
+        }
+
+        return $this;
     }
 }

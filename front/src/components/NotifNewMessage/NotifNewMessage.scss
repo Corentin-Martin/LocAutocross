@@ -1,0 +1,16 @@
+.NotifNewMessage {
+  cursor: pointer;
+  animation: clignotement 3s infinite;
+}
+
+@keyframes clignotement {
+  0% {
+    transform: scale(1); 
+  }
+  50% {
+    transform: scale(0.5); 
+  }
+  100% {
+    transform: scale(1); 
+  }
+}

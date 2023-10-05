@@ -1,0 +1,95 @@
+.Rental {
+
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+
+
+  &-Box {
+    border: 1px solid black;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px 10px 10px;
+    box-shadow: 5px 5px 5px gray;
+    padding: 1rem 0.5rem;
+    background-color: #e6e6e6;
+
+    &-Event {
+      width: 100%;
+      border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    &-Event:hover{
+      background-color: rgb(68, 68, 68);
+      color: white;
+    }
+
+    &-Title {
+      font-size: 2rem;
+    }
+
+    &-Image {
+      max-width: 75%;
+      border-radius: 5px 5px 5px;
+      box-shadow: 5px 5px 5px black;
+      margin-bottom: 2rem;
+    }
+
+    &-Infos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &-Element {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1rem;
+        width: 100%;
+        margin-bottom: 1rem;
+        border-radius: 13px;
+        background: #e6e6e6;
+        box-shadow:  -5px 5px 0px #5c5c5c,
+                     5px -5px 0px #ffffff;
+
+
+        &-Sub {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          min-height: 80%;
+        }
+        &-Title {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width : 1024px) {
+  .Rental-Box {
+    width: 50vw;
+  }
+
+  .Rental-Box-Infos {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+
+    &-Element{
+      width: 45%;
+      height: 100%;
+    }
+  }
+}

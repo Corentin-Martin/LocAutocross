@@ -1,0 +1,31 @@
+@use '/src/styles/vars';
+@import 'react-big-calendar/lib/sass/styles';
+
+.GeneralCalendar{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  
+
+  &-Unofficial{
+    width: 100%;
+    padding: 0.5rem;
+    text-align: center;
+
+    & input {
+      margin-right: 0.5rem;
+    }
+
+  }
+
+  &-Discipline {
+    margin-bottom: 1rem;
+  }
+  
+
+}
+
+

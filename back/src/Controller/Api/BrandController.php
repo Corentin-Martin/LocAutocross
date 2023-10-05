@@ -19,10 +19,16 @@ class BrandController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(BrandRepository $brandRepository): JsonResponse
+    public function browse(Request $request, BrandRepository $brandRepository): JsonResponse
     {
+        if (!is_null($request->query->get('name'))) {
+            $brand = $brandRepository->findOneBy(['name' => $request->query->get('name')]);
+
+            return (is_null($brand))    ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                        : $this->json($brand, Response::HTTP_OK, [], ["groups" => ["brand"]]);
+        }
         return (empty($brandRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($brandRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["brand_browse"]]);
+                                                    : $this->json($brandRepository->findBy([], ["name" => 'ASC']), Response::HTTP_OK, [], ["groups" => ["brands"]]);
     }
 
     /**
@@ -31,7 +37,7 @@ class BrandController extends AbstractController
     public function read(?Brand $brand): JsonResponse
     {
         return (is_null($brand))    ? $this->json(["message" => "Cette marque n'existe pas"], Response::HTTP_NOT_FOUND, []) 
-                                    : $this->json($brand, Response::HTTP_OK, [], ["groups" => ["brand_browse", "brand_read"]]);
+                                    : $this->json($brand, Response::HTTP_OK, [], ["groups" => ["brand"]]);
     }
 
     /**
@@ -43,6 +49,6 @@ class BrandController extends AbstractController
 
         $brandRepository->add($newBrand, true);
 
-        return $this->json($newBrand, Response::HTTP_CREATED, ["groups" => ["brand_browse", "brand_read"]]);
+        return $this->json($newBrand, Response::HTTP_CREATED, ["groups" => ["brand"]]);
     }
 }

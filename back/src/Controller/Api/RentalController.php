@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Rental;
 use App\Entity\User;
 use App\Repository\RentalRepository;
+use App\Services\EmailSender;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,19 @@ class RentalController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(RentalRepository $rentalRepository): JsonResponse
+    public function browse(Request $request, RentalRepository $rentalRepository): JsonResponse
     {
+        if (!is_null($request->query->get('last'))) {
+            $rentals = $rentalRepository->findLastPublished();
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+        }
+
+        if (!is_null($request->query->get('my'))) {
+            $rentals = $rentalRepository->findBy(["ownerUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+        }
         return (empty($rentalRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rental_browse", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rentals"]]);
     }
 
     /**
@@ -33,7 +43,7 @@ class RentalController extends AbstractController
     public function read(?Rental $rental): JsonResponse
     {
         return (is_null($rental)) ? $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($rental, Response::HTTP_OK, [], ["groups" => ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+                                        : $this->json($rental, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
     }
 
     /**
@@ -52,13 +62,13 @@ class RentalController extends AbstractController
 
         $rentalRepository->add($newRental, true);
 
-        return $this->json($newRental, Response::HTTP_CREATED, [], ["groups" => ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        return $this->json($newRental, Response::HTTP_CREATED, [], ["groups" => ["rentals"]]);
     }
 
     /**
      * @Route("/{id}", name="edit", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
      */
-    public function edit(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository): JsonResponse
+    public function edit(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository, EmailSender $emailSender): JsonResponse
     {
 
         if (is_null($rental)) {
@@ -73,7 +83,11 @@ class RentalController extends AbstractController
 
         $rentalRepository->add($rental, true);
 
-        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        if ($rental->getStatus() === '4') {
+            $emailSender->sendReservationMail($rental);
+        }
+
+        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
     }
 
     /**
@@ -97,7 +111,7 @@ class RentalController extends AbstractController
     /**
      * @Route("/book/{id}", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
      */
-    public function book(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository) : JsonResponse
+    public function book(?Rental $rental, Request $request, SerializerInterface $serializerInterface, RentalRepository $rentalRepository, EmailSender $emailSender) : JsonResponse
     {
 
         /** @var User */
@@ -120,10 +134,17 @@ class RentalController extends AbstractController
             return $this->json(["message" => "L'utilisateur ne peut pas modifier ces informations"], Response::HTTP_FORBIDDEN, []);
         }
 
-        $rental->setTenantUser($user);
+        if($requestInArray["status"] == 1) {
+            $rental->setTenantUser(null);
+        } else {
+
+            $rental->setTenantUser($user);
+        }
 
         $rentalRepository->add($rental, true);
 
-        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rental_browse", "rental_read", "event_read", "event_browse", "championship_browse", "category_championship_browse", "track_browse", "user_browse", "vehicle_browse", "vehicle_read", "rental_found"]]);
+        $emailSender->sendBookUpdate($rental);
+
+        return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
     }
 }

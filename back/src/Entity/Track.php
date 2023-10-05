@@ -18,31 +18,59 @@ class Track
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"track_browse"})
+     * @Groups({"tracks"})
+     * @Groups({"track"})
+     * @Groups({"vehicle"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"track_browse"})
+     * @Groups({"tracks"})
+     * @Groups({"track"})
+     * @Groups({"vehicle"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"track_browse"})
+     * @Groups({"tracks"})
+     * @Groups({"track"})
+     * @Groups({"vehicle"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"track_read"})
+     * @Groups({"track"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $department;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"track_read"})
+     * @Groups({"track"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
      */
     private $postCode;
 

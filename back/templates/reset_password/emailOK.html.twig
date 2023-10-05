@@ -1,0 +1,11 @@
+<h1>Hello!</h1>
+
+<p>Pour réinitialiser ton mot de passe :</p>
+
+
+<a href='http://localhost:8080/reset/{{resetToken.token}}'>CLIC ICI</a>
+
+
+<p>Ce lien expire dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+

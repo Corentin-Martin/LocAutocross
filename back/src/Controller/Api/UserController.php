@@ -4,6 +4,8 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Services\EmailSender;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +24,7 @@ class UserController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface): JsonResponse
+    public function add(Request $request, SerializerInterface $serializerInterface, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface, JWTTokenManagerInterface $JWTTokenManagerInterface, EmailSender $emailSender): JsonResponse
     {
 
         /** @var User */
@@ -32,7 +34,11 @@ class UserController extends AbstractController
 
         $userRepository->add($newUser, true);
 
-        return $this->json($newUser, Response::HTTP_CREATED, [], ["groups" => ["user_browse"]]);
+        $token = $JWTTokenManagerInterface->create($newUser);
+
+        $emailSender->sendNotificationEmail($newUser, 'Bienvenue !');
+
+        return $this->json(["user" => $newUser, "token" => $token], Response::HTTP_CREATED, [], ["groups" => ["user"]]);
     }
 
     /**
@@ -42,7 +48,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
 
-        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user_browse"]]);
+        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user"]]);
     }
 
     /**
@@ -57,7 +63,7 @@ class UserController extends AbstractController
 
         $userRepository->add($user, true);
 
-        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user_browse"]]);
+        return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user"]]);
     }
 }
 

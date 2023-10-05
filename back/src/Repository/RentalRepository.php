@@ -39,6 +39,22 @@ class RentalRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+    * @return Rental[] Returns an array of Rental objects
+     */
+    public function findLastPublished(): array
+    {
+        return $this->createQueryBuilder('r')
+        ->where('r.status BETWEEN :minStatus AND :maxStatus')
+        ->setParameter('minStatus', 1)
+        ->setParameter('maxStatus', 4)
+        ->orderBy('r.createdAt', 'DESC')
+        ->setMaxResults(4)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Rental[] Returns an array of Rental objects
 //     */

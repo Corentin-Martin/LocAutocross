@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RentalRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -16,58 +18,77 @@ class Rental
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="smallint", length=255)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vehicle::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"conversation"})
      */
     private $vehicle;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="propositions")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"event"})
+     * @Groups({"conversation"})
      */
     private $ownerUser;
 
     /**
      * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="rentals")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"vehicle"})
+     * @Groups({"conversation"})
      */
     private $event;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="reservations")
-     * @Groups({"rental_read"})
+     * @Groups({"rentals"})
      */
     private $tenantUser;
 
     /**
      * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="rental", cascade={"persist", "remove"})
-     * @Groups({"rental_read"})
+     * @Groups({"rentals"})
      */
     private $comment;
 
     /**
      * @ORM\OneToOne(targetEntity=Contract::class, mappedBy="rental", cascade={"persist", "remove"})
-     * @Groups({"rental_read"})
+     * @Groups({"rentals"})
      */
     private $contract;
 
@@ -83,9 +104,21 @@ class Rental
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"rental_browse"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
+     * @Groups({"federations"})
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Conversation::class, mappedBy="rental", cascade={"remove"})
+     */
+    private $conversations;
+
+    public function __construct()
+    {
+        $this->conversations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -255,6 +288,36 @@ class Rental
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): self
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations[] = $conversation;
+            $conversation->setRental($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): self
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            // set the owning side to null (unless already changed)
+            if ($conversation->getRental() === $this) {
+                $conversation->setRental(null);
+            }
+        }
 
         return $this;
     }
