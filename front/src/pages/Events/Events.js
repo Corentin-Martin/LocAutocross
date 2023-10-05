@@ -1,8 +1,16 @@
+import { Row } from 'react-bootstrap';
 import './Events.scss';
+import TracksMap from '../../components/TracksMap/TracksMap';
 
 function Events() {
   return (
-    <div>event</div>
+    <Row className="d-flex justify-content-center">
+
+      <h1 className="text-center">Mes évènements</h1>
+
+      <TracksMap />
+
+    </Row>
   );
 }
 
