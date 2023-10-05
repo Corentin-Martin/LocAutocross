@@ -4,11 +4,9 @@ namespace App\Controller\Api;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use App\Services\EmailSender;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -19,7 +17,7 @@ class CategoryController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(CategoryRepository $categoryRepository, EmailSender $emailSender, MailerInterface $mailerInterface): JsonResponse
+    public function browse(CategoryRepository $categoryRepository): JsonResponse
     {
         return (empty($categoryRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                                         : $this->json($categoryRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["vehicle"]]);
