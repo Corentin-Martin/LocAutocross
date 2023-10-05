@@ -15,7 +15,7 @@ function NotifNewMessage() {
   return (
     <Button
       variant="danger"
-      className="col-6 col-md-4 col-lg-3 align-self-end mb-3"
+      className="col-6 col-md-4 col-lg-3 align-self-end mb-3 NotifNewMessage"
       onClick={() => {
         navigate('/mes-conversations');
       }}

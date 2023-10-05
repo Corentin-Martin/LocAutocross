@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { Container, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import './App.scss';
@@ -21,6 +21,7 @@ import ProtectedRoute from '../../utils/ProtectedRoute';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import AxiosPublic from '../../utils/AxiosPublic';
 import AxiosPrivate from '../../utils/AxiosPrivate';
+import Events from '../../pages/Events/Events';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -69,15 +70,29 @@ function App() {
     }
   }, [token]);
 
+  const location = useLocation();
+
   useEffect(() => {
-    AxiosPrivate.get('conversations')
-      .then((response) => {
-        dispatch(setConversations(response.data));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [token, conversation === null]);
+    if (token !== null) {
+      AxiosPrivate.get('conversations')
+        .then((response) => {
+          dispatch(setConversations(response.data));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [token, conversation === null, location.pathname]);
+
+  if (token !== null && user === null) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center" style={{ flexGrow: '1' }}>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </Spinner>
+      </div>
+    );
+  }
 
   return (
     <Container>
@@ -118,6 +133,10 @@ function App() {
             <Route
               path="/mes-locations"
               element={(<Skeleton page={<RentalGestion />} />)}
+            />
+            <Route
+              path="/mes-evenements"
+              element={(<Skeleton page={<Events />} />)}
             />
           </Route>
           <Route element={<ProtectedRoute user={user} />}>
