@@ -1,9 +1,9 @@
 import { Row } from 'react-bootstrap';
 import './RentalGestion.scss';
 import { useSelector } from 'react-redux';
-import RentalCreation from '../../components/RentalCreation/RentalCreation';
 import MyRentals from '../../components/MyRentals/MyRentals';
 import RentalComponent from '../../components/RentalComponent/RentalComponent';
+import FormAccordion from '../../components/FormAccordion/FormAccordion';
 
 function RentalGestion() {
   const rental = useSelector((state) => state.dashboard.rental);
@@ -14,7 +14,7 @@ function RentalGestion() {
 
       {rental === null && (
       <>
-        <RentalCreation />
+        <FormAccordion type="rental" />
 
         <MyRentals />
       </>
