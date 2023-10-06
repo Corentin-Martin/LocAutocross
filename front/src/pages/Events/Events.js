@@ -10,8 +10,8 @@ function Events() {
 
       <h1 className="text-center">Mes évènements</h1>
 
-      {/* <TracksMap /> */}
-      <EventCreation />
+      <TracksMap />
+      {/* <EventCreation /> */}
 
     </Row>
   );
