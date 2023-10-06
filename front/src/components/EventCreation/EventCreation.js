@@ -10,13 +10,44 @@ import { setOpenTrackCreation } from '../../actions/dashboard';
 import TrackCreation from '../TrackCreation/TrackCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 
-function EventCreation() {
+function EventCreation({ event }) {
   const federations = useSelector((state) => state.generalCalendar.federations);
   const openTrackCreation = useSelector((state) => state.dashboard.openTrackCreation);
   const [isLoading, setIsLoading] = useState(true);
   const [tracks, setTracks] = useState(null);
 
+  const [fedeChoice, setFedeChoice] = useState(null);
+  const [champChoice, setChampChoice] = useState(null);
+
+  const [privateEvent, setPrivateEvent] = useState(false);
+
+  const [track, setTrack] = useState(null);
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
+  const [allDay, setAllDay] = useState(false);
+  const [description, setDescription] = useState(null);
+  const [title, setTitle] = useState(null);
+
   const newTrack = useSelector((state) => state.dashboard.newTrack);
+
+  useEffect(() => {
+    if (event !== null) {
+      setTitle(event.title);
+      setChampChoice(event.championship !== null ? event.championship.id : 0);
+      setFedeChoice(
+        event.championship !== null
+          ? federations.filter(
+            (fede) => fede.id === event.championship.federation.id,
+          )[0] : { id: 0 },
+      );
+      setPrivateEvent(!event.isOfficial);
+      setTrack(event.track);
+      setStart(event.start);
+      setEnd(event.end);
+      setAllDay(event.allDay);
+      setDescription(event.description);
+    }
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -30,18 +61,6 @@ function EventCreation() {
         console.error(error);
       });
   }, [newTrack]);
-
-  const [fedeChoice, setFedeChoice] = useState(null);
-  const [champChoice, setChampChoice] = useState(null);
-
-  const [privateEvent, setPrivateEvent] = useState(false);
-
-  const [track, setTrack] = useState(null);
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
-  const [allDay, setAllDay] = useState(false);
-  const [description, setDescription] = useState(null);
-  const [title, setTitle] = useState(null);
 
   useEffect(() => {
     if (newTrack !== null) {
@@ -78,8 +97,8 @@ function EventCreation() {
     return verif;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     if (verification()) {
       AxiosPrivate.post('events', {
@@ -121,6 +140,7 @@ function EventCreation() {
                 type="text"
                 placeholder="titre"
                 onChange={(e) => setTitle(e.currentTarget.value)}
+                value={title ?? ''}
               />
             </FloatingLabel>
 
@@ -172,22 +192,23 @@ function EventCreation() {
                 )}
 
                 {fedeChoice !== null && fedeChoice.id !== 0
-&& (
-<Form.Select
-  aria-label="Default select example"
-  onChange={(e) => setChampChoice(e.target.value)}
->
-  <option>Sélectionnez un championnat</option>
-  {fedeChoice.championships.map((champ) => (
-    <option
-      value={champ.id}
-      key={champ.id}
-    >
-      {champ.alias}
-    </option>
-  ))}
-</Form.Select>
-)}
+                && (
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setChampChoice(e.target.value)}
+                  defaultValue={champChoice ?? ''}
+                >
+                  <option>Sélectionnez un championnat</option>
+                  {fedeChoice.championships.map((champ) => (
+                    <option
+                      value={champ.id}
+                      key={champ.id}
+                    >
+                      {champ.alias}
+                    </option>
+                  ))}
+                </Form.Select>
+                )}
 
               </Row>
             </Form.Group>
@@ -225,6 +246,7 @@ function EventCreation() {
                 type="datetime-local"
                 placeholder="Sélectionnez le jour de début"
                 onChange={(e) => setStart(e.currentTarget.value)}
+                value={start ?? new Date('now')}
               />
             </Form.Group>
             <Form.Group controlId="endSelect" className="mb-3 col-10">
@@ -233,6 +255,7 @@ function EventCreation() {
                 type="datetime-local"
                 placeholder="Sélectionnez le jour de fin"
                 onChange={(e) => setEnd(e.currentTarget.value)}
+                value={end ?? new Date('now')}
               />
             </Form.Group>
             <Form.Group controlId="allDaySelect" className="mb-3 col-10">
@@ -243,6 +266,7 @@ function EventCreation() {
                 id="custom-switch"
                 label="Journée entière ?"
                 onChange={() => setAllDay(!allDay)}
+                defaultChecked={allDay}
               />
               <p className="text-center bg-secondary rounded-2 p-2">
                 Cochez cette case si l'évenènement se déroule sur une
@@ -262,6 +286,7 @@ function EventCreation() {
                 placeholder="description"
                 style={{ height: '100px' }}
                 onChange={(e) => setDescription(e.currentTarget.value)}
+                value={description ?? ''}
               />
             </FloatingLabel>
 
@@ -282,5 +307,9 @@ function EventCreation() {
     </div>
   );
 }
+
+EventCreation.defaultProps = {
+  event: null,
+};
 
 export default EventCreation;

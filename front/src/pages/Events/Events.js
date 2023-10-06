@@ -3,6 +3,7 @@ import './Events.scss';
 import { useSelector } from 'react-redux';
 import MyEvents from '../../components/MyEvents/MyEvents';
 import FormAccordion from '../../components/FormAccordion/FormAccordion';
+import EventComponent from '../../components/EventComponent/EventComponent';
 
 function Events() {
   const event = useSelector((state) => state.dashboard.event);
@@ -19,7 +20,7 @@ function Events() {
       </>
       )}
 
-      {/* <EventComponent fromGestion /> */}
+      <EventComponent fromGestion />
     </Row>
   );
 }
