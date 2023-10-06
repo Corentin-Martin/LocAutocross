@@ -50,6 +50,14 @@ export const setRental = (rental) => ({
   },
 });
 
+export const SET_EVENT = 'SET_EVENT';
+export const setEvent = (event) => ({
+  type: SET_EVENT,
+  payload: {
+    event: event,
+  },
+});
+
 export const SET_CONVERSATION = 'SET_CONVERSATION';
 export const setConversation = (conversation) => ({
   type: SET_CONVERSATION,

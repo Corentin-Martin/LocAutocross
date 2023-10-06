@@ -1,5 +1,6 @@
 import {
   SET_CONVERSATION,
+  SET_EVENT,
   SET_ID_VEHICLE_TO_EDIT,
   SET_MY_VEHICLES, SET_NEW_BRAND, SET_NEW_TRACK, SET_OPEN_BRAND_CREATION,
   SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION, SET_RENTAL, SET_VEHICLE,
@@ -16,6 +17,7 @@ const initialState = {
   openBrandCreation: false,
   newTrack: null,
   openTrackCreation: false,
+  event: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -87,6 +89,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         openTrackCreation: action.payload.openTrackCreation,
+      };
+
+    case SET_EVENT:
+      return {
+        ...state,
+        event: action.payload.event,
       };
 
     default:

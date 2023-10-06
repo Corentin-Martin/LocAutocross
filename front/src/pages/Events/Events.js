@@ -3,6 +3,7 @@ import './Events.scss';
 import TracksMap from '../../components/TracksMap/TracksMap';
 import TrackCreation from '../../components/TrackCreation/TrackCreation';
 import EventCreation from '../../components/EventCreation/EventCreation';
+import MyEvents from '../../components/MyEvents/MyEvents';
 
 function Events() {
   return (
@@ -10,9 +11,7 @@ function Events() {
 
       <h1 className="text-center">Mes évènements</h1>
 
-      <TracksMap />
-      {/* <EventCreation /> */}
-
+      <MyEvents/>
     </Row>
   );
 }
