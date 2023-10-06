@@ -1,6 +1,7 @@
 import { Row } from 'react-bootstrap';
 import './Events.scss';
 import TracksMap from '../../components/TracksMap/TracksMap';
+import TrackCreation from '../../components/TrackCreation/TrackCreation';
 
 function Events() {
   return (
@@ -8,7 +9,8 @@ function Events() {
 
       <h1 className="text-center">Mes évènements</h1>
 
-      <TracksMap />
+      {/* <TracksMap /> */}
+      <TrackCreation />
 
     </Row>
   );

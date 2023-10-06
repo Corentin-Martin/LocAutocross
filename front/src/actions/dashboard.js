@@ -73,3 +73,19 @@ export const setOpenBrandCreation = (bool) => ({
     openBrandCreation: bool,
   },
 });
+
+export const SET_NEW_TRACK = 'SET_NEW_TRACK';
+export const setNewTrack = (newTrack) => ({
+  type: SET_NEW_TRACK,
+  payload: {
+    newTrack: newTrack,
+  },
+});
+
+export const SET_OPEN_TRACK_CREATION = 'SET_OPEN_TRACK_CREATION';
+export const setOpenTrackCreation = (bool) => ({
+  type: SET_OPEN_TRACK_CREATION,
+  payload: {
+    openTrackCreation: bool,
+  },
+});

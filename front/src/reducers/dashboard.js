@@ -1,8 +1,8 @@
 import {
   SET_CONVERSATION,
   SET_ID_VEHICLE_TO_EDIT,
-  SET_MY_VEHICLES, SET_NEW_BRAND, SET_OPEN_BRAND_CREATION,
-  SET_OPEN_CREATION, SET_RENTAL, SET_VEHICLE,
+  SET_MY_VEHICLES, SET_NEW_BRAND, SET_NEW_TRACK, SET_OPEN_BRAND_CREATION,
+  SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION, SET_RENTAL, SET_VEHICLE,
 } from '../actions/dashboard';
 
 const initialState = {
@@ -14,6 +14,8 @@ const initialState = {
   conversation: null,
   newBrand: null,
   openBrandCreation: false,
+  newTrack: null,
+  openTrackCreation: false,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -73,6 +75,18 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         openBrandCreation: action.payload.openBrandCreation,
+      };
+
+    case SET_NEW_TRACK:
+      return {
+        ...state,
+        newTrack: action.payload.newTrack,
+      };
+
+    case SET_OPEN_TRACK_CREATION:
+      return {
+        ...state,
+        openTrackCreation: action.payload.openTrackCreation,
       };
 
     default:
