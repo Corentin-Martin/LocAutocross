@@ -60,6 +60,7 @@ class Track
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"tracks"})
      * @Groups({"track"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
@@ -68,6 +69,7 @@ class Track
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"tracks"})
      * @Groups({"track"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
