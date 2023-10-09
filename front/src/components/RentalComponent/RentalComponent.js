@@ -10,8 +10,7 @@ import defaultKart from '../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import RentalUserbox from './RentalUserbox/RentalUserbox';
 
-function RentalComponent() {
-  const rental = useSelector((state) => state.dashboard.rental);
+function RentalComponent({ rental }) {
   const user = useSelector((state) => state.user.user);
 
   const statusMatching = useSelector((state) => state.user.statusMatching);

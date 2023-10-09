@@ -42,19 +42,11 @@ export const setMyVehicles = (myVehicles) => ({
   },
 });
 
-export const SET_RENTAL = 'SET_RENTAL';
-export const setRental = (rental) => ({
-  type: SET_RENTAL,
+export const SET_ELEMENT_TO_DISPLAY = 'SET_ELEMENT_TO_DISPLAY';
+export const setElementToDisplay = (elementToDisplay) => ({
+  type: SET_ELEMENT_TO_DISPLAY,
   payload: {
-    rental: rental,
-  },
-});
-
-export const SET_EVENT = 'SET_EVENT';
-export const setEvent = (event) => ({
-  type: SET_EVENT,
-  payload: {
-    event: event,
+    elementToDisplay: elementToDisplay,
   },
 });
 

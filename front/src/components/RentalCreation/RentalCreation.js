@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'react-bootstrap-icons';
-import { setRental } from '../../actions/dashboard';
+import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function RentalCreation({ rental }) {
@@ -118,7 +118,7 @@ function RentalCreation({ rental }) {
           },
         )
           .then((response) => {
-            dispatch(setRental(response.data));
+            dispatch(setElementToDisplay(response.data));
           })
           .catch((err) => {
             console.error(err);
@@ -141,7 +141,7 @@ function RentalCreation({ rental }) {
           },
         )
           .then((response) => {
-            dispatch(setRental(response.data));
+            dispatch(setElementToDisplay(response.data));
           })
           .catch((err) => {
             console.error(err);

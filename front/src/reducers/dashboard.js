@@ -1,9 +1,10 @@
 import {
   SET_CONVERSATION,
-  SET_EVENT,
+  SET_ELEMENT_TO_DISPLAY,
+
   SET_ID_VEHICLE_TO_EDIT,
   SET_MY_VEHICLES, SET_NEW_BRAND, SET_NEW_TRACK, SET_OPEN_BRAND_CREATION,
-  SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION, SET_RENTAL, SET_VEHICLE,
+  SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION, SET_VEHICLE,
 } from '../actions/dashboard';
 
 const initialState = {
@@ -11,13 +12,12 @@ const initialState = {
   vehicle: null,
   myVehicles: null,
   idToEdit: null,
-  rental: null,
   conversation: null,
   newBrand: null,
   openBrandCreation: false,
   newTrack: null,
   openTrackCreation: false,
-  event: null,
+  elementToDisplay: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -55,12 +55,6 @@ function reducer(state = initialState, action = {}) {
         myVehicles: action.payload.myVehicles,
       };
 
-    case SET_RENTAL:
-      return {
-        ...state,
-        rental: action.payload.rental,
-      };
-
     case SET_CONVERSATION:
       return {
         ...state,
@@ -91,10 +85,10 @@ function reducer(state = initialState, action = {}) {
         openTrackCreation: action.payload.openTrackCreation,
       };
 
-    case SET_EVENT:
+    case SET_ELEMENT_TO_DISPLAY:
       return {
         ...state,
-        event: action.payload.event,
+        elementToDisplay: action.payload.elementToDisplay,
       };
 
     default:

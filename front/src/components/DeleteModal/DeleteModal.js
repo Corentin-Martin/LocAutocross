@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setMyVehicles, setRental, setVehicleForDetails } from '../../actions/dashboard';
+import { setElementToDisplay, setMyVehicles, setVehicleForDetails } from '../../actions/dashboard';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function DeleteModal({ type, idToDelete }) {
@@ -24,7 +24,7 @@ function DeleteModal({ type, idToDelete }) {
         dispatch(setVehicleForDetails(null));
         const newVehicles = vehicles.filter((vehicle) => vehicle.id !== idToDelete);
         dispatch(setMyVehicles(newVehicles));
-        dispatch(setRental(null));
+        dispatch(setElementToDisplay(null));
         setShow(false);
 
         if (type === 'rentals') {

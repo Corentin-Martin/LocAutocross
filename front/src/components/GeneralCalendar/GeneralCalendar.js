@@ -8,10 +8,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import ReactSelect from 'react-select';
 import {
-  Container, Row, Col, Alert, Button, Offcanvas, Spinner,
+  Container, Row, Col, Alert, Button, Offcanvas, Spinner, Modal,
 } from 'react-bootstrap';
-import { setModalCalendarIsOpen, setSelectedEvent } from '../../actions/generalCalendar';
 import AxiosPublic from '../../utils/AxiosPublic';
+import CardComponent from '../CardComponent/CardComponent';
+import EventComponent from '../EventComponent/EventComponent';
+import { setElementToDisplay } from '../../actions/dashboard';
 
 function GeneralCalendar() {
   moment.locale('fr-FR');
@@ -49,10 +51,14 @@ function GeneralCalendar() {
     }
   }, []);
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+
   useEffect(() => {
     if (selectedEvent !== null) {
-      dispatch(setModalCalendarIsOpen(true));
-      dispatch(setSelectedEvent(selectedEvent));
+      setShow(true);
+      dispatch(setElementToDisplay(selectedEvent));
     }
   }, [selectedEvent]);
 
@@ -270,6 +276,13 @@ function GeneralCalendar() {
             }}
             culture="fr"
           />
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton />
+            <Modal.Body className="d-flex justify-content-center">
+              <CardComponent childComponent={<EventComponent event={selectedEvent} />} />
+            </Modal.Body>
+          </Modal>
 
         </Container>
       )}

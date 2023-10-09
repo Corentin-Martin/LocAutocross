@@ -1,16 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Accordion } from 'react-bootstrap';
-import RentalCreation from '../RentalCreation/RentalCreation';
-import EventCreation from '../EventCreation/EventCreation';
 
-function FormAccordion({ toEdit, type }) {
+function FormAccordion({ childComponent, message }) {
   const [openItem, setOpenItem] = useState(null);
-
-  useEffect(() => {
-    if (toEdit !== null) {
-      setOpenItem('0');
-    }
-  });
 
   const handleAccordionToggle = (eventKey) => {
     setOpenItem(openItem === eventKey ? null : eventKey);
@@ -25,15 +17,14 @@ function FormAccordion({ toEdit, type }) {
 
         <Accordion.Item eventKey="0" onClick={() => handleAccordionToggle('0')}>
           <Accordion.Header className="text-center bg-secondary">
-            {type === 'rental' && (toEdit === null ? 'Créer une nouvelle proposition de location' : 'Editer cette proposition de location')}
-            {type === 'event' && (toEdit === null ? 'Créer un nouvel évènement' : 'Editer cet évènment')}
+            {message}
           </Accordion.Header>
           <Accordion.Body onClick={(e) => {
             e.stopPropagation();
           }}
           >
-            {type === 'rental' && <RentalCreation rental={toEdit} />}
-            {type === 'event' && <EventCreation event={toEdit} />}
+            {childComponent}
+
           </Accordion.Body>
         </Accordion.Item>
 
@@ -41,9 +32,5 @@ function FormAccordion({ toEdit, type }) {
     </div>
   );
 }
-
-FormAccordion.defaultProps = {
-  toEdit: null,
-};
 
 export default FormAccordion;

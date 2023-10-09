@@ -3,25 +3,26 @@ import './RentalGestion.scss';
 import { useSelector } from 'react-redux';
 import MyRentals from '../../components/MyRentals/MyRentals';
 import RentalComponent from '../../components/RentalComponent/RentalComponent';
-import FormAccordion from '../../components/FormAccordion/FormAccordion';
+import FormAccordionCreation from '../../components/FormAccordionCreation/FormAccordionCreation';
 import CardComponent from '../../components/CardComponent/CardComponent';
+import RentalCreation from '../../components/RentalCreation/RentalCreation';
 
 function RentalGestion() {
-  const rental = useSelector((state) => state.dashboard.rental);
+  const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
   return (
     <Row className="d-flex justify-content-center">
 
       <h1 className="text-center">Mes locations</h1>
 
-      {rental === null && (
+      {elementToDisplay === null && (
       <>
-        <FormAccordion type="rental" />
+        <FormAccordionCreation childComponent={<RentalCreation />} message="Créer une nouvelle proposition de location" />
 
         <MyRentals />
       </>
       )}
 
-      <CardComponent fromGestion childComponent={<RentalComponent />} />
+      <CardComponent fromGestion childComponent={<RentalComponent rental={elementToDisplay} />} />
 
     </Row>
   );

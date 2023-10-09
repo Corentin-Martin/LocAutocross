@@ -2,18 +2,18 @@ import { Card } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { setRental } from '../../actions/dashboard';
+import { setElementToDisplay } from '../../actions/dashboard';
 
 function CardComponent({ fromGestion, childComponent }) {
   const dispatch = useDispatch();
 
-  const rental = useSelector((state) => state.dashboard.rental);
+  const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
 
   useEffect(() => () => {
-    dispatch(setRental(null));
+    dispatch(setElementToDisplay(null));
   }, []);
 
-  if (rental === null) {
+  if (elementToDisplay === null) {
     return null;
   }
 
@@ -24,7 +24,7 @@ function CardComponent({ fromGestion, childComponent }) {
         <XCircleFill
           size={24}
           className="text-black VehicleDetail-CloseIcon"
-          onClick={() => dispatch(setRental(null))}
+          onClick={() => dispatch(setElementToDisplay(null))}
         />
         )}
         {childComponent}

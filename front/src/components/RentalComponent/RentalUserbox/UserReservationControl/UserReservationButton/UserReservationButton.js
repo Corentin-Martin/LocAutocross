@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { setRental } from '../../../../../actions/dashboard';
+import { setElementToDisplay } from '../../../../../actions/dashboard';
 import AxiosPrivate from '../../../../../utils/AxiosPrivate';
 
 function UserReservationButton({ rentalId, status }) {
@@ -15,7 +15,7 @@ function UserReservationButton({ rentalId, status }) {
       status: newStatus,
     })
       .then((res) => {
-        dispatch(setRental(res.data));
+        dispatch(setElementToDisplay(res.data));
       })
       .catch((err) => {
         console.error(err);

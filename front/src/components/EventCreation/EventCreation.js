@@ -7,7 +7,7 @@ import { X } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import AxiosPublic from '../../utils/AxiosPublic';
-import { setEvent, setOpenTrackCreation } from '../../actions/dashboard';
+import { setElementToDisplay, setOpenTrackCreation } from '../../actions/dashboard';
 import TrackCreation from '../TrackCreation/TrackCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import handleFileUpload from '../../utils/UploadImage';
@@ -123,14 +123,13 @@ function EventCreation({ event }) {
           picture: picture,
 
         }).then((response) => {
-          dispatch(setEvent(response.data));
+          dispatch(setElementToDisplay(response.data));
         }).catch((error) => {
           console.error(error);
         });
       }
 
       else {
-        picture.startsWith('images/event-picture/');
         AxiosPrivate.put(`events/${event.id}`, {
           track: track.id,
           championship: (champChoice !== 0 ? champChoice : null),
@@ -143,7 +142,7 @@ function EventCreation({ event }) {
           picture: picture,
 
         }).then((response) => {
-          dispatch(setEvent(response.data));
+          dispatch(setElementToDisplay(response.data));
         }).catch((error) => {
           console.error(error);
         });

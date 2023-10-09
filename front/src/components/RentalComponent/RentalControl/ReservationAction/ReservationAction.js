@@ -1,6 +1,6 @@
 import { Button, Card } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { setConversation, setRental } from '../../../../actions/dashboard';
+import { setConversation, setElementToDisplay } from '../../../../actions/dashboard';
 import AxiosPrivate from '../../../../utils/AxiosPrivate';
 
 function ReservationAction({ rental, associateConv, handleShow }) {
@@ -10,7 +10,7 @@ function ReservationAction({ rental, associateConv, handleShow }) {
     e.preventDefault();
     AxiosPrivate.put(`rentals/${rental.id}`, { status: 4 })
       .then((res) => {
-        dispatch(setRental(res.data));
+        dispatch(setElementToDisplay(res.data));
       })
       .catch((err) => {
         console.error(err);
