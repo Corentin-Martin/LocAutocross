@@ -6,6 +6,7 @@ import { Spinner } from 'react-bootstrap';
 import RentalComponent from '../../components/RentalComponent/RentalComponent';
 import { setRental } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
+import CardComponent from '../../components/CardComponent/CardComponent';
 
 function Rental() {
   const rental = useSelector((state) => state.dashboard.rental);
@@ -35,7 +36,7 @@ function Rental() {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <RentalComponent />)}
+        <CardComponent childComponent={<RentalComponent />} />)}
     </div>
   );
 }

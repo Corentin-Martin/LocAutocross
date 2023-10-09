@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import MyRentals from '../../components/MyRentals/MyRentals';
 import RentalComponent from '../../components/RentalComponent/RentalComponent';
 import FormAccordion from '../../components/FormAccordion/FormAccordion';
+import CardComponent from '../../components/CardComponent/CardComponent';
 
 function RentalGestion() {
   const rental = useSelector((state) => state.dashboard.rental);
@@ -20,7 +21,7 @@ function RentalGestion() {
       </>
       )}
 
-      <RentalComponent fromGestion />
+      <CardComponent fromGestion childComponent={<RentalComponent />} />
 
     </Row>
   );

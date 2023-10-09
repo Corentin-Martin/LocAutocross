@@ -129,11 +129,11 @@ function Header() {
                 </Nav.Link>
                 <Nav.Link
                   as={Link}
-                  to="/dashboard"
+                  to="/circuits"
                   onClick={() => {
                     setShowOffCanvas(false);
                   }}
-                >Les évenèments
+                >Les circuits
                 </Nav.Link>
                 <Nav.Link
                   as={Link}
@@ -141,8 +141,9 @@ function Header() {
                   onClick={() => {
                     setShowOffCanvas(false);
                   }}
-                >Les circuits
+                >Les évenèments
                 </Nav.Link>
+
                 <Nav.Link
                   as={Link}
                   to="/dashboard"

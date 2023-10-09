@@ -1,4 +1,4 @@
-import { Form, Row, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import './TracksMap.scss';
 import 'leaflet/dist/leaflet.css';
 import {
@@ -6,7 +6,9 @@ import {
 } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import AxiosPublic from '../../utils/AxiosPublic';
+import TrackPopup from './TrackPopup/TrackPopup';
 
 function TracksMap() {
   const getZoomLevel = () => {
@@ -19,21 +21,10 @@ function TracksMap() {
     return 3;
   };
 
-  const [tracks, setTracks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const tracks = useSelector((state) => state.map.tracks);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    AxiosPublic.get('tracks')
-      .then((response) => {
-        setTracks(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  const custom = new Icon({ iconUrl: 'https://cdn.icon-icons.com/icons2/930/PNG/512/cross_icon-icons.com_72347.png', iconSize: [38, 38] });
+  const custom = new Icon({ iconUrl: 'https://cdn.icon-icons.com/icons2/656/PNG/512/pin_gps_location_find_map_search_icon-icons.com_59982.png', iconSize: [24, 24] });
   return (
     <div style={{ height: '50vh' }}>
 
@@ -47,16 +38,14 @@ function TracksMap() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {tracks.map((oneTrack) => (
+          {tracks !== null && tracks.map((oneTrack) => (
             <Marker
               key={oneTrack.id}
               position={[oneTrack.latitude, oneTrack.longitude]}
               icon={custom}
             >
-              <Popup>
-                <div>{oneTrack.city} - {oneTrack.postCode} - {oneTrack.department}</div>
-                {oneTrack.name !== null && <div>{oneTrack.name}</div>}
-              </Popup>
+              <TrackPopup trackId={oneTrack.id} />
+
             </Marker>
           ))}
         </MapContainer>
