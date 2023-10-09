@@ -5,8 +5,9 @@ import {
 } from 'react-bootstrap';
 import { X } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import AxiosPublic from '../../utils/AxiosPublic';
-import { setOpenTrackCreation } from '../../actions/dashboard';
+import { setEvent, setOpenTrackCreation } from '../../actions/dashboard';
 import TrackCreation from '../TrackCreation/TrackCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 
@@ -22,8 +23,8 @@ function EventCreation({ event }) {
   const [privateEvent, setPrivateEvent] = useState(false);
 
   const [track, setTrack] = useState(null);
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
+  const [start, setStart] = useState(moment().format('YYYY-MM-DDTHH:mm'));
+  const [end, setEnd] = useState(moment().format('YYYY-MM-DDTHH:mm'));
   const [allDay, setAllDay] = useState(false);
   const [description, setDescription] = useState(null);
   const [title, setTitle] = useState(null);
@@ -101,21 +102,41 @@ function EventCreation({ event }) {
     e.preventDefault();
 
     if (verification()) {
-      AxiosPrivate.post('events', {
-        track: track,
-        championship: (champChoice !== 0 ? champChoice : null),
-        title: title,
-        isOfficial: !privateEvent,
-        allDay: allDay,
-        start: start,
-        end: end,
-        description: description,
+      if (event === null) {
+        AxiosPrivate.post('events', {
+          track: track,
+          championship: (champChoice !== 0 ? champChoice : null),
+          title: title,
+          isOfficial: !privateEvent,
+          allDay: allDay,
+          start: start,
+          end: end,
+          description: description,
 
-      }).then((response) => {
-        console.log(response.data);
-      }).catch((error) => {
-        console.error(error);
-      });
+        }).then((response) => {
+          dispatch(setEvent(response.data));
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+
+      else {
+        AxiosPrivate.put(`events/${event.id}`, {
+          track: track.id,
+          championship: (champChoice !== 0 ? champChoice : null),
+          title: title,
+          isOfficial: !privateEvent,
+          allDay: allDay,
+          start: start,
+          end: end,
+          description: description,
+
+        }).then((response) => {
+          dispatch(setEvent(response.data));
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
     }
   };
 
@@ -246,7 +267,7 @@ function EventCreation({ event }) {
                 type="datetime-local"
                 placeholder="Sélectionnez le jour de début"
                 onChange={(e) => setStart(e.currentTarget.value)}
-                value={start ?? new Date('now')}
+                value={moment(start).format('YYYY-MM-DDTHH:mm')}
               />
             </Form.Group>
             <Form.Group controlId="endSelect" className="mb-3 col-10">
@@ -255,7 +276,7 @@ function EventCreation({ event }) {
                 type="datetime-local"
                 placeholder="Sélectionnez le jour de fin"
                 onChange={(e) => setEnd(e.currentTarget.value)}
-                value={end ?? new Date('now')}
+                value={moment(end).format('YYYY-MM-DDTHH:mm')}
               />
             </Form.Group>
             <Form.Group controlId="allDaySelect" className="mb-3 col-10">
@@ -292,7 +313,7 @@ function EventCreation({ event }) {
 
             <p className="mb-3">* Champs obligatoires</p>
 
-            <Button type="submit" variant="secondary">Créer</Button>
+            <Button type="submit" variant="secondary">{event === null ? 'Créer' : 'Modifier'}</Button>
 
             {wrong.length > 0 && (
             <Alert variant="danger" className="text-center mt-2 col-10">
