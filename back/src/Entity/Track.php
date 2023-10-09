@@ -88,6 +88,7 @@ class Track
 
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="track")
+     * @Groups({"track"})
      */
     private $events;
 

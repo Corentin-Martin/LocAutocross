@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Track;
+use App\Repository\ChampionshipRepository;
 use App\Repository\TrackRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +20,15 @@ class TrackController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(TrackRepository $trackRepository): JsonResponse
+    public function browse(Request $request, TrackRepository $trackRepository, ChampionshipRepository $championshipRepository): JsonResponse
     {
+
+        if (!is_null($request->query->get('championship'))) {
+            $championship = $championshipRepository->findOneBy(["id" => $request->query->get('championship')]);
+            $tracks = $trackRepository->findTracksInAChampionship($championship);
+            return $this->json($tracks, Response::HTTP_OK, [], ["groups" => ["test"]]);
+        }
+
         return (empty($trackRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
                                                             : $this->json($trackRepository->findBy([], ["city" => "ASC"]), Response::HTTP_OK, [], ["groups" => ["tracks"]]);
     }

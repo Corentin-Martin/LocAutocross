@@ -39,6 +39,16 @@ class TrackRepository extends ServiceEntityRepository
         }
     }
 
+    public function findTracksInAChampionship($championship)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery('SELECT event FROM App\Entity\Event event  WHERE event.championship = :championship');
+        $query->setParameter('championship', $championship);
+        return $query->getResult();
+    }
+
+
+
 //    /**
 //     * @return Track[] Returns an array of Track objects
 //     */

@@ -20,11 +20,13 @@ class Event
      * @ORM\Column(type="integer")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"vehicle"})
      * @Groups({"championship"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"track"})
      */
     private $id;
 
@@ -32,11 +34,13 @@ class Event
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"vehicle"})
      * @Groups({"championship"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"track"})
      */
     private $title;
 
@@ -44,11 +48,13 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"vehicle"})
      * @Groups({"federations"})
      * @Groups({"championship"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"track"})
      */
     private $start;
 
@@ -56,8 +62,10 @@ class Event
      * @ORM\Column(type="boolean")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
+     * @Groups({"track"})
      */
     private $isOfficial;
 
@@ -108,7 +116,9 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
+     * @Groups({"track"})
      */
     private $end;
 
@@ -116,7 +126,9 @@ class Event
      * @ORM\Column(type="boolean")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
+     * @Groups({"track"})
      */
     private $allDay;
 
@@ -124,7 +136,9 @@ class Event
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
+     * @Groups({"track"})
      */
     private $description;
 
@@ -132,6 +146,8 @@ class Event
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
+     * @Groups({"track"})
      */
     private $picture;
 

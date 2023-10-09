@@ -6,6 +6,7 @@ use App\Entity\Championship;
 use App\Repository\ChampionshipRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -26,8 +27,28 @@ class ChampionshipController extends AbstractController
     /**
      * @Route("/{id}", name="read", requirements={"id"="\d+"}, methods={"GET"})
      */
-    public function read(?Championship $championship): JsonResponse
+    public function read(?Championship $championship, Request $request): JsonResponse
     {
+        if (!is_null($request->query->get('tracks'))) {
+            $tracks = [];
+            foreach ($championship->getEvents() as $event) {
+                $track = $event->getTrack();
+
+                if (array_key_exists($track->getId(), $tracks)) {
+                    array_push($tracks[$track->getId()]['events'], $event);
+                } else {
+
+                    $tracks[$track->getId()] =  [
+                        'track' => $track,
+                        'events' => [$event]
+                    ];
+                }
+            }
+
+            return $this->json(["championship" => $championship, "tracks" => array_values($tracks)], Response::HTTP_OK, [], ["groups" => ["championshipWithoutEvents", "track", "eventWithoutTrack"]]);
+        }
+
+
         return (is_null($championship)) ? $this->json(["message" => "Ce championnat n'existe pas"], Response::HTTP_NOT_FOUND, [])
                                         : $this->json($championship, Response::HTTP_OK, [], ["groups" => ["championship"]]);
     }
