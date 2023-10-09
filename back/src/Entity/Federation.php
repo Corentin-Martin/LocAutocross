@@ -23,6 +23,8 @@ class Federation
      * @Groups({"championship"})
      * @Groups({"disciplines"})
      * @Groups({"rentals"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $id;
 
@@ -33,6 +35,8 @@ class Federation
      * @Groups({"championship"})
      * @Groups({"disciplines"})
      * @Groups({"rentals"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $name;
 
@@ -43,6 +47,8 @@ class Federation
      * @Groups({"championship"})
      * @Groups({"disciplines"})
      * @Groups({"rentals"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $alias;
 

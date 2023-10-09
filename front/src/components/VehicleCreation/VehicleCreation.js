@@ -13,6 +13,7 @@ import Checkbox from './Checkbox/Checkbox';
 import BrandCreation from '../BrandCreation/BrandCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import AxiosPublic from '../../utils/AxiosPublic';
+import handleFileUpload from '../../utils/UploadImage';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
@@ -178,20 +179,8 @@ function VehicleCreation() {
     setYear(`${yearSelect}-01-01`);
   };
 
-  const convertToBase64 = (file) => new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
-
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
+  const handlePictureUpload = async (e) => {
+    const base64 = await handleFileUpload(e);
     setPicture(base64);
   };
 
@@ -309,7 +298,7 @@ function VehicleCreation() {
                     label="Image"
                     name="myFile"
                     accept=".jpeg, .png, .jpg"
-                    onChange={(e) => handleFileUpload(e)}
+                    onChange={(e) => handlePictureUpload(e)}
                   />
                 </Form.Group>
 

@@ -76,6 +76,8 @@ class Championship
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"championship"})
      * @Groups({"rentals"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $federation;
 

@@ -50,6 +50,14 @@ export const setRental = (rental) => ({
   },
 });
 
+export const SET_EVENT = 'SET_EVENT';
+export const setEvent = (event) => ({
+  type: SET_EVENT,
+  payload: {
+    event: event,
+  },
+});
+
 export const SET_CONVERSATION = 'SET_CONVERSATION';
 export const setConversation = (conversation) => ({
   type: SET_CONVERSATION,
@@ -71,5 +79,21 @@ export const setOpenBrandCreation = (bool) => ({
   type: SET_OPEN_BRAND_CREATION,
   payload: {
     openBrandCreation: bool,
+  },
+});
+
+export const SET_NEW_TRACK = 'SET_NEW_TRACK';
+export const setNewTrack = (newTrack) => ({
+  type: SET_NEW_TRACK,
+  payload: {
+    newTrack: newTrack,
+  },
+});
+
+export const SET_OPEN_TRACK_CREATION = 'SET_OPEN_TRACK_CREATION';
+export const setOpenTrackCreation = (bool) => ({
+  type: SET_OPEN_TRACK_CREATION,
+  payload: {
+    openTrackCreation: bool,
   },
 });

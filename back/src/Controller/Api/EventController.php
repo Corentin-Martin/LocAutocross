@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use App\Services\UploadImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,10 @@ class EventController extends AbstractController
      */
     public function browse(Request $request, EventRepository $eventRepository): JsonResponse
     {
+        if (!is_null($request->query->get('my'))) {
+            $events = $eventRepository->findBy(["associatedUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            return $this->json($events, Response::HTTP_OK, [], ["groups" => ["events"]]);
+        }
         /** @var array */
         $searchChampionships = $request->query->get('championship');
         $events = [];
@@ -111,7 +116,7 @@ class EventController extends AbstractController
     /**
      * @Route("", name="add", methods={"POST"})
      */
-    public function add(Request $request, SerializerInterface $serializerInterface, EventRepository $eventRepository): JsonResponse
+    public function add(Request $request, SerializerInterface $serializerInterface, EventRepository $eventRepository, UploadImageService $uploadImageService): JsonResponse
     {
 
         /** @var User */
@@ -122,6 +127,8 @@ class EventController extends AbstractController
 
         $newEvent->setAssociatedUser($user);
 
+        $uploadImageService->upload($newEvent);
+
         $eventRepository->add($newEvent, true);
 
         return $this->json($newEvent, Response::HTTP_CREATED, [], ["groups" => ["event"]]);
@@ -130,7 +137,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="edit", requirements={"id"="\d+"}, methods={"PUT", "PATCH"})
      */
-    public function edit(?Event $event, Request $request, SerializerInterface $serializerInterface, EventRepository $eventRepository): JsonResponse
+    public function edit(?Event $event, Request $request, SerializerInterface $serializerInterface, EventRepository $eventRepository, UploadImageService $uploadImageService): JsonResponse
     {
 
         if (is_null($event)) {
@@ -142,6 +149,8 @@ class EventController extends AbstractController
         }
 
         $serializerInterface->deserialize($request->getContent(), Event::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $event]);
+
+        $uploadImageService->upload($event);
 
         $eventRepository->add($event, true);
 

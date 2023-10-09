@@ -22,7 +22,7 @@ class TrackController extends AbstractController
     public function browse(TrackRepository $trackRepository): JsonResponse
     {
         return (empty($trackRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                            : $this->json($trackRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["tracks"]]);
+                                                            : $this->json($trackRepository->findBy([], ["city" => "ASC"]), Response::HTTP_OK, [], ["groups" => ["tracks"]]);
     }
 
     /**
