@@ -10,6 +10,7 @@ import AxiosPublic from '../../utils/AxiosPublic';
 import { setEvent, setOpenTrackCreation } from '../../actions/dashboard';
 import TrackCreation from '../TrackCreation/TrackCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
+import handleFileUpload from '../../utils/UploadImage';
 
 function EventCreation({ event }) {
   const federations = useSelector((state) => state.generalCalendar.federations);
@@ -28,8 +29,14 @@ function EventCreation({ event }) {
   const [allDay, setAllDay] = useState(false);
   const [description, setDescription] = useState(null);
   const [title, setTitle] = useState(null);
+  const [picture, setPicture] = useState(null);
 
   const newTrack = useSelector((state) => state.dashboard.newTrack);
+
+  const handlePictureUpload = async (e) => {
+    const base64 = await handleFileUpload(e);
+    setPicture(base64);
+  };
 
   useEffect(() => {
     if (event !== null) {
@@ -47,6 +54,7 @@ function EventCreation({ event }) {
       setEnd(event.end);
       setAllDay(event.allDay);
       setDescription(event.description);
+      setPicture(event.picture);
     }
   }, []);
 
@@ -112,6 +120,7 @@ function EventCreation({ event }) {
           start: start,
           end: end,
           description: description,
+          picture: picture,
 
         }).then((response) => {
           dispatch(setEvent(response.data));
@@ -121,6 +130,7 @@ function EventCreation({ event }) {
       }
 
       else {
+        picture.startsWith('images/event-picture/');
         AxiosPrivate.put(`events/${event.id}`, {
           track: track.id,
           championship: (champChoice !== 0 ? champChoice : null),
@@ -130,6 +140,7 @@ function EventCreation({ event }) {
           start: start,
           end: end,
           description: description,
+          picture: picture,
 
         }).then((response) => {
           dispatch(setEvent(response.data));
@@ -164,6 +175,17 @@ function EventCreation({ event }) {
                 value={title ?? ''}
               />
             </FloatingLabel>
+
+            <Form.Group controlId="pictureSelect" className="mb-3 col-10">
+              <Form.Label>Affiche</Form.Label>
+              <Form.Control
+                type="file"
+                label="Image"
+                name="myFile"
+                accept=".jpeg, .png, .jpg"
+                onChange={(e) => handlePictureUpload(e)}
+              />
+            </Form.Group>
 
             <Form.Group controlId="championshipSelect" className="mb-3 col-10">
               <Form.Label>Championnat *

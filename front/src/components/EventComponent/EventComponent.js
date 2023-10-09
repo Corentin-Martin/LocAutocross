@@ -48,6 +48,7 @@ function EventComponent({ fromGestion }) {
         </Card.Header>
 
         <Card.Body>
+          {event.picture !== null && <img src={`http://localhost:8000/${event.picture}`} alt="affiche" />}
           <div onClick={handleShow}>CLIC</div>
         </Card.Body>
 
