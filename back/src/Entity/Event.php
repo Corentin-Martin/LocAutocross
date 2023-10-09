@@ -128,6 +128,13 @@ class Event
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"events"})
+     * @Groups({"event"})
+     */
+    private $picture;
+
     public function __construct()
     {
         $this->rentals = new ArrayCollection();
@@ -323,5 +330,17 @@ class Event
     public function __toString(): string
     {
         return $this->id;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }

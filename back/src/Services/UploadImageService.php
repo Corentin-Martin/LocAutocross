@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Event;
 use App\Entity\Vehicle;
 
 class UploadImageService
@@ -20,6 +21,8 @@ class UploadImageService
         }
         if (get_class($entity) === Vehicle::class) {
             $folder = 'vehicle-picture/';
+        } else if (get_class($entity) === Event::class) {
+            $folder = 'event-picture/';
         }
 
         $base64 = explode("base64,", $entity->getPicture());
