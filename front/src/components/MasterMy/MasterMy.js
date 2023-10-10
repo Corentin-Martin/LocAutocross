@@ -1,9 +1,8 @@
 import moment from 'moment';
-import { Accordion, ListGroup } from 'react-bootstrap';
-import ItemRental from './ItemRental/ItemRental';
-import ItemEvent from './ItemEvent/ItemEvent';
+import { Accordion } from 'react-bootstrap';
+import React from 'react';
 
-function MasterMy({ myThings, type }) {
+function MasterMy({ myThings, type, childComponent }) {
   return (
 
     <div className="col-12">
@@ -19,21 +18,9 @@ function MasterMy({ myThings, type }) {
                   ? pastOrFuture[0].event.start : pastOrFuture[0].start) < moment() ? `${pastOrFuture.length > 1 ? 'Mes ' : 'Mon '}évènement${pastOrFuture.length > 1 ? 's' : ''} passé${pastOrFuture.length > 1 ? 's' : ''}` : `${pastOrFuture.length > 1 ? 'Mes ' : 'Mon '}évènement${pastOrFuture.length > 1 ? 's' : ''} à venir`}
                 </Accordion.Header>
                 <Accordion.Body>
-                  <ListGroup className="col-12">
 
-                    {pastOrFuture.map((thing) => {
-                      if (type === 'rental') {
-                        return <ItemRental key={thing.id} rent={thing} />;
-                      }
+                  {React.cloneElement(childComponent, { pastOrFuture: pastOrFuture })}
 
-                      if (type === 'event') {
-                        return <ItemEvent key={thing.id} event={thing} />;
-                      }
-
-                      return null;
-                    })}
-
-                  </ListGroup>
                 </Accordion.Body>
               </Accordion.Item>
               )
