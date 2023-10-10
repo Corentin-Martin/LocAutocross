@@ -3,7 +3,7 @@ import './ConversationPreview.scss';
 import { Eye } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { setConversation } from '../../../actions/dashboard';
+import { setConversation, setElementToDisplay } from '../../../actions/dashboard';
 
 function ConversationPreview({ conv }) {
   const user = useSelector((state) => state.user.user);
@@ -11,7 +11,13 @@ function ConversationPreview({ conv }) {
   const dispatch = useDispatch();
 
   return (
-    <ListGroup.Item className="bg-secondary d-flex flex-column" style={{ cursor: 'pointer' }} onClick={() => dispatch(setConversation(conv))}>
+    <ListGroup.Item
+      className="bg-secondary d-flex flex-column"
+      style={{ cursor: 'pointer' }}
+      onClick={() => {
+        dispatch(setConversation(conv)); dispatch(setElementToDisplay(conv));
+      }}
+    >
       <div>
         <span className="fw-bold">{(conv.interestedUser.id === user.id)
           ? `${conv.rental.ownerUser.pseudo} ` : `${conv.interestedUser.pseudo} `}

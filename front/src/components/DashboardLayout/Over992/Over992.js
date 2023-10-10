@@ -14,6 +14,7 @@ function Over992({
     <Row className="d-flex justify-content-center">
       <Col className="col-12 col-lg-6 d-flex flex-column">
         {myThings}
+        {infos !== null && (
         <CSSTransition
           in={elementToDisplay !== null || isOpenCreationModal}
           timeout={1000}
@@ -22,6 +23,8 @@ function Over992({
         >
           {infos}
         </CSSTransition>
+        )}
+
       </Col>
       <Col className="col-12 col-lg-6 d-flex flex-column">
         {(elementToDisplay === null) && creativePart }
@@ -42,5 +45,12 @@ function Over992({
 
   );
 }
+
+Over992.defaultProps = {
+  infos: null,
+  creativePart: null,
+  myThings: null,
+  detail: null,
+};
 
 export default Over992;

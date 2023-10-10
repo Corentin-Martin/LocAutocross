@@ -16,4 +16,11 @@ function Under992({
   );
 }
 
+Under992.defaultProps = {
+  infos: null,
+  creativePart: null,
+  myThings: null,
+  detail: null,
+};
+
 export default Under992;

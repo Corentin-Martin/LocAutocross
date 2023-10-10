@@ -33,4 +33,11 @@ function DashboardLayout({
   );
 }
 
+DashboardLayout.defaultProps = {
+  infos: null,
+  creativePart: null,
+  myThings: null,
+  detail: null,
+  title: null,
+};
 export default DashboardLayout;

@@ -1,25 +1,15 @@
-import { useState } from 'react';
 import './MyConversations.scss';
-import { Accordion, ListGroup, Spinner } from 'react-bootstrap';
+import { Accordion, ListGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import ConversationPreview from './ConversationPreview/ConversationPreview';
 
 function MyConversations() {
   const conversations = useSelector((state) => state.user.conversations);
-  // const [conversations, setConversations] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  // const conversation = useSelector((state) => state.dashboard.conversation);
 
   return (
     <div className="d-flex flex-column align-items-center col-12 mt-3">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      )
-        : (
-          <div className="col-12">
-            {((conversations.unread.length > 0 && conversations.read.length > 0)
+
+      {((conversations.unread.length > 0 && conversations.read.length > 0)
             || (conversations.unread.length > 0 && conversations.read.length === 0)
             || (conversations.unread.length === 0 && conversations.read.length > 0))
             && (
@@ -51,10 +41,9 @@ function MyConversations() {
               )))}
             </Accordion>
             )}
-            {(conversations.unread.length === 0 && conversations.read.length === 0)
+      {(conversations.unread.length === 0 && conversations.read.length === 0)
             && <p className="text-center">Vous n'avez encore jamais entamé de conversation</p>}
-          </div>
-        )}
+
     </div>
   );
 }
