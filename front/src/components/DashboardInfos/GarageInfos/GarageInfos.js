@@ -1,11 +1,10 @@
-import { Card, Spinner } from 'react-bootstrap';
-import './GarageInfos.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { Card, Spinner } from 'react-bootstrap';
 import { EyeFill } from 'react-bootstrap-icons';
-import AxiosPrivate from '../../utils/AxiosPrivate';
-import { setElementToDisplay } from '../../actions/dashboard';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
+import { setElementToDisplay } from '../../../actions/dashboard';
 
 function GarageInfos() {
   const vehicles = useSelector((state) => state.dashboard.myVehicles);
@@ -53,16 +52,14 @@ function GarageInfos() {
         console.error(err);
       });
   };
-
   return (
-    <div className="mt-3 text-center" style={{ flexGrow: '1' }}>
-
+    <div>
       {isLoading ? (
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <Card style={{ width: '100%', height: '100%' }} className="d-flex justify-content-center align-items-center">
+        <>
           <Card.Title>Les informations de votre garage</Card.Title>
           {length > 0 ? (
             <>
@@ -113,8 +110,7 @@ function GarageInfos() {
               </Card.Text>
             </>
           ) : <Card.Subtitle className="mt-3">Votre garage est vide.</Card.Subtitle>}
-
-        </Card>
+        </>
       )}
     </div>
   );
