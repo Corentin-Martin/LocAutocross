@@ -38,7 +38,10 @@ function Rental() {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <CardComponent childComponent={<RentalComponent rental={elementToDisplay} />} />)}
+        <CardComponent
+          childComponent={<RentalComponent rental={elementToDisplay} />}
+        />
+      )}
     </div>
   );
 }

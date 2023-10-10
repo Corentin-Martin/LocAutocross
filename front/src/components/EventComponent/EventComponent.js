@@ -31,7 +31,7 @@ function EventComponent({ event }) {
   return (
     <>
       <Card.Header>
-        <h2>{event.title}</h2>
+        {event.title !== null ? <h2>{event.title}</h2> : ''}
         <p>Date de début : {moment(event.start).format('DD/MM/YYYY')}</p>
         <p>Date de fin : {moment(event.end).format('DD/MM/YYYY')}</p>
         {event.championship !== null

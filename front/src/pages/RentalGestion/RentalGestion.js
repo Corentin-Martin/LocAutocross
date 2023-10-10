@@ -1,8 +1,9 @@
-import { Row, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import './RentalGestion.scss';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { PlusCircleFill } from 'react-bootstrap-icons';
 import MyRentals from '../../components/MasterMy/MyRentals/MyRentals';
 import RentalComponent from '../../components/RentalComponent/RentalComponent';
 import FormAccordionCreation from '../../components/FormAccordionCreation/FormAccordionCreation';
@@ -10,6 +11,8 @@ import CardComponent from '../../components/CardComponent/CardComponent';
 import RentalCreation from '../../components/RentalCreation/RentalCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import MasterMy from '../../components/MasterMy/MasterMy';
+import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
+import DashboardInfos from '../../components/DashboardInfos/DashboardInfos';
 
 function RentalGestion() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
@@ -47,24 +50,24 @@ function RentalGestion() {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <Row className="d-flex justify-content-center">
+        <DashboardLayout
+          infos={<DashboardInfos myThings={myRentals} text="de location" type="rentals" />}
+          creativePart={(
+            <FormAccordionCreation
+              childComponent={<RentalCreation />}
+              message={<><PlusCircleFill size={24} className="me-2" /> Ajouter une proposition de location</>}
+            />
+      )}
+          detail={(
+            <CardComponent
+              fromGestion
+              childComponent={<RentalComponent rental={elementToDisplay} />}
+            />
+)}
+          myThings={<MasterMy myThings={myRentals} type="rental" childComponent={<MyRentals />} />}
+          title="Mes locations"
+        />
 
-          <h1 className="text-center">Mes locations</h1>
-
-          {elementToDisplay === null && (
-          <>
-            <FormAccordionCreation childComponent={<RentalCreation />} message="Créer une nouvelle proposition de location" />
-
-            <MasterMy myThings={myRentals} type="rental" childComponent={<MyRentals />} />
-          </>
-          )}
-
-          <CardComponent
-            fromGestion
-            childComponent={<RentalComponent rental={elementToDisplay} />}
-          />
-
-        </Row>
       )}
     </div>
   );

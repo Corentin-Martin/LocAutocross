@@ -7,12 +7,12 @@ function Under992({
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
   const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
   return (
-    <div className="Vehicles-under992">
+    <>
       {!isOpenCreationModal && infos}
       {(elementToDisplay === null) && creativePart}
       {(elementToDisplay === null && !isOpenCreationModal) && myThings}
       {(elementToDisplay !== null && elementToEdit === null) && detail}
-    </div>
+    </>
   );
 }
 

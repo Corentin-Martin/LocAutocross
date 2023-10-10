@@ -36,7 +36,10 @@ function EventPage() {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <CardComponent childComponent={<EventComponent event={elementToDisplay} />} />)}
+        <CardComponent
+          childComponent={<EventComponent event={elementToDisplay} />}
+        />
+      )}
     </div>
   );
 }
