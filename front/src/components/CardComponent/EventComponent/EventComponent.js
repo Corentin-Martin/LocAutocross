@@ -4,8 +4,9 @@ import {
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { setElementToDisplay } from '../../../actions/dashboard';
-import EventCreation from '../../EventCreation/EventCreation';
+import { useLocation } from 'react-router-dom';
+import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
+import EventCreation from '../../FormAccordionCreation/EventCreation/EventCreation';
 import RentalList from './RentalList/RentalList';
 
 function EventComponent({ event }) {
@@ -14,7 +15,6 @@ function EventComponent({ event }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => () => {
     dispatch(setElementToDisplay(null));
@@ -27,6 +27,20 @@ function EventComponent({ event }) {
       behavior: 'smooth',
     });
   }, [event]);
+
+  const location = useLocation();
+
+  const handleEditEvent = () => {
+    dispatch(setElementToEdit(event));
+    if (location.pathname === `/evenement/${event.id}`) {
+      setShow(true);
+    }
+    else {
+      dispatch(setElementToDisplay(null));
+
+      dispatch(setOpenCreation(true));
+    }
+  };
 
   return (
     <>
@@ -42,8 +56,8 @@ function EventComponent({ event }) {
       </Card.Header>
 
       <Card.Body>
-        <h1>{event.title}</h1>
-        {event.description !== null && <p>"{event.description}"</p>}
+
+        {event.description !== null && <p>{event.description}</p>}
         <Row>
           <Col sm={12} md={6} className="mb-3">
             <div className="Event-Box">
@@ -90,7 +104,7 @@ function EventComponent({ event }) {
           </Col>
         </Row>
         {event.picture !== null && <img src={`http://localhost:8000/${event.picture}`} alt="affiche" />}
-        <div onClick={handleShow}>CLIC</div>
+        <div onClick={handleEditEvent}>CLIC</div>
       </Card.Body>
 
       <Modal show={show} onHide={handleClose}>

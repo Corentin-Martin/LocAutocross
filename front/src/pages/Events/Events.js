@@ -6,7 +6,7 @@ import moment from 'moment';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import MyEvents from '../../components/MasterMy/MyEvents/MyEvents';
 import FormAccordionCreation from '../../components/FormAccordionCreation/FormAccordionCreation';
-import EventCreation from '../../components/EventCreation/EventCreation';
+import EventCreation from '../../components/FormAccordionCreation/EventCreation/EventCreation';
 import MasterMy from '../../components/MasterMy/MasterMy';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
@@ -16,6 +16,7 @@ import EventComponent from '../../components/CardComponent/EventComponent/EventC
 
 function Events() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
+  const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
 
   const [isLoading, setIsLoading] = useState(true);
   const [myEvents, setMyEvents] = useState([]);
@@ -56,13 +57,13 @@ function Events() {
           creativePart={(
             <FormAccordionCreation
               childComponent={<EventCreation />}
-              message={<><PlusCircleFill size={24} className="me-2" /> Ajouter un évènement</>}
+              message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Créer un évènement</> : 'Modifier un évènement'}
             />
         )}
           detail={(
             <CardComponent
               fromGestion
-              childComponent={<EventComponent rental={elementToDisplay} />}
+              childComponent={<EventComponent event={elementToDisplay} />}
             />
         )}
           myThings={<MasterMy myThings={myEvents} type="event" childComponent={<MyEvents />} />}

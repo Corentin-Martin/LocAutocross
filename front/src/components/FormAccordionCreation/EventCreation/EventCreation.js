@@ -6,14 +6,17 @@ import {
 import { X } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import AxiosPublic from '../../utils/AxiosPublic';
-import { setElementToDisplay, setOpenModalCreation } from '../../actions/dashboard';
-import TrackCreation from '../ModalCreation/TrackCreation/TrackCreation';
-import AxiosPrivate from '../../utils/AxiosPrivate';
-import handleFileUpload from '../../utils/UploadImage';
-import ModalCreation from '../ModalCreation/ModalCreation';
+import { useLocation } from 'react-router-dom';
+import AxiosPublic from '../../../utils/AxiosPublic';
+import { setElementToDisplay, setElementToEdit, setOpenModalCreation } from '../../../actions/dashboard';
+import TrackCreation from '../../ModalCreation/TrackCreation/TrackCreation';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
+import handleFileUpload from '../../../utils/UploadImage';
+import ModalCreation from '../../ModalCreation/ModalCreation';
 
-function EventCreation({ event }) {
+function EventCreation() {
+  const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
+
   const federations = useSelector((state) => state.generalCalendar.federations);
   const openModalCreation = useSelector((state) => state.dashboard.openModalCreation);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,24 +43,24 @@ function EventCreation({ event }) {
   };
 
   useEffect(() => {
-    if (event !== null) {
-      setTitle(event.title);
-      setChampChoice(event.championship !== null ? event.championship.id : 0);
+    if (elementToEdit !== null) {
+      setTitle(elementToEdit.title);
+      setChampChoice(elementToEdit.championship !== null ? elementToEdit.championship.id : 0);
       setFedeChoice(
-        event.championship !== null
+        elementToEdit.championship !== null
           ? federations.filter(
-            (fede) => fede.id === event.championship.federation.id,
+            (fede) => fede.id === elementToEdit.championship.federation.id,
           )[0] : { id: 0 },
       );
-      setPrivateEvent(!event.isOfficial);
-      setTrack(event.track);
-      setStart(event.start);
-      setEnd(event.end);
-      setAllDay(event.allDay);
-      setDescription(event.description);
-      setPicture(event.picture);
+      setPrivateEvent(!elementToEdit.isOfficial);
+      setTrack(elementToEdit.track);
+      setStart(elementToEdit.start);
+      setEnd(elementToEdit.end);
+      setAllDay(elementToEdit.allDay);
+      setDescription(elementToEdit.description);
+      setPicture(elementToEdit.picture);
     }
-  }, []);
+  }, [elementToEdit]);
 
   const dispatch = useDispatch();
 
@@ -111,7 +114,7 @@ function EventCreation({ event }) {
     e.preventDefault();
 
     if (verification()) {
-      if (event === null) {
+      if (elementToEdit === null) {
         AxiosPrivate.post('events', {
           track: track,
           championship: (champChoice !== 0 ? champChoice : null),
@@ -131,7 +134,7 @@ function EventCreation({ event }) {
       }
 
       else {
-        AxiosPrivate.put(`events/${event.id}`, {
+        AxiosPrivate.put(`events/${elementToEdit.id}`, {
           track: track.id,
           championship: (champChoice !== 0 ? champChoice : null),
           title: title,
@@ -150,6 +153,26 @@ function EventCreation({ event }) {
       }
     }
   };
+
+  const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isOpenCreationModal && !location.pathname.startsWith('/evenement/')) {
+      dispatch(setElementToEdit(null));
+
+      setFedeChoice(null);
+      setChampChoice(null);
+      setPrivateEvent(false);
+      setTrack(null);
+      setStart(moment().format('YYYY-MM-DDTHH:mm'));
+      setEnd(moment().format('YYYY-MM-DDTHH:mm'));
+      setAllDay(false);
+      setDescription(null);
+      setTitle(null);
+      setPicture(null);
+    }
+  }, [isOpenCreationModal]);
 
   return (
     <div>
@@ -335,7 +358,7 @@ function EventCreation({ event }) {
 
             <p className="mb-3">* Champs obligatoires</p>
 
-            <Button type="submit" variant="secondary">{event === null ? 'Créer' : 'Modifier'}</Button>
+            <Button type="submit" variant="secondary">{elementToEdit === null ? 'Créer' : 'Modifier'}</Button>
 
             {wrong.length > 0 && (
             <Alert variant="danger" className="text-center mt-2 col-10">
@@ -350,9 +373,5 @@ function EventCreation({ event }) {
     </div>
   );
 }
-
-EventCreation.defaultProps = {
-  event: null,
-};
 
 export default EventCreation;

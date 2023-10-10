@@ -19,7 +19,7 @@ function CardComponent({ fromGestion, childComponent }) {
   }
 
   return (
-    <div className="col-12 col-md-10">
+    <div className="col-12">
       <Card style={{ width: '100%', position: 'relative' }} className="mt-3 text-center bg-secondary">
         {fromGestion && (
         <XCircleFill

@@ -28,6 +28,12 @@ function RentalCreation() {
   const [events, setEvents] = useState([]);
   const [noEvents, setNoEvents] = useState(true);
 
+  console.log('fed', fedeChoice);
+  console.log('cha', champChoice);
+  console.log('pri', privateEvent);
+  console.log('ev', event);
+  console.log('noev', noEvents);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -156,16 +162,19 @@ function RentalCreation() {
   const location = useLocation();
 
   useEffect(() => {
-    if (!isOpenCreationModal && location.pathname !== `/location/${elementToEdit.id}`) {
+    if (!isOpenCreationModal && !location.pathname.startsWith('/location/')) {
       dispatch(setElementToEdit(null));
 
       setVehicle(null);
-      setEvent('');
-      setPrice('');
-      setDescription('');
+      setEvent(null);
+      setPrice(null);
+      setDescription(null);
       setStatus(0);
       setFedeChoice(null);
       setChampChoice(null);
+      setPrivateEvent(false);
+      setNoEvents(true);
+      setEvents([]);
     }
   }, [isOpenCreationModal]);
 
