@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import {
-  Button, FloatingLabel, Form, Modal,
+  Button, FloatingLabel, Form,
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { setNewTrack, setOpenTrackCreation } from '../../actions/dashboard';
-import AxiosPrivate from '../../utils/AxiosPrivate';
+import {
+  setNewItemByModal, setOpenModalCreation,
+} from '../../../actions/dashboard';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
 
 function TrackCreation() {
   const [suggestions, setSuggestions] = useState([]);
@@ -66,8 +68,8 @@ function TrackCreation() {
           latitude: cityObject[0].lat,
           longitude: cityObject[0].lng,
         }).then((response) => {
-          dispatch(setOpenTrackCreation(false));
-          dispatch(setNewTrack(response.data));
+          dispatch(setOpenModalCreation(false));
+          dispatch(setNewItemByModal(response.data));
         })
           .catch((error) => {
             console.error(error);
@@ -80,43 +82,39 @@ function TrackCreation() {
   };
 
   return (
-    <Modal show onHide={() => dispatch(setOpenTrackCreation(false))}>
-      <Modal.Header closeButton>
-        <Modal.Title>Nouveau circuit</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="brandSelect" className="mb-3 col-10">
-            <Form.Label>Ville *</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Sélectionnez une ville"
-              list="citiesList"
-              onChange={handleCitySearch}
-            />
-            <datalist id="citiesList">
-              {suggestions.map((oneCity) => (
-                <option key={oneCity.postalCode + Math.random()} value={`${oneCity.placeName} / ${oneCity.postalCode} / ${oneCity.adminName2}`} />
-              ))}
-            </datalist>
-          </Form.Group>
 
-          <FloatingLabel
-            controlId="floatingInput"
-            label="Nom du circuit"
-            className="mb-3 col-10"
-          >
-            <Form.Control
-              onChange={(event) => {
-                setName(event.currentTarget.value);
-              }}
-              type="text"
-              placeholder="Nom du circuit"
-              value={name}
-            />
-          </FloatingLabel>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group controlId="brandSelect" className="mb-3 col-10">
+        <Form.Label>Ville *</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Sélectionnez une ville"
+          list="citiesList"
+          onChange={handleCitySearch}
+        />
+        <datalist id="citiesList">
+          {suggestions.map((oneCity) => (
+            <option key={oneCity.postalCode + Math.random()} value={`${oneCity.placeName} / ${oneCity.postalCode} / ${oneCity.adminName2}`} />
+          ))}
+        </datalist>
+      </Form.Group>
 
-          {wrong
+      <FloatingLabel
+        controlId="floatingInput"
+        label="Nom du circuit"
+        className="mb-3 col-10"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setName(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="Nom du circuit"
+          value={name}
+        />
+      </FloatingLabel>
+
+      {wrong
           && (
           <div className="text-danger mt-2 text-center">
             Le format de la ville n'est pas correct. Vous
@@ -124,11 +122,8 @@ function TrackCreation() {
           </div>
           )}
 
-          <Button type="submit">Créer</Button>
-        </Form>
-      </Modal.Body>
-
-    </Modal>
+      <Button type="submit">Créer</Button>
+    </Form>
 
   );
 }

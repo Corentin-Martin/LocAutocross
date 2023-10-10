@@ -9,13 +9,14 @@ import moment from 'moment';
 import {
   setElementToDisplay,
   setElementToEdit,
-  setMyVehicles, setOpenBrandCreation, setOpenCreation,
+  setMyVehicles, setOpenCreation, setOpenModalCreation,
 } from '../../actions/dashboard';
 import Checkbox from './Checkbox/Checkbox';
-import BrandCreation from '../BrandCreation/BrandCreation';
+import BrandCreation from '../ModalCreation/BrandCreation/BrandCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import AxiosPublic from '../../utils/AxiosPublic';
 import handleFileUpload from '../../utils/UploadImage';
+import ModalCreation from '../ModalCreation/ModalCreation';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
@@ -35,7 +36,7 @@ function VehicleCreation() {
   const [year, setYear] = useState('2023-01-01');
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [categories, setCategories] = useState([]);
-  const newBrand = useSelector((state) => state.dashboard.newBrand);
+  const newBrand = useSelector((state) => state.dashboard.newItemByModal);
 
   const dispatch = useDispatch();
 
@@ -233,11 +234,11 @@ function VehicleCreation() {
     }
   }, [isOpenCreationModal]);
 
-  const openBrandCreation = useSelector((state) => state.dashboard.openBrandCreation);
+  const openModalCreation = useSelector((state) => state.dashboard.openModalCreation);
 
   return (
     <>
-      {openBrandCreation && <BrandCreation />}
+      {openModalCreation && <ModalCreation childComponent={<BrandCreation />} />}
       <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
         <Form.Group controlId="pictureSelect" className="mb-3 col-10">
           <Form.Label>Photo</Form.Label>
@@ -280,7 +281,7 @@ function VehicleCreation() {
             <span
               className="badge bg-primary text-black p-1"
               style={{ cursor: 'pointer' }}
-              onClick={() => dispatch(setOpenBrandCreation(true))}
+              onClick={() => dispatch(setOpenModalCreation(true))}
             >Voulez-vous ajouter une nouvelle marque ?
             </span>
           </div>

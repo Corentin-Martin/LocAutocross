@@ -38,34 +38,18 @@ export const setConversation = (conversation) => ({
   },
 });
 
-export const SET_NEW_BRAND = 'SET_NEW_BRAND';
-export const setNewBrand = (newBrand) => ({
-  type: SET_NEW_BRAND,
+export const SET_OPEN_MODAL_CREATION = 'SET_OPEN_MODAL_CREATION';
+export const setOpenModalCreation = (bool) => ({
+  type: SET_OPEN_MODAL_CREATION,
   payload: {
-    newBrand: newBrand,
+    openModalCreation: bool,
   },
 });
 
-export const SET_OPEN_BRAND_CREATION = 'SET_OPEN_BRAND_CREATION';
-export const setOpenBrandCreation = (bool) => ({
-  type: SET_OPEN_BRAND_CREATION,
+export const SET_NEW_ITEM_BY_MODAL = 'SET_NEW_ITEM_BY_MODAL';
+export const setNewItemByModal = (newItemByModal) => ({
+  type: SET_NEW_ITEM_BY_MODAL,
   payload: {
-    openBrandCreation: bool,
-  },
-});
-
-export const SET_NEW_TRACK = 'SET_NEW_TRACK';
-export const setNewTrack = (newTrack) => ({
-  type: SET_NEW_TRACK,
-  payload: {
-    newTrack: newTrack,
-  },
-});
-
-export const SET_OPEN_TRACK_CREATION = 'SET_OPEN_TRACK_CREATION';
-export const setOpenTrackCreation = (bool) => ({
-  type: SET_OPEN_TRACK_CREATION,
-  payload: {
-    openTrackCreation: bool,
+    newItemByModal: newItemByModal,
   },
 });

@@ -7,14 +7,15 @@ import { X } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import AxiosPublic from '../../utils/AxiosPublic';
-import { setElementToDisplay, setOpenTrackCreation } from '../../actions/dashboard';
-import TrackCreation from '../TrackCreation/TrackCreation';
+import { setElementToDisplay, setOpenModalCreation } from '../../actions/dashboard';
+import TrackCreation from '../ModalCreation/TrackCreation/TrackCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import handleFileUpload from '../../utils/UploadImage';
+import ModalCreation from '../ModalCreation/ModalCreation';
 
 function EventCreation({ event }) {
   const federations = useSelector((state) => state.generalCalendar.federations);
-  const openTrackCreation = useSelector((state) => state.dashboard.openTrackCreation);
+  const openModalCreation = useSelector((state) => state.dashboard.openModalCreation);
   const [isLoading, setIsLoading] = useState(true);
   const [tracks, setTracks] = useState(null);
 
@@ -31,7 +32,7 @@ function EventCreation({ event }) {
   const [title, setTitle] = useState(null);
   const [picture, setPicture] = useState(null);
 
-  const newTrack = useSelector((state) => state.dashboard.newTrack);
+  const newTrack = useSelector((state) => state.dashboard.newItemByModal);
 
   const handlePictureUpload = async (e) => {
     const base64 = await handleFileUpload(e);
@@ -159,7 +160,7 @@ function EventCreation({ event }) {
       ) : (
         <>
 
-          {openTrackCreation && <TrackCreation />}
+          {openModalCreation && <ModalCreation childComponent={<TrackCreation />} />}
           <Form className="d-flex flex-column align-items-center bg-primary rounded-4 p-2 col-12" onSubmit={handleSubmit}>
 
             <FloatingLabel
@@ -277,7 +278,7 @@ function EventCreation({ event }) {
                 <span
                   className="badge bg-primary text-black p-1"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => dispatch(setOpenTrackCreation(true))}
+                  onClick={() => dispatch(setOpenModalCreation(true))}
                 >Voulez-vous le créer ?
                 </span>
               </div>
