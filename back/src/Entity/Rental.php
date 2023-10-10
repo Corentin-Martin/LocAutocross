@@ -94,11 +94,13 @@ class Rental
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"rentals"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"rentals"})
      */
     private $updatedAt;
 

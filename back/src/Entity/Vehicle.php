@@ -44,6 +44,7 @@ class Vehicle
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"vehicles"})
      * @Groups({"vehicle"})
      * @Groups({"event"})
      * @Groups({"federations"})

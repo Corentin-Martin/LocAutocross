@@ -71,11 +71,15 @@ class Event
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $updatedAt;
 
