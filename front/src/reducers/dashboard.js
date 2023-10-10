@@ -1,52 +1,30 @@
 import {
   SET_CONVERSATION,
   SET_ELEMENT_TO_DISPLAY,
-
-  SET_ID_VEHICLE_TO_EDIT,
+  SET_ELEMENT_TO_EDIT,
   SET_MY_VEHICLES, SET_NEW_BRAND, SET_NEW_TRACK, SET_OPEN_BRAND_CREATION,
-  SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION, SET_VEHICLE,
+  SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION,
 } from '../actions/dashboard';
 
 const initialState = {
   isOpenCreationModal: false,
-  vehicle: null,
+
   myVehicles: null,
-  idToEdit: null,
   conversation: null,
   newBrand: null,
   openBrandCreation: false,
   newTrack: null,
   openTrackCreation: false,
   elementToDisplay: null,
+  elementToEdit: null,
 };
 
 function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    /*
-    Exemple d'action
-    case SET_CONNECTED_USER:
-      return {
-        ...state,
-        connectedUser: action.payload.connectedUser,
-      };
-    */
-
     case SET_OPEN_CREATION:
       return {
         ...state,
         isOpenCreationModal: action.payload.isOpenCreationModal,
-      };
-
-    case SET_VEHICLE:
-      return {
-        ...state,
-        vehicle: action.payload.vehicle,
-      };
-
-    case SET_ID_VEHICLE_TO_EDIT:
-      return {
-        ...state,
-        idToEdit: action.payload.idToEdit,
       };
 
     case SET_MY_VEHICLES:
@@ -89,6 +67,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         elementToDisplay: action.payload.elementToDisplay,
+      };
+
+    case SET_ELEMENT_TO_EDIT:
+      return {
+        ...state,
+        elementToEdit: action.payload.elementToEdit,
       };
 
     default:

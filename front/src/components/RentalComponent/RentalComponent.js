@@ -4,11 +4,12 @@ import {
 } from 'react-bootstrap';
 import moment from 'moment/moment';
 import './RentalComponent.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import RentalUserbox from './RentalUserbox/RentalUserbox';
+import { setElementToDisplay } from '../../actions/dashboard';
 
 function RentalComponent({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -16,10 +17,17 @@ function RentalComponent({ rental }) {
   const statusMatching = useSelector((state) => state.user.statusMatching);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <>
-      <Card.Header>
+      <Card.Header
+        onClick={() => {
+          dispatch(setElementToDisplay(null));
+          navigate(`/evenement/${rental.event.id}`);
+        }}
+        style={{ cursor: 'pointer' }}
+      >
         <h2>{rental.event.title}</h2>
         <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
         <p>Date de fin : {moment(rental.event.start).format('DD/MM/YYYY')}</p>

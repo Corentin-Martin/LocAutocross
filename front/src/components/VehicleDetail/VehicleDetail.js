@@ -6,11 +6,13 @@ import moment from 'moment';
 import { PencilSquare, XCircleFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
-import { setIdToEdit, setOpenCreation, setVehicleForDetails } from '../../actions/dashboard';
+import {
+  setElementToDisplay, setElementToEdit, setOpenCreation,
+} from '../../actions/dashboard';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
 function VehicleDetail() {
-  const vehicle = useSelector((state) => state.dashboard.vehicle);
+  const vehicle = useSelector((state) => state.dashboard.elementToDisplay);
 
   const dispatch = useDispatch();
   if (vehicle === null) {
@@ -26,7 +28,7 @@ function VehicleDetail() {
       <XCircleFill
         size={36}
         className="text-black VehicleDetail-CloseIcon"
-        onClick={() => dispatch(setVehicleForDetails(null))}
+        onClick={() => dispatch(setElementToDisplay(null))}
       />
       <Card.Body style={{ position: 'relative' }}>
         <div className="VehicleDetail-DeleteIcon">
@@ -36,9 +38,10 @@ function VehicleDetail() {
           size={24}
           className="text-tertiary VehicleDetail-EditIcon"
           onClick={() => {
-            dispatch(setIdToEdit(vehicle.id));
+            dispatch(setElementToEdit(vehicle));
+            dispatch(setElementToDisplay(null));
+
             dispatch(setOpenCreation(true));
-            dispatch(setVehicleForDetails(null));
           }}
         />
         <Card.Title>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</Card.Title>

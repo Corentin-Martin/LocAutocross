@@ -6,6 +6,7 @@ import { setElementToDisplay } from '../../../actions/dashboard';
 function RentalList({ rentals }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   return (
 
     (rentals.length === 0)
@@ -19,8 +20,8 @@ function RentalList({ rentals }) {
               <li
                 className="RentalList-Li"
                 onClick={(() => {
+                  dispatch(setElementToDisplay(null));
                   navigate(`/location/${rental.id}`);
-                  { /* TO DO ENVOYER EVENT ET VOIR SWITH ELEMENT TO DISPLAY */ }
                 })}
                 key={rental.id}
               >

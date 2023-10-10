@@ -6,8 +6,10 @@ import { PencilSquare, ThreeDots } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
 import {
-  setIdToEdit,
-  setOpenCreation, setVehicleForDetails,
+  setElementToDisplay,
+  setElementToEdit,
+
+  setOpenCreation,
 } from '../../actions/dashboard';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import AxiosPrivate from '../../utils/AxiosPrivate';
@@ -33,7 +35,7 @@ function MyVehicles() {
   const handleSeeDetails = (id) => {
     AxiosPrivate.get(`vehicles/${id}`)
       .then((response) => {
-        dispatch(setVehicleForDetails(response.data));
+        dispatch(setElementToDisplay(response.data));
       })
       .catch((err) => {
         console.error(err);
@@ -81,7 +83,7 @@ function MyVehicles() {
                   size={24}
                   className="text-secondary MyVehicles-Carousel-EditIcon"
                   onClick={() => {
-                    dispatch(setIdToEdit(vehicle.id));
+                    dispatch(setElementToEdit(vehicle));
                     dispatch(setOpenCreation(true));
                   }}
                 />
@@ -105,7 +107,7 @@ function MyVehicles() {
                   size={24}
                   className="text-secondary MyVehicles-Carousel-EditIcon"
                   onClick={() => {
-                    dispatch(setIdToEdit(vehicle.id));
+                    dispatch(setElementToEdit(vehicle));
                     dispatch(setOpenCreation(true));
                   }}
                 />

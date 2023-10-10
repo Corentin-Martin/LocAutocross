@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { EyeFill } from 'react-bootstrap-icons';
 import AxiosPrivate from '../../utils/AxiosPrivate';
-import { setVehicleForDetails } from '../../actions/dashboard';
+import { setElementToDisplay } from '../../actions/dashboard';
 
 function GarageInfos() {
   const vehicles = useSelector((state) => state.dashboard.myVehicles);
@@ -47,7 +47,7 @@ function GarageInfos() {
       `vehicles/${id}`,
     )
       .then((response) => {
-        dispatch(setVehicleForDetails(response.data));
+        dispatch(setElementToDisplay(response.data));
       })
       .catch((err) => {
         console.error(err);

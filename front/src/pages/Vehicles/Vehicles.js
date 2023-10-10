@@ -2,6 +2,7 @@ import { CSSTransition } from 'react-transition-group';
 import { Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
+import { PlusCircleFill } from 'react-bootstrap-icons';
 import VehicleCreation from '../../components/VehicleCreation/VehicleCreation';
 import './Vehicles.scss';
 import MyVehicles from '../../components/MyVehicles/MyVehicles';
@@ -9,10 +10,13 @@ import MyVehicles from '../../components/MyVehicles/MyVehicles';
 import VehicleDetail from '../../components/VehicleDetail/VehicleDetail';
 import GarageInfos from '../../components/GarageInfos/GarageInfos';
 
+import FormAccordionCreation from '../../components/FormAccordionCreation/FormAccordionCreation';
+
 function Vehicles() {
-  const vehicle = useSelector((state) => state.dashboard.vehicle);
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
-  const idToEdit = useSelector((state) => state.dashboard.idToEdit);
+
+  const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
+  const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
 
   return (
     <Row className="d-flex justify-content-center">
@@ -21,9 +25,14 @@ function Vehicles() {
 
       <div className="Vehicles-under992">
         {!isOpenCreationModal && <GarageInfos />}
-        {(vehicle === null) && <VehicleCreation />}
-        {(vehicle === null && !isOpenCreationModal) && <MyVehicles />}
-        {(vehicle !== null && idToEdit === null) && <VehicleDetail />}
+        {(elementToDisplay === null) && (
+        <FormAccordionCreation
+          childComponent={<VehicleCreation />}
+          message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule</> : 'Modification de véhicule'}
+        />
+        )}
+        {(elementToDisplay === null && !isOpenCreationModal) && <MyVehicles />}
+        {(elementToDisplay !== null && elementToEdit === null) && <VehicleDetail />}
       </div>
 
       <div className="Vehicles-over992">
@@ -32,7 +41,7 @@ function Vehicles() {
           <Col className="col-12 col-lg-6 d-flex flex-column">
             <MyVehicles />
             <CSSTransition
-              in={vehicle !== null || isOpenCreationModal}
+              in={elementToDisplay !== null || isOpenCreationModal}
               timeout={1000}
               classNames="your-component"
               unmountOnExit
@@ -41,9 +50,14 @@ function Vehicles() {
             </CSSTransition>
           </Col>
           <Col className="col-12 col-lg-6 d-flex flex-column">
-            {(vehicle === null) && <VehicleCreation />}
+            {(elementToDisplay === null) && (
+            <FormAccordionCreation
+              childComponent={<VehicleCreation />}
+              message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Ajouter un nouveau véhicule</> : 'Modification de véhicule'}
+            />
+            )}
             <CSSTransition
-              in={vehicle !== null}
+              in={elementToDisplay !== null}
               timeout={1000}
               classNames="your-component"
               unmountOnExit
@@ -51,7 +65,7 @@ function Vehicles() {
               <VehicleDetail />
             </CSSTransition>
 
-            {(vehicle === null && !isOpenCreationModal) && <GarageInfos />}
+            {(elementToDisplay === null && !isOpenCreationModal) && <GarageInfos />}
 
           </Col>
 
