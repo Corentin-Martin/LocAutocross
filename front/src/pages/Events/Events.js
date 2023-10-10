@@ -12,7 +12,7 @@ import AxiosPrivate from '../../utils/AxiosPrivate';
 import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import DashboardInfos from '../../components/DashboardInfos/DashboardInfos';
 import CardComponent from '../../components/CardComponent/CardComponent';
-import EventComponent from '../../components/EventComponent/EventComponent';
+import EventComponent from '../../components/CardComponent/EventComponent/EventComponent';
 
 function Events() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);

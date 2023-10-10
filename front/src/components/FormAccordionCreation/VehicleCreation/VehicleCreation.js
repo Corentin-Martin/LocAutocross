@@ -10,13 +10,13 @@ import {
   setElementToDisplay,
   setElementToEdit,
   setMyVehicles, setOpenCreation, setOpenModalCreation,
-} from '../../actions/dashboard';
+} from '../../../actions/dashboard';
 import Checkbox from './Checkbox/Checkbox';
-import BrandCreation from '../ModalCreation/BrandCreation/BrandCreation';
-import AxiosPrivate from '../../utils/AxiosPrivate';
-import AxiosPublic from '../../utils/AxiosPublic';
-import handleFileUpload from '../../utils/UploadImage';
-import ModalCreation from '../ModalCreation/ModalCreation';
+import BrandCreation from '../../ModalCreation/BrandCreation/BrandCreation';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
+import AxiosPublic from '../../../utils/AxiosPublic';
+import handleFileUpload from '../../../utils/UploadImage';
+import ModalCreation from '../../ModalCreation/ModalCreation';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);

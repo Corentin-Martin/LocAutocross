@@ -4,8 +4,8 @@ import {
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { setElementToDisplay } from '../../actions/dashboard';
-import EventCreation from '../EventCreation/EventCreation';
+import { setElementToDisplay } from '../../../actions/dashboard';
+import EventCreation from '../../EventCreation/EventCreation';
 import RentalList from './RentalList/RentalList';
 
 function EventComponent({ event }) {

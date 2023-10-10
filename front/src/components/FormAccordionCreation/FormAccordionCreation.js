@@ -30,6 +30,10 @@ function FormAccordionCreation({ childComponent, message }) {
     }
   }, [elementToDisplay]);
 
+  useEffect(() => () => {
+    dispatch(setOpenCreation(false));
+  }, []);
+
   return (
     <div className="d-flex flex-column align-items-center">
       <Accordion

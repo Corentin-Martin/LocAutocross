@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../CardComponent/CardComponent';
-import EventComponent from '../EventComponent/EventComponent';
+import EventComponent from '../CardComponent/EventComponent/EventComponent';
 import { setElementToDisplay } from '../../actions/dashboard';
 
 function GeneralCalendar() {

@@ -1,3 +1,4 @@
+import './CardComponent.scss';
 import { Card } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +24,7 @@ function CardComponent({ fromGestion, childComponent }) {
         {fromGestion && (
         <XCircleFill
           size={24}
-          className="text-black VehicleDetail-CloseIcon"
+          className="text-black CardComponent-CloseIcon"
           onClick={() => dispatch(setElementToDisplay(null))}
         />
         )}

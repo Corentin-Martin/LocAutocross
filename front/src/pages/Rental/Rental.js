@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
-import RentalComponent from '../../components/RentalComponent/RentalComponent';
+import RentalComponent from '../../components/CardComponent/RentalComponent/RentalComponent';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../../components/CardComponent/CardComponent';

@@ -6,10 +6,10 @@ import './RentalUserbox.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { setConversation } from '../../../actions/dashboard';
-import ModalChat from '../../ModalChat/ModalChat';
+import { setConversation } from '../../../../actions/dashboard';
+import ModalChat from '../../../ModalChat/ModalChat';
 import UserReservationControl from './UserReservationControl/UserReservationControl';
-import AxiosPrivate from '../../../utils/AxiosPrivate';
+import AxiosPrivate from '../../../../utils/AxiosPrivate';
 
 function RentalUserbox({ rental }) {
   const [isLoading, setIsLoading] = useState(true);

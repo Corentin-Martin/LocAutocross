@@ -6,10 +6,10 @@ import moment from 'moment/moment';
 import './RentalComponent.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import defaultKart from '../../assets/images/defaultKart.jpeg';
+import defaultKart from '../../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import RentalUserbox from './RentalUserbox/RentalUserbox';
-import { setElementToDisplay } from '../../actions/dashboard';
+import { setElementToDisplay } from '../../../actions/dashboard';
 
 function RentalComponent({ rental }) {
   const user = useSelector((state) => state.user.user);

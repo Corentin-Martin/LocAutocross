@@ -1,7 +1,7 @@
 import { Button, Card } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { setConversation, setElementToDisplay } from '../../../../actions/dashboard';
-import AxiosPrivate from '../../../../utils/AxiosPrivate';
+import { setConversation, setElementToDisplay } from '../../../../../actions/dashboard';
+import AxiosPrivate from '../../../../../utils/AxiosPrivate';
 
 function ReservationAction({ rental, associateConv, handleShow }) {
   const dispatch = useDispatch();

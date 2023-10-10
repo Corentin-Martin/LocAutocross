@@ -17,15 +17,17 @@ function DashboardInfos({ myThings, text, type }) {
 
   useEffect(() => {
     if (myThings) {
-      setLength(myThings.length);
+      const thingsToCompare = (type !== 'vehicles' ? [...myThings[0], ...myThings[1]] : myThings);
 
-      const byCreatedAt = myThings.sort((a, b) => {
+      setLength(thingsToCompare.length);
+
+      const byCreatedAt = thingsToCompare.sort((a, b) => {
         const dateA = new Date(a.createdAt);
         const dateB = new Date(b.createdAt);
         return dateA - dateB;
       });
 
-      const byUpdatedAt = myThings
+      const byUpdatedAt = thingsToCompare
         .filter((vehicle) => vehicle.updatedAt !== null)
         .sort((a, b) => {
           const dateA = new Date(a.updatedAt);

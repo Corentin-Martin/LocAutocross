@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './RentalList.scss';
-import { setElementToDisplay } from '../../../actions/dashboard';
+import { setElementToDisplay } from '../../../../actions/dashboard';
 
 function RentalList({ rentals }) {
   const navigate = useNavigate();

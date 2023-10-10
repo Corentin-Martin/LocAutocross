@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { PlusCircleFill } from 'react-bootstrap-icons';
 import MyRentals from '../../components/MasterMy/MyRentals/MyRentals';
-import RentalComponent from '../../components/RentalComponent/RentalComponent';
+import RentalComponent from '../../components/CardComponent/RentalComponent/RentalComponent';
 import FormAccordionCreation from '../../components/FormAccordionCreation/FormAccordionCreation';
 import CardComponent from '../../components/CardComponent/CardComponent';
-import RentalCreation from '../../components/RentalCreation/RentalCreation';
+import RentalCreation from '../../components/FormAccordionCreation/RentalCreation/RentalCreation';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import MasterMy from '../../components/MasterMy/MasterMy';
 import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
@@ -16,6 +16,7 @@ import DashboardInfos from '../../components/DashboardInfos/DashboardInfos';
 
 function RentalGestion() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
+  const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
 
   const [isLoading, setIsLoading] = useState(true);
   const [myRentals, setMyRentals] = useState([]);
@@ -55,7 +56,7 @@ function RentalGestion() {
           creativePart={(
             <FormAccordionCreation
               childComponent={<RentalCreation />}
-              message={<><PlusCircleFill size={24} className="me-2" /> Ajouter une proposition de location</>}
+              message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Créer une proposition de location</> : 'Modifier une location'}
             />
       )}
           detail={(

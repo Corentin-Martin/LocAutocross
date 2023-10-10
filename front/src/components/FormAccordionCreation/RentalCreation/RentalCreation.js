@@ -5,12 +5,14 @@ import './RentalCreation.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { X } from 'react-bootstrap-icons';
-import { setElementToDisplay } from '../../actions/dashboard';
-import AxiosPrivate from '../../utils/AxiosPrivate';
+import { setElementToDisplay, setElementToEdit } from '../../../actions/dashboard';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
 
-function RentalCreation({ rental }) {
+function RentalCreation() {
+  const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
+
   const myVehicles = useSelector((state) => state.dashboard.myVehicles);
   const federations = useSelector((state) => state.generalCalendar.federations);
 
@@ -30,25 +32,25 @@ function RentalCreation({ rental }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (rental !== null) {
-      setVehicle(rental.vehicle.id);
-      setEvent(rental.event.id);
-      setPrice(rental.price);
-      setDescription(rental.description);
-      setStatus(parseInt(rental.status, 10));
+    if (elementToEdit !== null) {
+      setVehicle(elementToEdit.vehicle.id);
+      setEvent(elementToEdit.event.id);
+      setPrice(elementToEdit.price);
+      setDescription(elementToEdit.description);
+      setStatus(parseInt(elementToEdit.status, 10));
 
-      if (!rental.event.isOfficial) {
+      if (!elementToEdit.event.isOfficial) {
         setPrivateEvent(true);
       }
       else {
         setFedeChoice(...federations.filter(
-          (fd) => fd.id === rental.event.championship.federation.id,
+          (fd) => fd.id === elementToEdit.event.championship.federation.id,
         ));
 
-        setChampChoice(rental.event.championship);
+        setChampChoice(elementToEdit.event.championship);
       }
     }
-  }, []);
+  }, [elementToEdit]);
 
   useEffect(() => {
     if (champChoice !== null) {
@@ -106,7 +108,7 @@ function RentalCreation({ rental }) {
     e.preventDefault();
 
     if (verification()) {
-      if (rental === null) {
+      if (elementToEdit === null) {
         AxiosPrivate.post(
           'rentals',
           {
@@ -125,12 +127,12 @@ function RentalCreation({ rental }) {
           });
       }
       else {
-        const existUser = (rental.tenantUser !== null ? rental.tenantUser.id : null);
+        const existUser = (elementToEdit.tenantUser !== null ? elementToEdit.tenantUser.id : null);
 
         const tenantUser = (status === 0) ? null : existUser;
 
         AxiosPrivate.put(
-          `rentals/${rental.id}`,
+          `rentals/${elementToEdit.id}`,
           {
             vehicle: vehicle,
             event: event,
@@ -150,6 +152,23 @@ function RentalCreation({ rental }) {
     }
   };
 
+  const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isOpenCreationModal && location.pathname !== `/location/${elementToEdit.id}`) {
+      dispatch(setElementToEdit(null));
+
+      setVehicle(null);
+      setEvent('');
+      setPrice('');
+      setDescription('');
+      setStatus(0);
+      setFedeChoice(null);
+      setChampChoice(null);
+    }
+  }, [isOpenCreationModal]);
+
   return (
 
     <Form className="d-flex flex-column align-items-center bg-primary rounded-4 p-2 col-12" onSubmit={handleSubmit}>
@@ -160,7 +179,7 @@ function RentalCreation({ rental }) {
           <>
             <Form.Label>Véhicule *</Form.Label>
             <Form.Select
-              defaultValue={vehicle ?? ''}
+              defaultValue={`${vehicle}`}
               aria-label="Default select example"
               onChange={(e) => setVehicle(e.currentTarget.value)}
             >
@@ -310,7 +329,7 @@ function RentalCreation({ rental }) {
       <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
         <Form.Label>Statut</Form.Label>
 
-        {(rental === null || (rental !== null && rental.status === '0')) && (
+        {(elementToEdit === null || (elementToEdit !== null && elementToEdit.status === '0')) && (
         <Form.Check // prettier-ignore
           type="switch"
           id="custom-switch"
@@ -319,22 +338,22 @@ function RentalCreation({ rental }) {
         />
         )}
 
-        {rental !== null && rental.status < 4 && rental.status > 0 && (
+        {elementToEdit !== null && elementToEdit.status < 4 && elementToEdit.status > 0 && (
         <Form.Check // prettier-ignore
           type="switch"
           id="custom-switch"
           label="Masquer cette annonce"
-          onChange={() => setStatus(status !== 0 ? 0 : parseInt(rental.status, 10))}
+          onChange={() => setStatus(status !== 0 ? 0 : parseInt(elementToEdit.status, 10))}
         />
         )}
-        {(rental !== null && status === 0 && rental.tenantUser !== null)
+        {(elementToEdit !== null && status === 0 && elementToEdit.tenantUser !== null)
                     && <p className="alert alert-danger text-center">Attention, si vous masquez cette annonce. La réservation ou demande de réservation associée sera supprimée.</p>}
 
       </Form.Group>
 
       <p className="mb-3">* Champs obligatoires</p>
 
-      <Button type="submit" variant="secondary">{rental === null ? 'Créer' : 'Modifier'}</Button>
+      <Button type="submit" variant="secondary">{elementToEdit === null ? 'Créer' : 'Modifier'}</Button>
       {wrong.length > 0 && (
       <Alert variant="danger" className="text-center mt-2 col-10">
         <Alert.Heading>Erreur{wrong.length > 1 ? 's' : ''}</Alert.Heading>
@@ -347,7 +366,4 @@ function RentalCreation({ rental }) {
   );
 }
 
-RentalCreation.defaultProps = {
-  rental: null,
-};
 export default RentalCreation;

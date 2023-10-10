@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { setElementToDisplay } from '../../../../../actions/dashboard';
-import AxiosPrivate from '../../../../../utils/AxiosPrivate';
+import { setElementToDisplay } from '../../../../../../actions/dashboard';
+import AxiosPrivate from '../../../../../../utils/AxiosPrivate';
 
 function UserReservationButton({ rentalId, status }) {
   const dispatch = useDispatch();

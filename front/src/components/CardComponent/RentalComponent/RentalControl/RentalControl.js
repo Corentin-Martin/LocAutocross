@@ -6,13 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import DeleteModal from '../../DeleteModal/DeleteModal';
-import { setConversation } from '../../../actions/dashboard';
+import { useLocation } from 'react-router-dom';
+import DeleteModal from '../../../DeleteModal/DeleteModal';
+import {
+  setConversation, setElementToDisplay, setElementToEdit, setOpenCreation,
+} from '../../../../actions/dashboard';
 
-import ModalChat from '../../ModalChat/ModalChat';
+import ModalChat from '../../../ModalChat/ModalChat';
 import ReservationAction from './ReservationAction/ReservationAction';
-import RentalCreation from '../../RentalCreation/RentalCreation';
-import AxiosPrivate from '../../../utils/AxiosPrivate';
+import RentalCreation from '../../../FormAccordionCreation/RentalCreation/RentalCreation';
+import AxiosPrivate from '../../../../utils/AxiosPrivate';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -57,7 +60,20 @@ function RentalControl({ rental }) {
 
   const [showEdit, setShowEdit] = useState(false);
   const handleCloseEdit = () => setShowEdit(false);
-  const handleShowEdit = () => setShowEdit(true);
+
+  const location = useLocation();
+
+  const handleEditRental = () => {
+    dispatch(setElementToEdit(rental));
+    if (location.pathname === `/location/${rental.id}`) {
+      setShowEdit(true);
+    }
+    else {
+      dispatch(setElementToDisplay(null));
+
+      dispatch(setOpenCreation(true));
+    }
+  };
 
   useEffect(() => {
     setShowEdit(false);
@@ -90,7 +106,12 @@ function RentalControl({ rental }) {
                     <>
                       <div className="d-flex justify-content-between mb-2">
 
-                        <Card.Text className="d-flex align-items-center" style={{ cursor: 'pointer' }} onClick={() => handleShowEdit()}><PencilSquare size={24} className="me-2" /> Editer</Card.Text>
+                        <Card.Text
+                          className="d-flex align-items-center"
+                          style={{ cursor: 'pointer' }}
+                          onClick={handleEditRental}
+                        ><PencilSquare size={24} className="me-2" /> Editer
+                        </Card.Text>
                         <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}><DeleteModal type="rentals" idToDelete={rental.id} /></Card.Text>
                       </div>
 
@@ -128,7 +149,7 @@ function RentalControl({ rental }) {
           <Modal show={showEdit} onHide={handleCloseEdit}>
             <Modal.Header closeButton />
             <Modal.Body>
-              <RentalCreation rental={rental} />
+              <RentalCreation />
             </Modal.Body>
           </Modal>
         </>

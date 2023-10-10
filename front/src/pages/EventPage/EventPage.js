@@ -6,7 +6,7 @@ import { Spinner } from 'react-bootstrap';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../../components/CardComponent/CardComponent';
-import EventComponent from '../../components/EventComponent/EventComponent';
+import EventComponent from '../../components/CardComponent/EventComponent/EventComponent';
 
 function EventPage() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
