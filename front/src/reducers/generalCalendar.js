@@ -1,8 +1,9 @@
-import { SET_FEDERATIONS } from '../actions/generalCalendar';
+import { SET_FEDERATIONS, SET_SEARCH } from '../actions/generalCalendar';
 
 const initialState = {
 
   federations: null,
+  search: null,
 };
 
 function reducer(state = initialState, action = {}) {
@@ -11,6 +12,12 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         federations: action.payload.federations,
+      };
+
+    case SET_SEARCH:
+      return {
+        ...state,
+        search: action.payload.search,
       };
 
     default:
