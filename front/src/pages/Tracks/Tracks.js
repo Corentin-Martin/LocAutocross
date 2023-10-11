@@ -29,7 +29,6 @@ function Tracks() {
       AxiosPublic.get(`championships/${search}?tracks`)
         .then((response) => {
           const tracksToSend = [];
-          console.log(response.data);
 
           response.data.tracks.forEach((track) => {
             tracksToSend.push(track);
