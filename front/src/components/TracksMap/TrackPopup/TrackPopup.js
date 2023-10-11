@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Popup } from 'react-leaflet';
 import { Spinner } from 'react-bootstrap';
-import moment from 'moment';
+import { useDispatch } from 'react-redux';
 import AxiosPublic from '../../../utils/AxiosPublic';
+import TrackComponent from '../../CardComponent/TrackComponent/TrackComponent';
+import CardComponent from '../../CardComponent/CardComponent';
+import { setElementToDisplay } from '../../../actions/dashboard';
+import './TrackPopup.scss';
 
 function TrackPopup({ trackId }) {
   const [isLoading, setIsLoading] = useState(true);
   const [track, setTrack] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     AxiosPublic.get(`tracks/${trackId}`)
       .then((response) => {
         setTrack(response.data);
         setIsLoading(false);
+        dispatch(setElementToDisplay(true));
       }).catch((error) => {
         console.error(error);
       });
@@ -24,16 +30,9 @@ function TrackPopup({ trackId }) {
           <span className="visually-hidden">Chargement...</span>
         </Spinner>
       ) : (
-        <>
-          <div>{track.city} - {track.postCode} - {track.department}</div>
-          {track.name !== null && <div>{track.name}</div>}
-          {track.events !== '' && (
-          <ul>
-            {track.events.map((event) => (
-              <li>{moment(event.start).format('DD/MM/YYYY')}</li>))}
-          </ul>
-          )}
-        </>
+
+        <CardComponent childComponent={<TrackComponent track={track} />} />
+
       )}
     </Popup>
   );
