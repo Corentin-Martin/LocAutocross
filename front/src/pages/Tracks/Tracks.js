@@ -5,6 +5,7 @@ import TracksMap from '../../components/TracksMap/TracksMap';
 import './Tracks.scss';
 import AxiosPublic from '../../utils/AxiosPublic';
 import { setTracks } from '../../actions/map';
+import { setElementToDisplay } from '../../actions/dashboard';
 
 function Tracks() {
   const search = useSelector((state) => state.generalCalendar.search);
@@ -28,9 +29,10 @@ function Tracks() {
       AxiosPublic.get(`championships/${search}?tracks`)
         .then((response) => {
           const tracksToSend = [];
+          console.log(response.data);
 
           response.data.tracks.forEach((track) => {
-            tracksToSend.push(track.track);
+            tracksToSend.push(track);
           });
           dispatch(setTracks(tracksToSend));
         }).catch((error) => {
@@ -38,6 +40,15 @@ function Tracks() {
         });
     }
   }, [search]);
+
+  useEffect(() => {
+    dispatch(setElementToDisplay(true));
+
+    return () => {
+      dispatch(setElementToDisplay(null));
+    };
+  }, []);
+
   return (
     <div>
 

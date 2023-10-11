@@ -10,6 +10,8 @@ import TrackPopup from './TrackPopup/TrackPopup';
 function TracksMap() {
   const tracks = useSelector((state) => state.map.tracks);
 
+  console.log(tracks);
+
   const custom = new Icon({ iconUrl: 'https://cdn.icon-icons.com/icons2/656/PNG/512/pin_gps_location_find_map_search_icon-icons.com_59982.png', iconSize: [24, 24] });
   return (
     <div style={{ height: '50vh' }}>

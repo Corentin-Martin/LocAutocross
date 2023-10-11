@@ -18,7 +18,6 @@ function TrackPopup({ trackId }) {
       .then((response) => {
         setTrack(response.data);
         setIsLoading(false);
-        dispatch(setElementToDisplay(true));
       }).catch((error) => {
         console.error(error);
       });
@@ -31,7 +30,7 @@ function TrackPopup({ trackId }) {
         </Spinner>
       ) : (
 
-        <CardComponent childComponent={<TrackComponent track={track} />} />
+        <CardComponent childComponent={<TrackComponent extract track={track} />} />
 
       )}
     </Popup>
