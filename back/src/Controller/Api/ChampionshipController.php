@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Championship;
 use App\Repository\ChampionshipRepository;
+use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,11 +28,16 @@ class ChampionshipController extends AbstractController
     /**
      * @Route("/{id}", name="read", requirements={"id"="\d+"}, methods={"GET"})
      */
-    public function read(?Championship $championship, Request $request): JsonResponse
+    public function read(?Championship $championship, Request $request, EventRepository $eventRepository): JsonResponse
     {
         if (!is_null($request->query->get('tracks'))) {
+            if (is_null($championship)) {
+                $events = $eventRepository->findBy(["championship" => null]);
+            } else {
+                $events = $championship->getEvents();
+            }
             $tracks = [];
-            foreach ($championship->getEvents() as $event) {
+            foreach ($events as $event) {
                 $track = $event->getTrack();
 
                 if (array_key_exists($track->getId(), $tracks)) {

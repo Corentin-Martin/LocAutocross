@@ -38,7 +38,7 @@ class TrackController extends AbstractController
      */
     public function read(?Track $track): JsonResponse
     {
-        return (is_null($track)) ? $this->json(["message" => "Ce championnat n'existe pas"], Response::HTTP_NOT_FOUND, [])
+        return (is_null($track)) ? $this->json(["message" => "Ce circuit n'existe pas"], Response::HTTP_NOT_FOUND, [])
                                         : $this->json($track, Response::HTTP_OK, [], ["groups" => ["track"]]);
     }
 

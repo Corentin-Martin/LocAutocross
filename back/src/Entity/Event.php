@@ -108,6 +108,7 @@ class Event
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"rentals"})
+     * @Groups({"track"})
      */
     private $championship;
 

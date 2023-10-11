@@ -26,9 +26,7 @@ class Championship
      * @Groups({"federations"})
      * @Groups({"federation"})
      * @Groups({"rentals"})
-     * @Groups({"championship_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"track"})
      */
     private $id;
 
@@ -42,9 +40,7 @@ class Championship
      * @Groups({"federations"})
      * @Groups({"federation"})
      * @Groups({"rentals"})
-     * @Groups({"championship_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"track"})
      */
     private $name;
 
@@ -58,9 +54,7 @@ class Championship
      * @Groups({"federations"})
      * @Groups({"federation"})
      * @Groups({"rentals"})
-     * @Groups({"championship_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"track"})
      */
     private $alias;
 
@@ -81,6 +75,7 @@ class Championship
      * @Groups({"rentals"})
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"track"})
      */
     private $federation;
 
