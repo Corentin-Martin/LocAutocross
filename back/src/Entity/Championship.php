@@ -95,6 +95,7 @@ class Championship
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"federation"})
+     * @Groups({"track"})
      */
     private $color;
 
