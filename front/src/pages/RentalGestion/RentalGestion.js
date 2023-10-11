@@ -58,13 +58,13 @@ function RentalGestion() {
               childComponent={<RentalCreation />}
               message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Créer une proposition de location</> : 'Modifier une location'}
             />
-      )}
+          )}
           detail={(
             <CardComponent
               fromGestion
               childComponent={<RentalComponent rental={elementToDisplay} />}
             />
-)}
+          )}
           myThings={<MasterMy myThings={myRentals} type="rental" childComponent={<MyRentals />} />}
           title="Mes locations"
         />

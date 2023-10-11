@@ -17,20 +17,14 @@ const initialState = {
   token: null,
   mainHeight: null,
   resetToken: null,
-  conversations: '',
+  conversations: {
+    unread: [],
+    read: [],
+  },
 };
 
 function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    /*
-    Exemple d'action
-    case SET_CONNECTED_USER:
-      return {
-        ...state,
-        connectedUser: action.payload.connectedUser,
-      };
-    */
-
     case SET_USER_CONNECTED:
       return {
         ...state,
