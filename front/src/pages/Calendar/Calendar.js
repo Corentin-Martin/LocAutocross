@@ -1,7 +1,6 @@
 import './Calendar.scss';
 import Card from 'react-bootstrap/Card';
 import GeneralCalendar from '../../components/GeneralCalendar/GeneralCalendar';
-import Event from '../../components/Event/Event';
 
 function Calendar() {
   return (
@@ -16,7 +15,7 @@ function Calendar() {
         </Card.Body>
       </Card>
       <GeneralCalendar />
-      <Event />
+
     </div>
   );
 }

@@ -62,6 +62,8 @@ class Track
      * @ORM\Column(type="string", length=255)
      * @Groups({"tracks"})
      * @Groups({"track"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      */
@@ -71,6 +73,8 @@ class Track
      * @ORM\Column(type="integer")
      * @Groups({"tracks"})
      * @Groups({"track"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      */
@@ -88,6 +92,7 @@ class Track
 
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="track")
+     * @Groups({"track"})
      */
     private $events;
 
@@ -259,5 +264,10 @@ class Track
         $this->longitude = $longitude;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
     }
 }

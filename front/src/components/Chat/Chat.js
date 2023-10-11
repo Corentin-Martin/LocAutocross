@@ -5,7 +5,7 @@ import {
   Button, Form, InputGroup, Spinner,
 } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
-import { setConversation } from '../../actions/dashboard';
+import { setConversation, setElementToDisplay } from '../../actions/dashboard';
 import Message from './Message/Message';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 
@@ -123,7 +123,10 @@ function Chat({ noCloseButton }) {
             >
               <XCircleFill
                 size={24}
-                onClick={() => dispatch(setConversation(null))}
+                onClick={() => {
+                  dispatch(setConversation(null));
+                  dispatch(setElementToDisplay(null));
+                }}
                 className="m-2"
               />
             </div>

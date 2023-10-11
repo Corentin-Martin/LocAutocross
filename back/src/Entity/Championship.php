@@ -20,14 +20,13 @@ class Championship
      * @ORM\Column(type="integer")
      * @Groups({"championships"})
      * @Groups({"championship"})
+     * @Groups({"championshipWithoutEvents"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"federation"})
      * @Groups({"rentals"})
-     * @Groups({"championship_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"track"})
      */
     private $id;
 
@@ -35,14 +34,13 @@ class Championship
      * @ORM\Column(type="string", length=255)
      * @Groups({"championships"})
      * @Groups({"championship"})
+     * @Groups({"championshipWithoutEvents"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"federation"})
      * @Groups({"rentals"})
-     * @Groups({"championship_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"track"})
      */
     private $name;
 
@@ -50,14 +48,13 @@ class Championship
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"championships"})
      * @Groups({"championship"})
+     * @Groups({"championshipWithoutEvents"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"federation"})
      * @Groups({"rentals"})
-     * @Groups({"championship_browse"})
-     * @Groups({"federation_read"})
-     * @Groups({"rental_found"})
+     * @Groups({"track"})
      */
     private $alias;
 
@@ -78,6 +75,7 @@ class Championship
      * @Groups({"rentals"})
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"track"})
      */
     private $federation;
 
@@ -92,10 +90,12 @@ class Championship
      * @ORM\Column(type="string", length=7, nullable=true)
      * @Groups({"championships"})
      * @Groups({"championship"})
+     * @Groups({"championshipWithoutEvents"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"federation"})
+     * @Groups({"track"})
      */
     private $color;
 

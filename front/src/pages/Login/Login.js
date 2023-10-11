@@ -6,7 +6,7 @@ import {
   Form, Button, FloatingLabel, Row, Alert, Modal,
 } from 'react-bootstrap';
 import { setToken, setUserConnected } from '../../actions/user';
-import { setRental } from '../../actions/dashboard';
+import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 
 function Login() {
@@ -21,7 +21,7 @@ function Login() {
 
   useEffect(() => {
     if (location.state !== null) {
-      dispatch(setRental(location.state.rental));
+      dispatch(setElementToDisplay(location.state.rental));
     }
   }, []);
 

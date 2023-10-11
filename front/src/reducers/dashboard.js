@@ -1,52 +1,27 @@
 import {
   SET_CONVERSATION,
-  SET_EVENT,
-  SET_ID_VEHICLE_TO_EDIT,
-  SET_MY_VEHICLES, SET_NEW_BRAND, SET_NEW_TRACK, SET_OPEN_BRAND_CREATION,
-  SET_OPEN_CREATION, SET_OPEN_TRACK_CREATION, SET_RENTAL, SET_VEHICLE,
+  SET_ELEMENT_TO_DISPLAY,
+  SET_ELEMENT_TO_EDIT,
+  SET_MY_VEHICLES, SET_NEW_ITEM_BY_MODAL,
+  SET_OPEN_CREATION, SET_OPEN_MODAL_CREATION,
 } from '../actions/dashboard';
 
 const initialState = {
   isOpenCreationModal: false,
-  vehicle: null,
   myVehicles: null,
-  idToEdit: null,
-  rental: null,
   conversation: null,
-  newBrand: null,
-  openBrandCreation: false,
-  newTrack: null,
-  openTrackCreation: false,
-  event: null,
+  elementToDisplay: null,
+  elementToEdit: null,
+  openModalCreation: false,
+  newItemByModal: null,
 };
 
 function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    /*
-    Exemple d'action
-    case SET_CONNECTED_USER:
-      return {
-        ...state,
-        connectedUser: action.payload.connectedUser,
-      };
-    */
-
     case SET_OPEN_CREATION:
       return {
         ...state,
         isOpenCreationModal: action.payload.isOpenCreationModal,
-      };
-
-    case SET_VEHICLE:
-      return {
-        ...state,
-        vehicle: action.payload.vehicle,
-      };
-
-    case SET_ID_VEHICLE_TO_EDIT:
-      return {
-        ...state,
-        idToEdit: action.payload.idToEdit,
       };
 
     case SET_MY_VEHICLES:
@@ -55,46 +30,34 @@ function reducer(state = initialState, action = {}) {
         myVehicles: action.payload.myVehicles,
       };
 
-    case SET_RENTAL:
-      return {
-        ...state,
-        rental: action.payload.rental,
-      };
-
     case SET_CONVERSATION:
       return {
         ...state,
         conversation: action.payload.conversation,
       };
 
-    case SET_NEW_BRAND:
+    case SET_ELEMENT_TO_DISPLAY:
       return {
         ...state,
-        newBrand: action.payload.newBrand,
+        elementToDisplay: action.payload.elementToDisplay,
       };
 
-    case SET_OPEN_BRAND_CREATION:
+    case SET_ELEMENT_TO_EDIT:
       return {
         ...state,
-        openBrandCreation: action.payload.openBrandCreation,
+        elementToEdit: action.payload.elementToEdit,
       };
 
-    case SET_NEW_TRACK:
+    case SET_OPEN_MODAL_CREATION:
       return {
         ...state,
-        newTrack: action.payload.newTrack,
+        openModalCreation: action.payload.openModalCreation,
       };
 
-    case SET_OPEN_TRACK_CREATION:
+    case SET_NEW_ITEM_BY_MODAL:
       return {
         ...state,
-        openTrackCreation: action.payload.openTrackCreation,
-      };
-
-    case SET_EVENT:
-      return {
-        ...state,
-        event: action.payload.event,
+        newItemByModal: action.payload.newItemByModal,
       };
 
     default:

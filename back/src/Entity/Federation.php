@@ -25,6 +25,7 @@ class Federation
      * @Groups({"rentals"})
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"track"})
      */
     private $id;
 
@@ -37,6 +38,7 @@ class Federation
      * @Groups({"rentals"})
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"track"})
      */
     private $name;
 
@@ -49,6 +51,7 @@ class Federation
      * @Groups({"rentals"})
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"track"})
      */
     private $alias;
 

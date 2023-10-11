@@ -27,7 +27,7 @@ class EventController extends AbstractController
     {
         if (!is_null($request->query->get('my'))) {
             $events = $eventRepository->findBy(["associatedUser" => $this->getUser()], ['createdAt' => 'DESC']);
-            return $this->json($events, Response::HTTP_OK, [], ["groups" => ["events"]]);
+            return $this->json($events, Response::HTTP_OK, [], ["groups" => ["event"]]);
         }
         /** @var array */
         $searchChampionships = $request->query->get('championship');

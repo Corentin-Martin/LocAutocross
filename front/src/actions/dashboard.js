@@ -1,36 +1,8 @@
-/*
-Exemple d'action creator
-
-export const SET_CONNECTED_USER = 'SET_CONNECTED_USER';
-export const setConnectedUser = (connectedUser) => ({
-  type: SET_CONNECTED_USER,
-  payload: {
-    connectedUser: connectedUser,
-  },
-});
-*/
-
 export const SET_OPEN_CREATION = 'SET_OPEN_CREATION';
 export const setOpenCreation = (bool) => ({
   type: SET_OPEN_CREATION,
   payload: {
     isOpenCreationModal: bool,
-  },
-});
-
-export const SET_VEHICLE = 'SET_VEHICLE';
-export const setVehicleForDetails = (vehicle) => ({
-  type: SET_VEHICLE,
-  payload: {
-    vehicle: vehicle,
-  },
-});
-
-export const SET_ID_VEHICLE_TO_EDIT = 'SET_ID_VEHICLE_TO_EDIT';
-export const setIdToEdit = (idVehicleToEdit) => ({
-  type: SET_ID_VEHICLE_TO_EDIT,
-  payload: {
-    idToEdit: idVehicleToEdit,
   },
 });
 
@@ -42,19 +14,19 @@ export const setMyVehicles = (myVehicles) => ({
   },
 });
 
-export const SET_RENTAL = 'SET_RENTAL';
-export const setRental = (rental) => ({
-  type: SET_RENTAL,
+export const SET_ELEMENT_TO_DISPLAY = 'SET_ELEMENT_TO_DISPLAY';
+export const setElementToDisplay = (elementToDisplay) => ({
+  type: SET_ELEMENT_TO_DISPLAY,
   payload: {
-    rental: rental,
+    elementToDisplay: elementToDisplay,
   },
 });
 
-export const SET_EVENT = 'SET_EVENT';
-export const setEvent = (event) => ({
-  type: SET_EVENT,
+export const SET_ELEMENT_TO_EDIT = 'SET_ELEMENT_TO_EDIT';
+export const setElementToEdit = (elementToEdit) => ({
+  type: SET_ELEMENT_TO_EDIT,
   payload: {
-    event: event,
+    elementToEdit: elementToEdit,
   },
 });
 
@@ -66,34 +38,18 @@ export const setConversation = (conversation) => ({
   },
 });
 
-export const SET_NEW_BRAND = 'SET_NEW_BRAND';
-export const setNewBrand = (newBrand) => ({
-  type: SET_NEW_BRAND,
+export const SET_OPEN_MODAL_CREATION = 'SET_OPEN_MODAL_CREATION';
+export const setOpenModalCreation = (bool) => ({
+  type: SET_OPEN_MODAL_CREATION,
   payload: {
-    newBrand: newBrand,
+    openModalCreation: bool,
   },
 });
 
-export const SET_OPEN_BRAND_CREATION = 'SET_OPEN_BRAND_CREATION';
-export const setOpenBrandCreation = (bool) => ({
-  type: SET_OPEN_BRAND_CREATION,
+export const SET_NEW_ITEM_BY_MODAL = 'SET_NEW_ITEM_BY_MODAL';
+export const setNewItemByModal = (newItemByModal) => ({
+  type: SET_NEW_ITEM_BY_MODAL,
   payload: {
-    openBrandCreation: bool,
-  },
-});
-
-export const SET_NEW_TRACK = 'SET_NEW_TRACK';
-export const setNewTrack = (newTrack) => ({
-  type: SET_NEW_TRACK,
-  payload: {
-    newTrack: newTrack,
-  },
-});
-
-export const SET_OPEN_TRACK_CREATION = 'SET_OPEN_TRACK_CREATION';
-export const setOpenTrackCreation = (bool) => ({
-  type: SET_OPEN_TRACK_CREATION,
-  payload: {
-    openTrackCreation: bool,
+    newItemByModal: newItemByModal,
   },
 });

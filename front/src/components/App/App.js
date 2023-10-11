@@ -22,6 +22,8 @@ import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import AxiosPublic from '../../utils/AxiosPublic';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import Events from '../../pages/Events/Events';
+import Tracks from '../../pages/Tracks/Tracks';
+import EventPage from '../../pages/EventPage/EventPage';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -108,8 +110,16 @@ function App() {
             element={(<Skeleton page={<Calendar />} />)}
           />
           <Route
+            path="/circuits"
+            element={(<Skeleton page={<Tracks />} />)}
+          />
+          <Route
             path="/location/:rentalId"
             element={(<Skeleton page={<Rental />} />)}
+          />
+          <Route
+            path="/evenement/:eventId"
+            element={(<Skeleton page={<EventPage />} />)}
           />
           <Route
             path="/connexion"
