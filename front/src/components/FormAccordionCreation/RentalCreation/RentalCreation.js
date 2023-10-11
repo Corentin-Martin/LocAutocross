@@ -28,12 +28,6 @@ function RentalCreation() {
   const [events, setEvents] = useState([]);
   const [noEvents, setNoEvents] = useState(true);
 
-  console.log('fed', fedeChoice);
-  console.log('cha', champChoice);
-  console.log('pri', privateEvent);
-  console.log('ev', event);
-  console.log('noev', noEvents);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -188,8 +182,8 @@ function RentalCreation() {
           <>
             <Form.Label>Véhicule *</Form.Label>
             <Form.Select
-              defaultValue={`${vehicle}`}
-              aria-label="Default select example"
+              value={vehicle ?? ''}
+              aria-label="Sélectionnez un véhicule"
               onChange={(e) => setVehicle(e.currentTarget.value)}
             >
               <option>Sélectionnez un véhicule</option>

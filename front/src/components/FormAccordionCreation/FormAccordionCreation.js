@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Accordion } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { setElementToDisplay, setOpenCreation } from '../../actions/dashboard';
+import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../actions/dashboard';
 
 function FormAccordionCreation({ childComponent, message }) {
   const [openItem, setOpenItem] = useState(null);
@@ -32,6 +32,7 @@ function FormAccordionCreation({ childComponent, message }) {
 
   useEffect(() => () => {
     dispatch(setOpenCreation(false));
+    dispatch(setElementToEdit(null));
   }, []);
 
   return (
