@@ -50,11 +50,12 @@ class EmailSender
         $this->mailer->send($email);
     }
 
-    public function sendNotifNewConv($rental, $byOwner = false): void
+    public function sendNotifNewConv($user, $rental, $byOwner = false): void
     {
         $template = ($byOwner) ? 'email/new-conv-by-owner.html.twig' : 'email/new-conv.html.twig';
 
         $htmlContent = $this->twig->render($template, [
+            'user' => $user,
             'rental' => $rental,
         ]);
 
