@@ -1,5 +1,5 @@
 import {
-  Card, Col, ListGroup,
+  Card, Col,
 } from 'react-bootstrap';
 import './RentalControl.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import DeleteModal from '../../../DeleteModal/DeleteModal';
 import {
-  setConversation, setElementToDisplay, setElementToEdit, setOpenCreation,
+  setElementToDisplay, setElementToEdit, setOpenCreation,
 } from '../../../../actions/dashboard';
 
 import ReservationAction from './ReservationAction/ReservationAction';
@@ -18,6 +18,7 @@ import AxiosPrivate from '../../../../utils/AxiosPrivate';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
 import MasterModal from '../../../MasterModal/MasterModal';
 import Chat from '../../../Chat/Chat';
+import ConversationsPreview from './ConversationsPreview/ConversationsPreview';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -59,6 +60,10 @@ function RentalControl({ rental }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const setShowToParent = (bool) => {
+    setShow(bool);
+  };
 
   const [showEdit, setShowEdit] = useState(false);
   const handleCloseEdit = () => setShowEdit(false);
@@ -113,7 +118,9 @@ function RentalControl({ rental }) {
                       onClick={handleEditRental}
                     ><PencilSquare size={24} className="me-2" /> Editer
                     </Card.Text>
-                    <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}><DeleteModal type="rentals" idToDelete={rental.id} /></Card.Text>
+                    <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
+                      <DeleteModal type="rentals" idToDelete={rental.id} />
+                    </Card.Text>
                   </div>
 
                   <ReservationAction
@@ -122,22 +129,11 @@ function RentalControl({ rental }) {
                     handleShow={handleShow}
                   />
 
-                  <Card.Text>Conversation{conversations.length > 1 ? 's' : ''} : {conversations.length}</Card.Text>
-                  {conversations.length > 0 && (
-                  <ListGroup>
-                    {conversations.map((conv) => (
-                      <ListGroup.Item
-                        key={conv.id}
-                        onClick={() => {
-                          dispatch(setConversation(conv));
-                          handleShow();
-                        }}
-                        style={{ cursor: 'pointer' }}
-                      ><span className="badge rounded me-2" style={{ backgroundColor: (conv.isReadByOwnerUser ? 'green' : 'red') }}>{conv.isReadByOwnerUser ? 'Lue' : 'Non lue'}</span>avec {conv.interestedUser.pseudo} - Dernier message le : {moment(conv.messages[conv.messages.length - 1].createdAt).format('DD/MM/YYYY à HH:mm')}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                  )}
+                  <ConversationsPreview
+                    conversations={conversations}
+                    setShowToParent={setShowToParent}
+                  />
+
                 </>
               )}
 
