@@ -1,16 +1,15 @@
-import './Registration.scss';
-import { Row } from 'react-bootstrap';
-
 import RegisterForm from '../../components/RegisterForm/RegisterForm';
+import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
 
 function Registration() {
   return (
-    <Row className="d-flex justify-content-center">
+    <GeneralLayout
+      title="Inscription"
+      pageTitle="Inscription"
+      description="Inscrivez-vous et trouvez la location idéale pour rouler sur les piste de France ou mettez votre véhicule à louer."
+      childComponent={<RegisterForm />}
+    />
 
-      <h1 className="text-center">Inscription</h1>
-
-      <RegisterForm />
-    </Row>
   );
 }
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import {
-  Button, Col, Offcanvas, Row, Spinner,
+  Button, Col, Offcanvas, Row,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactSelect from 'react-select';
 import { setSearch } from '../../actions/generalCalendar';
 import '../GeneralCalendar/GeneralCalendar.scss';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function FederationFilter({ onlyChampionships }) {
   const federations = useSelector((state) => state.generalCalendar.federations);
@@ -89,99 +90,97 @@ function FederationFilter({ onlyChampionships }) {
     }),
   };
 
-  return (
-    <div className="d-flex flex-column align-items-center">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
-        <>
-          <Row className="mb-3 " style={{ width: '100%' }}>
-            {federations.map((fede) => (
-              <Col size={6} key={fede.id} className="d-flex justify-content-center">
-                <Button variant="primary" className="col-8" onClick={fede.alias === 'FFSA' ? handleShowFFSA : handleShowUFOLEP}>
-                  {'>'} {fede.alias}
-                </Button>
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
-                <Offcanvas
-                  show={fede.alias === 'FFSA' ? showFFSA : showUFOLEP}
-                  onHide={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}
-                  placement={fede.alias === 'FFSA' ? 'start' : 'end'}
-                  scroll
-                >
-                  <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{fede.alias}</Offcanvas.Title>
-                  </Offcanvas.Header>
-                  <Offcanvas.Body>
-                    {fede.disciplines.map((discipline) => (
-                      !onlyChampionships && (
-                      <>
-                        <div key={discipline.id} className="GeneralCalendar-Discipline">
-                          <h4>{discipline.name}</h4>
-                          <ReactSelect
-                            placeholder="Sélectionnez..."
-                            isMulti
-                            isSearchable
-                            isClearable={false}
-                            onChange={handleInputOnReactSelect}
-                            options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
-                          />
-                        </div>
-                        <hr />
-                      </>
-                      )
-                    ))}
-                    <div className="GeneralCalendar-Discipline">
-                      <h4>Championnat</h4>
+  return (
+    <div className="col-12 d-flex flex-column align-items-center">
+
+      <Row className="mb-3 " style={{ width: '100%' }}>
+        {federations.map((fede) => (
+          <Col size={6} key={fede.id} className="d-flex justify-content-center">
+            <Button variant="primary" className="col-8" onClick={fede.alias === 'FFSA' ? handleShowFFSA : handleShowUFOLEP}>
+              {'>'} {fede.alias}
+            </Button>
+
+            <Offcanvas
+              show={fede.alias === 'FFSA' ? showFFSA : showUFOLEP}
+              onHide={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}
+              placement={fede.alias === 'FFSA' ? 'start' : 'end'}
+              scroll
+            >
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title>{fede.alias}</Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body>
+                {fede.disciplines.map((discipline) => (
+                  !onlyChampionships && (
+                  <>
+                    <div key={discipline.id} className="GeneralCalendar-Discipline">
+                      <h4>{discipline.name}</h4>
                       <ReactSelect
-                        styles={customStyles}
-                        isClearable={false}
-                        closeMenuOnSelect={onlyChampionships}
-                        isMulti={!onlyChampionships}
+                        placeholder="Sélectionnez..."
+                        isMulti
                         isSearchable
-                        onChange={onlyChampionships
-                          ? handleInputOnlyChampionships : handleInputOnReactSelect}
-                        options={fede.championships.map((oneChampionship) => (
-                          { value: `championship[]=${oneChampionship.id}`, label: oneChampionship.name, color: oneChampionship.color }))}
+                        isClearable={false}
+                        onChange={handleInputOnReactSelect}
+                        options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
                       />
                     </div>
-                    <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Unofficial">
-
-                      <label htmlFor="unofficial">
-                        <input
-                          type="checkbox"
-                          onChange={onlyChampionships
-                            ? handleInputUnofficialOnlyChampionships : handleInputUnofficial}
-                          name="unofficial"
-                          id="unofficial"
-                          value="championship[]=0"
-                        />
-                        Séances non-officielles
-                      </label>
-
-                    </div>
                     <hr />
-                    <Button type="button" className="col-12" onClick={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}>Valider mes choix</Button>
-                  </Offcanvas.Body>
-                </Offcanvas>
-              </Col>
-            ))}
-          </Row>
-          <Row className="mb-3">
-            <Col size={8}>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  dispatch(setSearch(null));
-                }}
-              >Réinitialiser les filtres
-              </Button>
-            </Col>
-          </Row>
-        </>
-      )}
+                  </>
+                  )
+                ))}
+                <div className="GeneralCalendar-Discipline">
+                  <h4>Championnat</h4>
+                  <ReactSelect
+                    styles={customStyles}
+                    isClearable={false}
+                    closeMenuOnSelect={onlyChampionships}
+                    isMulti={!onlyChampionships}
+                    isSearchable
+                    onChange={onlyChampionships
+                      ? handleInputOnlyChampionships : handleInputOnReactSelect}
+                    options={fede.championships.map((oneChampionship) => (
+                      { value: `championship[]=${oneChampionship.id}`, label: oneChampionship.name, color: oneChampionship.color }))}
+                  />
+                </div>
+                <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Unofficial">
+
+                  <label htmlFor="unofficial">
+                    <input
+                      type="checkbox"
+                      onChange={onlyChampionships
+                        ? handleInputUnofficialOnlyChampionships : handleInputUnofficial}
+                      name="unofficial"
+                      id="unofficial"
+                      value="championship[]=0"
+                    />
+                    Séances non-officielles
+                  </label>
+
+                </div>
+                <hr />
+                <Button type="button" className="col-12" onClick={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}>Valider mes choix</Button>
+              </Offcanvas.Body>
+            </Offcanvas>
+          </Col>
+        ))}
+      </Row>
+      <Row className="mb-3">
+        <Col size={8}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              dispatch(setSearch(null));
+            }}
+          >Réinitialiser les filtres
+          </Button>
+        </Col>
+      </Row>
+
     </div>
   );
 }

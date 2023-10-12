@@ -9,14 +9,15 @@ import moment from 'moment';
 import {
   setElementToDisplay,
   setElementToEdit,
-  setMyVehicles, setOpenCreation, setOpenModalCreation,
+  setMyVehicles, setOpenCreation,
 } from '../../../actions/dashboard';
 import Checkbox from './Checkbox/Checkbox';
-import BrandCreation from '../../ModalCreation/BrandCreation/BrandCreation';
+import BrandCreation from '../../MasterModal/BrandCreation/BrandCreation';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
 import AxiosPublic from '../../../utils/AxiosPublic';
 import handleFileUpload from '../../../utils/UploadImage';
-import ModalCreation from '../../ModalCreation/ModalCreation';
+
+import MasterModal from '../../MasterModal/MasterModal';
 
 function VehicleCreation() {
   const isOpenCreationModal = useSelector((state) => state.dashboard.isOpenCreationModal);
@@ -234,159 +235,175 @@ function VehicleCreation() {
     }
   }, [isOpenCreationModal]);
 
-  const openModalCreation = useSelector((state) => state.dashboard.openModalCreation);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const setShowToParent = (bool) => {
+    setShow(bool);
+  };
 
   return (
-    <>
-      {openModalCreation && <ModalCreation childComponent={<BrandCreation />} />}
-      <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
-        <Form.Group controlId="pictureSelect" className="mb-3 col-10">
-          <Form.Label>Photo</Form.Label>
-          <Form.Control
-            type="file"
-            label="Image"
-            name="myFile"
-            accept=".jpeg, .png, .jpg"
-            onChange={(e) => handlePictureUpload(e)}
-          />
-        </Form.Group>
 
-        <Form.Group controlId="yearSelect" className="mb-3 col-10">
-          <Form.Label className="text-center">Année *</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Sélectionnez l'année"
-            value={elementToEdit !== null ? moment(year).format('YYYY') : selectedYear}
-            onChange={handleYearChange}
-          />
-        </Form.Group>
+    <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center bg-secondary rounded-4 p-2 col-12">
 
-        <Form.Group controlId="brandSelect" className="mb-3 col-10">
-          <Form.Label>Marque *</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Sélectionnez une marque"
-            list="brandsList"
-            value={brand ? brand.name : brandSearch}
-            onChange={handleBrandChange}
-          />
-          <datalist id="brandsList" ref={dataRef}>
-            {brands.map((oneBrand) => (
-              <option key={oneBrand.id} value={oneBrand.name} />
-            ))}
-          </datalist>
-          {!match && !brand && brandSearch !== '' && (
+      {show
+      && (
+      <MasterModal
+        show={show}
+        handleClose={handleClose}
+        title="Nouvelle marque"
+        childComponent={<BrandCreation setShowToParent={setShowToParent} />}
+      />
+      )}
+
+      <Form.Group controlId="pictureSelect" className="mb-3 col-10">
+        <Form.Label>Photo</Form.Label>
+        <Form.Control
+          type="file"
+          label="Image"
+          name="myFile"
+          accept=".jpeg, .png, .jpg"
+          onChange={(e) => handlePictureUpload(e)}
+        />
+      </Form.Group>
+
+      <Form.Group controlId="yearSelect" className="mb-3 col-10">
+        <Form.Label className="text-center">Année *</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="Sélectionnez l'année"
+          value={elementToEdit !== null ? moment(year).format('YYYY') : selectedYear}
+          onChange={handleYearChange}
+        />
+      </Form.Group>
+
+      <Form.Group controlId="brandSelect" className="mb-3 col-10">
+        <Form.Label>Marque *</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Sélectionnez une marque"
+          list="brandsList"
+          value={brand ? brand.name : brandSearch}
+          onChange={handleBrandChange}
+        />
+        <datalist id="brandsList" ref={dataRef}>
+          {brands.map((oneBrand) => (
+            <option key={oneBrand.id} value={oneBrand.name} />
+          ))}
+        </datalist>
+        {!match && !brand && brandSearch !== '' && (
           <div className="text-danger mt-2 text-center">
             Aucune correspondance trouvée.
             <span
               className="badge bg-primary text-black p-1"
               style={{ cursor: 'pointer' }}
-              onClick={() => dispatch(setOpenModalCreation(true))}
+              onClick={handleShow}
             >Voulez-vous ajouter une nouvelle marque ?
             </span>
           </div>
-          )}
-        </Form.Group>
+        )}
+      </Form.Group>
 
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Modèle"
-          className="mb-3 col-10"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setModel(event.currentTarget.value);
-            }}
-            type="text"
-            placeholder="modèle"
-            value={model}
-          />
-        </FloatingLabel>
+      <FloatingLabel
+        controlId="floatingInput"
+        label="Modèle"
+        className="mb-3 col-10"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setModel(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="modèle"
+          value={model}
+        />
+      </FloatingLabel>
 
-        <FloatingLabel
-          controlId="floatingInput2"
-          label="Moteur *"
-          className="mb-3 col-10"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setEngine(event.currentTarget.value);
-            }}
-            type="text"
-            placeholder="moteur"
-            value={engine}
-          />
-        </FloatingLabel>
+      <FloatingLabel
+        controlId="floatingInput2"
+        label="Moteur *"
+        className="mb-3 col-10"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setEngine(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="moteur"
+          value={engine}
+        />
+      </FloatingLabel>
 
-        <FloatingLabel
-          controlId="floatingInput3"
-          label="Amortisseurs"
-          className="mb-3 col-10"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setShocks(event.currentTarget.value);
-            }}
-            type="text"
-            placeholder="amortisseurs"
-            value={shocks}
-          />
-        </FloatingLabel>
+      <FloatingLabel
+        controlId="floatingInput3"
+        label="Amortisseurs"
+        className="mb-3 col-10"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setShocks(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="amortisseurs"
+          value={shocks}
+        />
+      </FloatingLabel>
 
-        <FloatingLabel
-          controlId="floatingInput4"
-          label="Informations complémentaires"
-          className="mb-3 col-10"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setDescription(event.currentTarget.value);
-            }}
-            type="textarea"
-            placeholder="description"
-            style={{ height: '100px' }}
-            value={description}
-          />
-        </FloatingLabel>
+      <FloatingLabel
+        controlId="floatingInput4"
+        label="Informations complémentaires"
+        className="mb-3 col-10"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setDescription(event.currentTarget.value);
+          }}
+          type="textarea"
+          placeholder="description"
+          style={{ height: '100px' }}
+          value={description}
+        />
+      </FloatingLabel>
 
-        <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
-          <Form.Label>Catégorie(s) *</Form.Label>
+      <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
+        <Form.Label>Catégorie(s) *</Form.Label>
 
-          <Accordion>
-            {disciplines.map((discipline) => (
-              <Accordion.Item eventKey={discipline.id} key={discipline.id}>
-                <Accordion.Header>
-                  {discipline.name} - {discipline.federation.alias}
-                </Accordion.Header>
-                <Accordion.Body>
-                  {discipline.categories.map((category) => (
-                    <Checkbox
-                      key={`${resetKey}-${category.id}`}
-                      id={category.id}
-                      label={category.name}
-                      checked={categories.includes(category.id)}
-                      onChange={() => handleCheckboxChange(category.id)}
-                    />
-                  ))}
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
-          </Accordion>
+        <Accordion>
+          {disciplines.map((discipline) => (
+            <Accordion.Item eventKey={discipline.id} key={discipline.id}>
+              <Accordion.Header>
+                {discipline.name} - {discipline.federation.alias}
+              </Accordion.Header>
+              <Accordion.Body>
+                {discipline.categories.map((category) => (
+                  <Checkbox
+                    key={`${resetKey}-${category.id}`}
+                    id={category.id}
+                    label={category.name}
+                    checked={categories.includes(category.id)}
+                    onChange={() => handleCheckboxChange(category.id)}
+                  />
+                ))}
+              </Accordion.Body>
+            </Accordion.Item>
+          ))}
+        </Accordion>
 
-        </Form.Group>
+      </Form.Group>
 
-        <p className="mb-3">* Champs obligatoires</p>
+      <p className="mb-3">* Champs obligatoires</p>
 
-        <Button type="submit">{!elementToEdit ? 'Créer' : 'Modifier'}</Button>
-        {wrong.length > 0 && (
+      <Button type="submit">{!elementToEdit ? 'Créer' : 'Modifier'}</Button>
+      {wrong.length > 0 && (
         <Alert variant="danger" className="text-center mt-2">
           <Alert.Heading>Erreur{wrong.length > 1 ? 's' : ''}</Alert.Heading>
           {wrong.map((error) => (<p key={error}>{error}</p>))}
         </Alert>
-        )}
-      </Form>
+      )}
+    </Form>
 
-    </>
   );
 }
 

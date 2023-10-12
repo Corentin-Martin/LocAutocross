@@ -12,7 +12,7 @@ function TracksMap() {
 
   const custom = new Icon({ iconUrl: 'https://cdn.icon-icons.com/icons2/656/PNG/512/pin_gps_location_find_map_search_icon-icons.com_59982.png', iconSize: [24, 24] });
   return (
-    <div style={{ height: '50vh' }}>
+    <div style={{ height: '50vh', width: '100%' }}>
 
       <MapContainer center={[46.603354, 1.888334]} zoom="5" scrollWheelZoom style={{ height: '100%', width: '100%' }}>
         <TileLayer

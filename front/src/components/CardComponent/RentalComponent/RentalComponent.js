@@ -1,6 +1,6 @@
 import {
   Button,
-  Card, Col, Row,
+  Card, Row,
 } from 'react-bootstrap';
 import moment from 'moment/moment';
 import './RentalComponent.scss';
@@ -10,6 +10,8 @@ import defaultKart from '../../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import RentalUserbox from './RentalUserbox/RentalUserbox';
 import { setElementToDisplay } from '../../../actions/dashboard';
+import RentalInfos from './RentalInfos/RentalInfos';
+import VehicleInfos from './VehicleInfos/VehicleInfos';
 
 function RentalComponent({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -52,37 +54,8 @@ function RentalComponent({ rental }) {
         </Card.Title>
 
         <Row className="mt-3 d-flex justify-content-between">
-          <Col sm={12} md={6} className="mb-2" style={{ flexGrow: '1' }}>
-            <Card style={{ width: '100%', height: '100%' }}>
-              <Card.Header>La location</Card.Header>
-              <Card.Body className="text-start">
-
-                <Card.Text>Tarif : {rental.price ? `${rental.price}€` : 'Non renseigné'}</Card.Text>
-                <Card.Text>Loueur : {rental.ownerUser.pseudo}</Card.Text>
-                <Card.Text>Informations : {rental.description ?? 'Aucunes informations supplémentaires'}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col sm={12} md={6} className="mb-2">
-            <Card>
-              <Card.Header>Le véhicule</Card.Header>
-              <Card.Body className="text-start">
-
-                <Card.Text>Catégorie{rental.vehicle.category.length > 1 ? 's : ' : ' : '}
-                  {rental.vehicle.category.map((category, index) => (
-                    (index === rental.vehicle.category.length - 1)
-                      ? `${category.name}`
-                      : `${category.name} / `
-                  ))}
-                </Card.Text>
-                <Card.Text>Modèle : {rental.vehicle.model ?? 'Non renseigné'}</Card.Text>
-                <Card.Text>Année : {moment(rental.vehicle.year).format('YYYY')}</Card.Text>
-                <Card.Text>Moteur : {rental.vehicle.engine}</Card.Text>
-                <Card.Text>Amortisseur : {rental.vehicle.shocks ?? 'Non renseigné'}</Card.Text>
-                <Card.Text>Infos : {rental.vehicle.description ?? '/'}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
+          <RentalInfos rental={rental} />
+          <VehicleInfos vehicle={rental.vehicle} />
 
           <RentalControl rental={rental} />
           <RentalUserbox rental={rental} />

@@ -1,9 +1,9 @@
-import { Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setResetToken } from '../../actions/user';
 import ResetPasswordForm from '../../components/ResetPasswordForm/ResetPasswordForm';
+import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
 
 function ResetPassword() {
   const { token } = useParams();
@@ -21,13 +21,13 @@ function ResetPassword() {
   }, []);
 
   return (
-    <Row className="d-flex justify-content-center">
 
-      <h1 className="text-center">Réinitialiser votre mot de passe</h1>
+    <GeneralLayout
+      title="Réinitialiser votre mot de passe"
+      pageTitle="Réinitialisation de votre mot de passe"
+      childComponent={<ResetPasswordForm />}
+    />
 
-      <ResetPasswordForm />
-
-    </Row>
   );
 }
 

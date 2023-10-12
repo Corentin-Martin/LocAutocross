@@ -12,9 +12,11 @@ function Conversation() {
 
   return (
     <DashboardLayout
+      title="Mes conversations"
+      pageTitle="Mes conversations"
+      description="Discutez en temps réel sur le chat Loc'Autocross"
       detail={<Chat />}
       myThings={<MyConversations />}
-      title="Mes conversations"
     />
 
   );

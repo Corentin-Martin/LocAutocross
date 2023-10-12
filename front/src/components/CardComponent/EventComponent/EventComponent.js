@@ -1,5 +1,5 @@
 import {
-  Card, Col, Modal, Row,
+  Card, Col, Row,
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
@@ -8,8 +8,9 @@ import { useLocation } from 'react-router-dom';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
 import EventCreation from '../../FormAccordionCreation/EventCreation/EventCreation';
 import RentalList from './RentalList/RentalList';
+import MasterModal from '../../MasterModal/MasterModal';
 
-function EventComponent({ event }) {
+function EventComponent({ event, fromCalendar }) {
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
@@ -104,17 +105,22 @@ function EventComponent({ event }) {
           </Col>
         </Row>
         {event.picture !== null && <img src={`http://localhost:8000/${event.picture}`} alt="affiche" />}
-        <div onClick={handleEditEvent}>CLIC</div>
+        {!fromCalendar && <div onClick={handleEditEvent}>CLIC</div>}
+
       </Card.Body>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton />
-        <Modal.Body>
-          <EventCreation event={event} />
-        </Modal.Body>
-      </Modal>
+      <MasterModal
+        show={show}
+        onHide={handleClose}
+        childComponent={<EventCreation />}
+      />
+
     </>
   );
 }
+
+EventComponent.defaultProps = {
+  fromCalendar: false,
+};
 
 export default EventComponent;

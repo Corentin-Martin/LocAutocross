@@ -4,8 +4,16 @@ import Under992 from './Under992/Under992';
 import Over992 from './Over992/Over992';
 
 function DashboardLayout({
-  infos, creativePart, myThings, detail, title,
+  infos, creativePart, myThings, detail, title, pageTitle, description,
 }) {
+  useEffect(() => {
+    document.title = `Loc'Autocross - ${pageTitle ?? ''}`;
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription && description !== null) {
+      metaDescription.setAttribute('content', `Loc'Autocross - ${description}`);
+    }
+  }, [title, description]);
+
   const [width, setWidth] = useState(window.innerWidth);
 
   const handleResize = () => {
@@ -39,5 +47,7 @@ DashboardLayout.defaultProps = {
   myThings: null,
   detail: null,
   title: null,
+  pageTitle: null,
+  description: null,
 };
 export default DashboardLayout;

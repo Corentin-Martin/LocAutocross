@@ -8,13 +8,15 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  Container, Alert, Spinner, Modal,
+  Container, Alert,
 } from 'react-bootstrap';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../CardComponent/CardComponent';
 import EventComponent from '../CardComponent/EventComponent/EventComponent';
 import { setElementToDisplay } from '../../actions/dashboard';
 import FederationFilter from '../FederationFilter/FederationFilter';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import MasterModal from '../MasterModal/MasterModal';
 
 function GeneralCalendar() {
   moment.locale('fr-FR');
@@ -114,54 +116,56 @@ function GeneralCalendar() {
       });
   }, [search]);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
 
     <div className="GeneralCalendar">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
 
-        <Container fluid>
+      <Container fluid>
 
-          <FederationFilter />
+        <FederationFilter />
 
-          {noEvents && <Alert variant="danger">Aucun événement ne correspond à votre recherche</Alert>}
+        {noEvents && <Alert variant="danger">Aucun événement ne correspond à votre recherche</Alert>}
 
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            defaultView={Views.MONTH}
-            style={{ height: '70vh', width: '100%' }}
-            onSelectEvent={onSelectEvent}
-            eventPropGetter={eventPropGetter}
-            popup
-            views={{ month: true, week: true }}
-            messages={{
-              week: 'Semaine',
-              day: 'Jour',
-              month: 'Mois',
-              previous: 'Précédent',
-              next: 'Suivant',
-              today: 'Aujourd\'hui',
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          defaultView={Views.MONTH}
+          style={{ height: '70vh', width: '100%' }}
+          onSelectEvent={onSelectEvent}
+          eventPropGetter={eventPropGetter}
+          popup
+          views={{ month: true, week: true }}
+          messages={{
+            week: 'Semaine',
+            day: 'Jour',
+            month: 'Mois',
+            previous: 'Précédent',
+            next: 'Suivant',
+            today: 'Aujourd\'hui',
 
-              showMore: (total) => `Voir ${total} supplémentaires`,
-            }}
-            culture="fr"
-          />
+            showMore: (total) => `Voir ${total} supplémentaires`,
+          }}
+          culture="fr"
+        />
 
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton />
-            <Modal.Body className="d-flex justify-content-center">
-              <CardComponent childComponent={<EventComponent event={selectedEvent} />} />
-            </Modal.Body>
-          </Modal>
+        <MasterModal
+          show={show}
+          handleClose={handleClose}
+          childComponent={(
+            <CardComponent
+              childComponent={<EventComponent event={selectedEvent} fromCalendar />}
+            />
+)}
+        />
 
-        </Container>
-      )}
+      </Container>
+
     </div>
   );
 }

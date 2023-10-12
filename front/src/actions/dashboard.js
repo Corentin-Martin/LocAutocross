@@ -38,14 +38,6 @@ export const setConversation = (conversation) => ({
   },
 });
 
-export const SET_OPEN_MODAL_CREATION = 'SET_OPEN_MODAL_CREATION';
-export const setOpenModalCreation = (bool) => ({
-  type: SET_OPEN_MODAL_CREATION,
-  payload: {
-    openModalCreation: bool,
-  },
-});
-
 export const SET_NEW_ITEM_BY_MODAL = 'SET_NEW_ITEM_BY_MODAL';
 export const setNewItemByModal = (newItemByModal) => ({
   type: SET_NEW_ITEM_BY_MODAL,

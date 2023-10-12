@@ -3,7 +3,7 @@ import {
   SET_ELEMENT_TO_DISPLAY,
   SET_ELEMENT_TO_EDIT,
   SET_MY_VEHICLES, SET_NEW_ITEM_BY_MODAL,
-  SET_OPEN_CREATION, SET_OPEN_MODAL_CREATION,
+  SET_OPEN_CREATION,
 } from '../actions/dashboard';
 
 const initialState = {
@@ -12,7 +12,6 @@ const initialState = {
   conversation: null,
   elementToDisplay: null,
   elementToEdit: null,
-  openModalCreation: false,
   newItemByModal: null,
 };
 
@@ -46,12 +45,6 @@ function reducer(state = initialState, action = {}) {
       return {
         ...state,
         elementToEdit: action.payload.elementToEdit,
-      };
-
-    case SET_OPEN_MODAL_CREATION:
-      return {
-        ...state,
-        openModalCreation: action.payload.openModalCreation,
       };
 
     case SET_NEW_ITEM_BY_MODAL:

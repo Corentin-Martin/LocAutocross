@@ -35,43 +35,42 @@ function LoginForm() {
       });
   };
   return (
-    <div>
+
+    <Form onSubmit={handleSubmit} className="col-12 d-flex flex-column align-items-center">
       {wrongConnexion && (
-      <Alert variant="danger" className="col-8 text-center">
-        Erreur, identifiant ou mot de passe invalides...
-      </Alert>
+        <Alert variant="danger" className="col-8 text-center">
+          Erreur, identifiant ou mot de passe invalides...
+        </Alert>
       )}
+      <FloatingLabel
+        controlId="floatingInput"
+        label="Adresse mail"
+        className="mb-3 col-8"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setMail(event.currentTarget.value);
+          }}
+          type="email"
+          placeholder="name@example.com"
+        />
+      </FloatingLabel>
 
-      <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Adresse mail"
-          className="mb-3 col-8"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setMail(event.currentTarget.value);
-            }}
-            type="email"
-            placeholder="name@example.com"
-          />
-        </FloatingLabel>
+      <FloatingLabel controlId="floatingPassword" className="mb-3 col-8" label="Mot de passe">
+        <Form.Control
+          onChange={(event) => {
+            setPassword(event.currentTarget.value);
+          }}
+          type="password"
+          placeholder="Password"
+        />
+      </FloatingLabel>
 
-        <FloatingLabel controlId="floatingPassword" className="mb-3 col-8" label="Mot de passe">
-          <Form.Control
-            onChange={(event) => {
-              setPassword(event.currentTarget.value);
-            }}
-            type="password"
-            placeholder="Password"
-          />
-        </FloatingLabel>
+      <Button variant="primary" type="submit">
+        Se connecter
+      </Button>
+    </Form>
 
-        <Button variant="primary" type="submit">
-          Se connecter
-        </Button>
-      </Form>
-    </div>
   );
 }
 
