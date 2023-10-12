@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
-
+import moment from 'moment';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../../components/CardComponent/CardComponent';
 import EventComponent from '../../components/CardComponent/EventComponent/EventComponent';
+import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 function EventPage() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
@@ -29,18 +30,23 @@ function EventPage() {
       setIsLoading(false);
     }
   }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <div className="d-flex justify-content-center">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
+
+    <GeneralLayout
+      pageTitle={`${`${elementToDisplay.title} - ` ?? ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
+      description={`Découvrez les informations et véhicules à louer pour : ${`${elementToDisplay.title} - ` ?? ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
+      childComponent={(
         <CardComponent
           childComponent={<EventComponent event={elementToDisplay} />}
         />
-      )}
-    </div>
+            )}
+    />
+
   );
 }
 

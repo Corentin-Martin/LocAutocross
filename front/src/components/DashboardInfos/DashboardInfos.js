@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Card, Spinner } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { EyeFill } from 'react-bootstrap-icons';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import { setElementToDisplay } from '../../actions/dashboard';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function DashboardInfos({ myThings, text, type }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,68 +54,67 @@ function DashboardInfos({ myThings, text, type }) {
         console.error(err);
       });
   };
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="mt-3 text-center" style={{ flexGrow: '1' }}>
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
-        <Card style={{ width: '100%', height: '100%' }} className="d-flex justify-content-center align-items-center">
 
-          <Card.Title>Les informations</Card.Title>
-          {length > 0 ? (
-            <>
-              <Card.Subtitle className="mt-2">Nombre {text}{length > 1 ? 's' : ''}</Card.Subtitle>
-              <Card.Text>{length}</Card.Text>
-              <Card.Subtitle>Premier ajout {text}</Card.Subtitle>
-              <Card.Text>{oldest ? (
-                <>
-                  {moment(oldest.createdAt).format('DD/MM/YYYY HH:mm')} <EyeFill
-                    size={24}
-                    style={{ cursor: 'pointer' }}
-                    className="ms-2 text-tertiary"
-                    onClick={() => {
-                      handleShow(oldest.id);
-                    }}
-                  />
-                </>
-              )
-                : ''}
-              </Card.Text>
-              <Card.Subtitle>Dernier ajout {text}</Card.Subtitle>
-              <Card.Text>{newest ? (
-                <>
-                  {moment(newest.createdAt).format('DD/MM/YYYY HH:mm')} <EyeFill
-                    size={24}
-                    style={{ cursor: 'pointer' }}
-                    className="ms-2 text-tertiary"
-                    onClick={() => {
-                      handleShow(newest.id);
-                    }}
-                  />
-                </>
-              ) : ''}
-              </Card.Text>
-              <Card.Subtitle>Dernière modification {text}</Card.Subtitle>
-              <Card.Text>{recentlyUpdated ? (
-                <>
-                  {moment(recentlyUpdated.updatedAt).format('DD/MM/YYYY HH:mm')} <EyeFill
-                    size={24}
-                    style={{ cursor: 'pointer' }}
-                    className="ms-2 text-tertiary"
-                    onClick={() => {
-                      handleShow(recentlyUpdated.id);
-                    }}
-                  />
-                </>
-              ) : '/'}
-              </Card.Text>
-            </>
-          ) : <Card.Subtitle className="mt-3">Aucune information à afficher. Cette section est vide pour le moment.</Card.Subtitle>}
+      <Card style={{ width: '100%', height: '100%' }} className="d-flex justify-content-center align-items-center">
 
-        </Card>
-      )}
+        <Card.Title>Les informations</Card.Title>
+        {length > 0 ? (
+          <>
+            <Card.Subtitle className="mt-2">Nombre {text}{length > 1 ? 's' : ''}</Card.Subtitle>
+            <Card.Text>{length}</Card.Text>
+            <Card.Subtitle>Premier ajout {text}</Card.Subtitle>
+            <Card.Text>{oldest ? (
+              <>
+                {moment(oldest.createdAt).format('DD/MM/YYYY HH:mm')} <EyeFill
+                  size={24}
+                  style={{ cursor: 'pointer' }}
+                  className="ms-2 text-tertiary"
+                  onClick={() => {
+                    handleShow(oldest.id);
+                  }}
+                />
+              </>
+            )
+              : ''}
+            </Card.Text>
+            <Card.Subtitle>Dernier ajout {text}</Card.Subtitle>
+            <Card.Text>{newest ? (
+              <>
+                {moment(newest.createdAt).format('DD/MM/YYYY HH:mm')} <EyeFill
+                  size={24}
+                  style={{ cursor: 'pointer' }}
+                  className="ms-2 text-tertiary"
+                  onClick={() => {
+                    handleShow(newest.id);
+                  }}
+                />
+              </>
+            ) : ''}
+            </Card.Text>
+            <Card.Subtitle>Dernière modification {text}</Card.Subtitle>
+            <Card.Text>{recentlyUpdated ? (
+              <>
+                {moment(recentlyUpdated.updatedAt).format('DD/MM/YYYY HH:mm')} <EyeFill
+                  size={24}
+                  style={{ cursor: 'pointer' }}
+                  className="ms-2 text-tertiary"
+                  onClick={() => {
+                    handleShow(recentlyUpdated.id);
+                  }}
+                />
+              </>
+            ) : '/'}
+            </Card.Text>
+          </>
+        ) : <Card.Subtitle className="mt-3">Aucune information à afficher. Cette section est vide pour le moment.</Card.Subtitle>}
+
+      </Card>
+
     </div>
   );
 }

@@ -7,15 +7,22 @@ import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import DashboardInfos from '../../components/DashboardInfos/DashboardInfos';
 import CardComponent from '../../components/CardComponent/CardComponent';
 import VehicleComponent from '../../components/CardComponent/VehicleComponent/VehicleComponent';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 function Vehicles() {
   const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
   const myVehicles = useSelector((state) => state.dashboard.myVehicles);
 
+  // eslint-disable-next-line no-prototype-builtins
+  if (elementToDisplay !== null && !elementToDisplay.hasOwnProperty('engine')) {
+    return <LoadingSpinner />;
+  }
+
   return (
 
     <DashboardLayout
+      pageTitle="Votre garage"
       infos={<DashboardInfos myThings={myVehicles} text="de véhicule" type="vehicles" />}
       creativePart={(
         <FormAccordionCreation

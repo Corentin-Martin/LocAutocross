@@ -2,10 +2,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import FederationFilter from '../../components/FederationFilter/FederationFilter';
 import TracksMap from '../../components/TracksMap/TracksMap';
-import './Tracks.scss';
 import AxiosPublic from '../../utils/AxiosPublic';
 import { setTracks } from '../../actions/map';
 import { setElementToDisplay } from '../../actions/dashboard';
+import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
+import CardText from '../../components/CardText/CardText';
+import TrackText from '../../components/CardText/TrackText/TrackText';
 
 function Tracks() {
   const search = useSelector((state) => state.generalCalendar.search);
@@ -49,11 +51,19 @@ function Tracks() {
   }, []);
 
   return (
-    <div>
+    <GeneralLayout
+      title="Les circuits"
+      pageTitle="Les circuits"
+      description="Découvrez tous les circuits de France et réservez une location pour l'épreuve de votre choix !"
+      childComponent={(
+        <>
+          <CardText childComponent={<TrackText />} />
+          <FederationFilter onlyChampionships />
+          <TracksMap />
+        </>
+    )}
+    />
 
-      <FederationFilter onlyChampionships />
-      <TracksMap />
-    </div>
   );
 }
 

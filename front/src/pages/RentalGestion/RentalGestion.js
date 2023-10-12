@@ -1,5 +1,3 @@
-import { Spinner } from 'react-bootstrap';
-import './RentalGestion.scss';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
@@ -13,6 +11,7 @@ import AxiosPrivate from '../../utils/AxiosPrivate';
 import MasterMy from '../../components/MasterMy/MasterMy';
 import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import DashboardInfos from '../../components/DashboardInfos/DashboardInfos';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 function RentalGestion() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
@@ -44,33 +43,30 @@ function RentalGestion() {
         console.error(err);
       });
   }, [elementToDisplay]);
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return (
-    <div>
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
-        <DashboardLayout
-          infos={<DashboardInfos myThings={myRentals} text="de location" type="rentals" />}
-          creativePart={(
-            <FormAccordionCreation
-              childComponent={<RentalCreation />}
-              message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Créer une proposition de location</> : 'Modifier une location'}
-            />
-          )}
-          detail={(
-            <CardComponent
-              fromGestion
-              childComponent={<RentalComponent rental={elementToDisplay} />}
-            />
-          )}
-          myThings={<MasterMy myThings={myRentals} type="rental" childComponent={<MyRentals />} />}
-          title="Mes locations"
-        />
 
-      )}
-    </div>
+    <DashboardLayout
+      pageTitle="Gérez vos locations"
+      infos={<DashboardInfos myThings={myRentals} text="de location" type="rentals" />}
+      creativePart={(
+        <FormAccordionCreation
+          childComponent={<RentalCreation />}
+          message={elementToEdit === null ? <><PlusCircleFill size={24} className="me-2" /> Créer une proposition de location</> : 'Modifier une location'}
+        />
+          )}
+      detail={(
+        <CardComponent
+          fromGestion
+          childComponent={<RentalComponent rental={elementToDisplay} />}
+        />
+          )}
+      myThings={<MasterMy myThings={myRentals} type="rental" childComponent={<MyRentals />} />}
+      title="Mes locations"
+    />
+
   );
 }
 

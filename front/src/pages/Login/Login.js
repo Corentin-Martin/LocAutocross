@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Login.scss';
 import { useDispatch } from 'react-redux';
-import { Row } from 'react-bootstrap';
 import { setElementToDisplay } from '../../actions/dashboard';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import ModalResetPassword from '../../components/ModalResetPassword/ModalResetPassword';
+import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
 
 function Login() {
   const dispatch = useDispatch();
@@ -24,30 +23,36 @@ function Login() {
   const handleClose = () => setShow(false);
 
   return (
-    <Row className="d-flex justify-content-center">
+    <GeneralLayout
+      title="Connexion"
+      pageTitle="Connexion"
+      description="Connectez-vous et trouvez la location idéale pour rouler sur les piste de France ou mettez votre véhicule à louer."
+      childComponent={(
+        <>
 
-      <h1 className="text-center">Connexion</h1>
+          <LoginForm />
 
-      <LoginForm />
+          <div
+            className="badge mt-2 bg-danger col-6 col-md-4 col-lg-2"
+            onClick={handleShow}
+          >Mot de passe oublié ?
+          </div>
 
-      <div
-        className="badge mt-2 bg-danger col-6 col-md-4 col-lg-2"
-        onClick={handleShow}
-      >Mot de passe oublié ?
-      </div>
+          <p
+            className="text-center mt-3"
+          >Vous n'avez pas encore de compte ?
+            <span
+              className="badge bg-primary ms-2"
+              onClick={() => navigate('/inscription', location.state !== null ? { state: { rental: location.state.rental } } : '')}
+            >Inscrivez-vous
+            </span>
+          </p>
 
-      <p
-        className="text-center mt-3"
-      >Vous n'avez pas encore de compte ?
-        <span
-          className="badge bg-primary ms-2"
-          onClick={() => navigate('/inscription', location.state !== null ? { state: { rental: location.state.rental } } : '')}
-        >Inscrivez-vous
-        </span>
-      </p>
+          <ModalResetPassword show={show} handleClose={handleClose} />
+        </>
+    )}
+    />
 
-      <ModalResetPassword show={show} handleClose={handleClose} />
-    </Row>
   );
 }
 

@@ -1,3 +1,4 @@
+import './RegisterForm.scss';
 import {
   Alert, Button, FloatingLabel, Form, Row,
 } from 'react-bootstrap';
@@ -69,132 +70,130 @@ function RegisterForm() {
     setRole(desiredRole);
   };
   return (
-    <div>
 
+    <Form onSubmit={handleSubmit} className="col-12 d-flex flex-column align-items-center">
       {wrongConnexion && (
-      <Alert variant="danger" className="col-8 text-center">
-        Attention, tous les champs sont obligatoires pour l'inscription !
-      </Alert>
+        <Alert variant="danger" className="col-8 text-center">
+          Attention, tous les champs sont obligatoires pour l'inscription !
+        </Alert>
       )}
+      <FloatingLabel
+        controlId="floatingInput"
+        label="Adresse mail"
+        className="mb-3 col-8"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setMail(event.currentTarget.value);
+          }}
+          type="email"
+          placeholder="name@example.com"
+        />
+      </FloatingLabel>
 
-      <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
-        <FloatingLabel
-          controlId="floatingInput"
-          label="Adresse mail"
-          className="mb-3 col-8"
+      <FloatingLabel
+        controlId="floatingInput2"
+        label="Pseudo"
+        className="mb-3 col-8"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setPseudo(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="pseudo"
+        />
+      </FloatingLabel>
+
+      <FloatingLabel
+        controlId="floatingInput3"
+        label="Prénom"
+        className="mb-3 col-8"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setFirstname(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="Prénom"
+        />
+      </FloatingLabel>
+
+      <FloatingLabel
+        controlId="floatingInput4"
+        label="Nom de famille"
+        className="mb-3 col-8"
+      >
+        <Form.Control
+          onChange={(event) => {
+            setLastname(event.currentTarget.value);
+          }}
+          type="text"
+          placeholder="Nom de famille"
+        />
+      </FloatingLabel>
+
+      <Password sendPasswordToParent={receivePasswordFromChild} />
+
+      <Row className="mb-3 col-8 text-center d-flex flex-column justify-content-center align-items-center">
+
+        <h5>Choisissez votre rôle :</h5>
+
+        <Button variant="secondary" className="col-6 mb-3" onClick={handleShow}>
+          Quel rôle choisir ?
+        </Button>
+
+        <ModalRoleChoice
+          show={show}
+          handleClose={handleClose}
+          sendRoleToParent={receiveRoleFromChild}
+        />
+
+        <div
+          className="role-input col-7 bg-tertiary p-1 m-1 rounded"
+          onClick={() => {
+            setRole(['ROLE_PRO']);
+          }}
         >
-          <Form.Control
-            onChange={(event) => {
-              setMail(event.currentTarget.value);
-            }}
-            type="email"
-            placeholder="name@example.com"
-          />
-        </FloatingLabel>
 
-        <FloatingLabel
-          controlId="floatingInput2"
-          label="Pseudo"
-          className="mb-3 col-8"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setPseudo(event.currentTarget.value);
-            }}
-            type="text"
-            placeholder="pseudo"
-          />
-        </FloatingLabel>
-
-        <FloatingLabel
-          controlId="floatingInput3"
-          label="Prénom"
-          className="mb-3 col-8"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setFirstname(event.currentTarget.value);
-            }}
-            type="text"
-            placeholder="Prénom"
-          />
-        </FloatingLabel>
-
-        <FloatingLabel
-          controlId="floatingInput4"
-          label="Nom de famille"
-          className="mb-3 col-8"
-        >
-          <Form.Control
-            onChange={(event) => {
-              setLastname(event.currentTarget.value);
-            }}
-            type="text"
-            placeholder="Nom de famille"
-          />
-        </FloatingLabel>
-
-        <Password sendPasswordToParent={receivePasswordFromChild} />
-
-        <Row className="mb-3 col-8 text-center d-flex flex-column justify-content-center align-items-center">
-
-          <h5>Choisissez votre rôle :</h5>
-
-          <Button variant="secondary" className="col-6 mb-3" onClick={handleShow}>
-            Quel rôle choisir ?
-          </Button>
-
-          <ModalRoleChoice
-            show={show}
-            handleClose={handleClose}
-            sendRoleToParent={receiveRoleFromChild}
-          />
-
-          <div
-            className="role-input col-7 bg-tertiary p-1 m-1 rounded"
-            onClick={() => {
+          <Form.Check
+            type="switch"
+            id="pro"
+            name="role"
+            label="Pro"
+            checked={role.includes('ROLE_PRO')}
+            onChange={() => {
               setRole(['ROLE_PRO']);
             }}
-          >
+          />
+        </div>
 
-            <Form.Check
-              type="switch"
-              id="pro"
-              name="role"
-              label="Pro"
-              checked={role.includes('ROLE_PRO')}
-              onChange={() => {
-                setRole(['ROLE_PRO']);
-              }}
-            />
-          </div>
+        <div
+          className="role-input col-7 bg-tertiary p-1 m-1 rounded"
+          onClick={() => {
+            setRole(['ROLE_USER']);
+          }}
+        >
 
-          <div
-            className="role-input col-7 bg-tertiary p-1 m-1 rounded"
-            onClick={() => {
+          <Form.Check
+            type="switch"
+            id="user"
+            name="role"
+            label="Pilote"
+            checked={role.includes('ROLE_USER')}
+            onChange={() => {
               setRole(['ROLE_USER']);
             }}
-          >
+          />
+        </div>
 
-            <Form.Check
-              type="switch"
-              id="user"
-              name="role"
-              label="Pilote"
-              checked={role.includes('ROLE_USER')}
-              onChange={() => {
-                setRole(['ROLE_USER']);
-              }}
-            />
-          </div>
+      </Row>
 
-        </Row>
+      <Button variant="primary" type="submit">
+        Se connecter
+      </Button>
+    </Form>
 
-        <Button variant="primary" type="submit">
-          Se connecter
-        </Button>
-      </Form>
-    </div>
   );
 }
 

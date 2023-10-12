@@ -1,12 +1,13 @@
-import './Rental.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+import moment from 'moment';
 import RentalComponent from '../../components/CardComponent/RentalComponent/RentalComponent';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../../components/CardComponent/CardComponent';
+import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 function Rental() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
@@ -31,18 +32,23 @@ function Rental() {
       setIsLoading(false);
     }
   }, [location.pathname]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return (
-    <div className="d-flex justify-content-center">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
+    <GeneralLayout
+      pageTitle={`Proposition de location pour ${elementToDisplay.event.title !== null ? `${elementToDisplay.event.title} - ` : ''}${elementToDisplay.event.track.city} - ${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')}`}
+      description={`Proposition de location pour ${elementToDisplay.event.title !== null ? `${elementToDisplay.event.title} - ` : ''}${elementToDisplay.event.track.city} - ${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')}`}
+      childComponent={(
+
         <CardComponent
           childComponent={<RentalComponent rental={elementToDisplay} />}
         />
-      )}
-    </div>
+        )}
+
+    />
+
   );
 }
 

@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import './Chat.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Button, Form, InputGroup, Spinner,
+  Button, Form, InputGroup,
 } from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import { setConversation, setElementToDisplay } from '../../actions/dashboard';
 import Message from './Message/Message';
 import AxiosPrivate from '../../utils/AxiosPrivate';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function Chat({ noCloseButton }) {
   const conversation = useSelector((state) => state.dashboard.conversation);
@@ -103,48 +104,42 @@ function Chat({ noCloseButton }) {
     }
   };
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="d-flex flex-column align-items-center col-12 mt-3" style={{ height: `${chatBoxHeight - 8}vh`, position: 'relative' }}>
-      {isLoading ? (
-        <div className="d-flex flex-column justify-content-center align-items-center" style={{ flexGrow: '1' }}>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Chargement...</span>
-          </Spinner>
-        </div>
-      )
-        : (
-          <>
-            {!noCloseButton && (
-            <div
-              className="XButton"
-              style={{
-                position: 'absolute', top: '0', right: '4%', zIndex: '5',
-              }}
-            >
-              <XCircleFill
-                size={24}
-                onClick={() => {
-                  dispatch(setConversation(null));
-                  dispatch(setElementToDisplay(null));
-                }}
-                className="m-2"
-              />
-            </div>
-            )}
 
-            <div
-              style={{
-                width: '100%', overflow: 'auto', position: 'relative', scrollTop: '100%', flexGrow: '1',
-              }}
-              className="d-flex flex-column"
-              ref={chatBoxRef}
-            >
-              {localConv !== null && localConv.messages.map((message) => (
-                <Message key={message.id} message={message} />
-              ))}
-            </div>
-          </>
-        )}
+      {!noCloseButton && (
+      <div
+        className="XButton"
+        style={{
+          position: 'absolute', top: '0', right: '4%', zIndex: '5',
+        }}
+      >
+        <XCircleFill
+          size={24}
+          onClick={() => {
+            dispatch(setConversation(null));
+            dispatch(setElementToDisplay(null));
+          }}
+          className="m-2"
+        />
+      </div>
+      )}
+
+      <div
+        style={{
+          width: '100%', overflow: 'auto', position: 'relative', scrollTop: '100%', flexGrow: '1',
+        }}
+        className="d-flex flex-column"
+        ref={chatBoxRef}
+      >
+        {localConv !== null && localConv.messages.map((message) => (
+          <Message key={message.id} message={message} />
+        ))}
+      </div>
 
       <Form onSubmit={handleSubmit} className="MessageForm mt-3 col-12 d-flex flex-column justify-content-center align-items-center">
 

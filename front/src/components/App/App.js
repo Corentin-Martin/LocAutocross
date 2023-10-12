@@ -1,8 +1,8 @@
+import './App.scss';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import './App.scss';
 import Skeleton from '../Skeleton/Skeleton';
 import Homepage from '../../pages/Homepage/Homepage';
 import Rental from '../../pages/Rental/Rental';
@@ -24,6 +24,7 @@ import AxiosPrivate from '../../utils/AxiosPrivate';
 import Events from '../../pages/Events/Events';
 import Tracks from '../../pages/Tracks/Tracks';
 import EventPage from '../../pages/EventPage/EventPage';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -89,9 +90,7 @@ function App() {
   if (token !== null && user === null) {
     return (
       <div className="d-flex flex-column justify-content-center align-items-center" style={{ flexGrow: '1' }}>
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
+        <LoadingSpinner />
       </div>
     );
   }
