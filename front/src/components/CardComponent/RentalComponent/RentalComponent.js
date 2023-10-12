@@ -57,9 +57,12 @@ function RentalComponent({ rental }) {
           <RentalInfos rental={rental} />
           <VehicleInfos vehicle={rental.vehicle} />
 
-          <RentalControl rental={rental} />
-          <RentalUserbox rental={rental} />
-          {(user === null && rental.status < 4)
+          {rental.event.isCancelled ? <div className="alert alert-danger text-center"><Card.Text>L'évènement est annulé, aucune action possible.</Card.Text></div>
+            : (
+              <>
+                <RentalControl rental={rental} />
+                <RentalUserbox rental={rental} />
+                {(user === null && rental.status < 4)
               && (
               <Button
                 type="button"
@@ -71,6 +74,8 @@ function RentalComponent({ rental }) {
               >Pour plus de renseignements ou pour réserver, veuillez vous connecter
               </Button>
               )}
+              </>
+            )}
         </Row>
       </Card.Body>
 
