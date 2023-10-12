@@ -33,7 +33,7 @@ function ResetPasswordForm() {
     }
   };
   return (
-    <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
+    <Form onSubmit={handleSubmit} className="col-12 d-flex flex-column align-items-center">
       <Password sendPasswordToParent={receivePasswordFromChild} />
       <Button variant="primary" type="submit">
         Réinitialiser

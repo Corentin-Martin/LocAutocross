@@ -4,11 +4,11 @@ import {
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import {
-  setNewItemByModal, setOpenModalCreation,
+  setNewItemByModal,
 } from '../../../actions/dashboard';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
 
-function TrackCreation() {
+function TrackCreation({ setShowToParent }) {
   const [suggestions, setSuggestions] = useState([]);
   const [lastSearchTerm, setLastSearchTerm] = useState('');
 
@@ -68,7 +68,7 @@ function TrackCreation() {
           latitude: cityObject[0].lat,
           longitude: cityObject[0].lng,
         }).then((response) => {
-          dispatch(setOpenModalCreation(false));
+          setShowToParent(false);
           dispatch(setNewItemByModal(response.data));
         })
           .catch((error) => {

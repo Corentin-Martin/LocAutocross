@@ -1,21 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import './Chat.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Button, Form, InputGroup,
-} from 'react-bootstrap';
 import { XCircleFill } from 'react-bootstrap-icons';
 import { setConversation, setElementToDisplay } from '../../actions/dashboard';
 import Message from './Message/Message';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import ChatForm from './ChatForm/ChatForm';
 
 function Chat({ noCloseButton }) {
   const conversation = useSelector((state) => state.dashboard.conversation);
-  const rental = useSelector((state) => state.dashboard.rental);
+
   const [localConv, setLocalConv] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [content, setContent] = useState('');
+
   const [chatBoxHeight, setChatBoxHeight] = useState('50vh');
 
   const dispatch = useDispatch();
@@ -68,40 +66,8 @@ function Chat({ noCloseButton }) {
     window.addEventListener('resize', setAvailableHeight);
   }, []);
 
-  const handleSubmit = (event) => {
-    setIsLoading(true);
-    event.preventDefault();
-    if (conversation !== null) {
-      AxiosPrivate.post(
-        `messages/${conversation.id}`,
-        {
-          content: content,
-        },
-
-      )
-        .then(() => {
-          setContent('');
-          chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-    else {
-      AxiosPrivate.post(
-        `conversations/location/${rental.id}`,
-        {
-          content: content,
-        },
-      )
-        .then((response) => {
-          setContent('');
-          dispatch(setConversation(response.data.conversation));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+  const setSendLoadToChat = (bool) => {
+    setIsLoading(bool);
   };
 
   if (isLoading) {
@@ -141,23 +107,10 @@ function Chat({ noCloseButton }) {
         ))}
       </div>
 
-      <Form onSubmit={handleSubmit} className="MessageForm mt-3 col-12 d-flex flex-column justify-content-center align-items-center">
-
-        <InputGroup>
-          <InputGroup.Text>Votre message</InputGroup.Text>
-          <Form.Control
-            as="textarea"
-            aria-label="Votre message"
-            onChange={(event) => {
-              setContent(event.currentTarget.value);
-            }}
-            value={content}
-          />
-        </InputGroup>
-
-        <Button type="submit" className="mt-2 col-8">Envoyer</Button>
-
-      </Form>
+      <ChatForm
+        conversation={conversation}
+        setSendLoadToChat={setSendLoadToChat}
+      />
 
     </div>
 

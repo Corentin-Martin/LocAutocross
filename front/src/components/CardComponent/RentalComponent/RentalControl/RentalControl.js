@@ -1,5 +1,5 @@
 import {
-  Card, Col, ListGroup, Modal,
+  Card, Col, ListGroup,
 } from 'react-bootstrap';
 import './RentalControl.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,11 +12,12 @@ import {
   setConversation, setElementToDisplay, setElementToEdit, setOpenCreation,
 } from '../../../../actions/dashboard';
 
-import ModalChat from '../../../ModalChat/ModalChat';
 import ReservationAction from './ReservationAction/ReservationAction';
 import RentalCreation from '../../../FormAccordionCreation/RentalCreation/RentalCreation';
 import AxiosPrivate from '../../../../utils/AxiosPrivate';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
+import MasterModal from '../../../MasterModal/MasterModal';
+import Chat from '../../../Chat/Chat';
 
 function RentalControl({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -144,14 +145,18 @@ function RentalControl({ rental }) {
         </Card>
       </Col>
 
-      <ModalChat show={show} handleClose={handleClose} />
+      <MasterModal
+        show={show}
+        handleClose={handleClose}
+        childComponent={<Chat noCloseButton />}
+      />
 
-      <Modal show={showEdit} onHide={handleCloseEdit}>
-        <Modal.Header closeButton />
-        <Modal.Body>
-          <RentalCreation />
-        </Modal.Body>
-      </Modal>
+      <MasterModal
+        show={showEdit}
+        handleClose={handleCloseEdit}
+        childComponent={<RentalCreation />}
+      />
+
     </>
 
   );

@@ -6,11 +6,12 @@ import './RentalUserbox.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { Chat } from 'react-bootstrap-icons';
 import { setConversation } from '../../../../actions/dashboard';
-import ModalChat from '../../../ModalChat/ModalChat';
 import UserReservationControl from './UserReservationControl/UserReservationControl';
 import AxiosPrivate from '../../../../utils/AxiosPrivate';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
+import MasterModal from '../../../MasterModal/MasterModal';
 
 function RentalUserbox({ rental }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -89,7 +90,12 @@ function RentalUserbox({ rental }) {
         </Card>
       </Col>
 
-      <ModalChat show={show} handleClose={handleClose} />
+      <MasterModal
+        show={show}
+        handleClose={handleClose}
+        childComponent={<Chat noCloseButton />}
+      />
+
     </>
 
   );

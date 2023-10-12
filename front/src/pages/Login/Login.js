@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setElementToDisplay } from '../../actions/dashboard';
 import LoginForm from '../../components/LoginForm/LoginForm';
-import ModalResetPassword from '../../components/ModalResetPassword/ModalResetPassword';
 import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
+import MasterModal from '../../components/MasterModal/MasterModal';
+import AskResetPasswordForm from '../../components/MasterModal/AskResetPasswordForm/AskResetPasswordForm';
 
 function Login() {
   const dispatch = useDispatch();
@@ -48,7 +49,12 @@ function Login() {
             </span>
           </p>
 
-          <ModalResetPassword show={show} handleClose={handleClose} />
+          <MasterModal
+            show={show}
+            handleClose={handleClose}
+            title="Réinitialisation de mot de passe"
+            childComponent={<AskResetPasswordForm />}
+          />
         </>
     )}
     />

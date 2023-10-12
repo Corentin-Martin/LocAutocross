@@ -5,12 +5,12 @@ import './BrandCreation.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  setNewItemByModal, setOpenModalCreation,
+  setNewItemByModal,
 } from '../../../actions/dashboard';
 import AxiosPublic from '../../../utils/AxiosPublic';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
 
-function BrandCreation() {
+function BrandCreation({ setShowToParent }) {
   const [brandName, setBrandName] = useState('');
   const [brandExist, setBrandExist] = useState(false);
 
@@ -34,7 +34,7 @@ function BrandCreation() {
     if (brandName !== '' && !brandExist) {
       AxiosPrivate.post('brands', { name: brandName })
         .then((response) => {
-          dispatch(setOpenModalCreation(false));
+          setShowToParent(false);
           dispatch(setNewItemByModal(response.data));
         })
         .catch((err) => {
@@ -45,7 +45,7 @@ function BrandCreation() {
 
   return (
 
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className="col-12 d-flex flex-column justify-content-center">
       <FloatingLabel
         controlId="floatingInput"
         label="Nom"
