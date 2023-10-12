@@ -34,14 +34,14 @@ class ChampionshipController extends AbstractController
     {
         if (!is_null($request->query->get('tracks'))) {
             if (is_null($championship)) {
-                $events = $eventRepository->findBy(["championship" => null]);
+                $events = $eventRepository->findBy(["championship" => null, "isCancelled" => false]);
             } else {
                 $events = $championship->getEvents();
             }
             $tracks = [];
             foreach ($events as $event) {
                 
-                if ($event->getStart() > new DateTime('now')) {
+                if ($event->getStart() > new DateTime('now') && !$event->isIsCancelled()) {
                     $tracks[$event->getTrack()->getId()] = $event->getTrack();
                 }
                 
