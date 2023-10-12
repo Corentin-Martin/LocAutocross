@@ -15,7 +15,7 @@ import handleFileUpload from '../../../utils/UploadImage';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import MasterModal from '../../MasterModal/MasterModal';
 
-function EventCreation() {
+function EventCreation({ closeModal }) {
   const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
 
   const federations = useSelector((state) => state.generalCalendar.federations);
@@ -148,6 +148,9 @@ function EventCreation() {
 
         }).then((response) => {
           dispatch(setElementToDisplay(response.data));
+          if (closeModal !== null) {
+            closeModal();
+          }
         }).catch((error) => {
           console.error(error);
         });
@@ -383,5 +386,9 @@ function EventCreation() {
 
   );
 }
+
+EventCreation.defaultProps = {
+  closeModal: null,
+};
 
 export default EventCreation;

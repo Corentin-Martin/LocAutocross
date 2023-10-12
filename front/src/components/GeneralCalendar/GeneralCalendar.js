@@ -159,7 +159,13 @@ function GeneralCalendar() {
           handleClose={handleClose}
           childComponent={(
             <CardComponent
-              childComponent={<EventComponent event={selectedEvent} fromCalendar />}
+              childComponent={(
+                <EventComponent
+                  inColumn={false}
+                  event={selectedEvent}
+                  fromCalendar
+                />
+)}
             />
 )}
         />

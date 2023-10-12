@@ -29,6 +29,9 @@ function DeleteModal({ type, idToDelete }) {
         if (type === 'rentals') {
           navigate('/mes-locations');
         }
+        if (type === 'events') {
+          navigate('/mes-evenements');
+        }
       })
       .catch((err) => {
         console.error(err);

@@ -17,8 +17,6 @@ function Events() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
   const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
 
-  console.log(elementToDisplay);
-
   const [isLoading, setIsLoading] = useState(true);
   const [myEvents, setMyEvents] = useState([]);
 
