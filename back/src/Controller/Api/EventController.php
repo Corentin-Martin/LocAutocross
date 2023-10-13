@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use App\Services\EmailSender;
 use App\Services\UploadImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -161,7 +162,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="delete", requirements={"id"="\d+"}, methods={"DELETE"})
      */
-    public function delete(?Event $event, EventRepository $eventRepository): JsonResponse
+    public function delete(?Event $event, EventRepository $eventRepository, EmailSender $emailSender): JsonResponse
     {
         if (is_null($event)) {
             return $this->json(["message" => "Cet évenement n'existe pas"], Response::HTTP_NOT_FOUND, []);
@@ -172,6 +173,12 @@ class EventController extends AbstractController
         }
 
         $event->setIsCancelled(true);
+
+        $rentals = $event->getRentals();
+
+        foreach ($rentals as $rental) {
+            $emailSender->sendAlertEventCancelled($event, $rental);
+        }
 
         $eventRepository->add($event, true);
 
