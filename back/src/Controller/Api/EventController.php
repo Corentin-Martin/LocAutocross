@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use App\Repository\RentalRepository;
 use App\Services\EmailSender;
 use App\Services\UploadImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -162,7 +163,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="delete", requirements={"id"="\d+"}, methods={"DELETE"})
      */
-    public function delete(?Event $event, EventRepository $eventRepository, EmailSender $emailSender): JsonResponse
+    public function delete(?Event $event, EventRepository $eventRepository, EmailSender $emailSender, RentalRepository $rentalRepository): JsonResponse
     {
         if (is_null($event)) {
             return $this->json(["message" => "Cet évenement n'existe pas"], Response::HTTP_NOT_FOUND, []);
@@ -178,6 +179,9 @@ class EventController extends AbstractController
 
         foreach ($rentals as $rental) {
             $emailSender->sendAlertEventCancelled($event, $rental);
+            $rental->setStatus(6);
+            $rentalRepository->add($rental, true);
+
         }
 
         $eventRepository->add($event, true);
