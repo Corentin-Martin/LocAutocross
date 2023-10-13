@@ -1,10 +1,10 @@
 import { Card, Col } from 'react-bootstrap';
 
 function InfosComponent({
-  childComponent, title, inColumn, bgVariant,
+  childComponent, title, inColumn, bgVariant, onClick,
 }) {
   return (
-    <Col sm={12} md={inColumn ? 12 : 6} className="mb-2" style={{ flexGrow: '1' }}>
+    <Col sm={12} md={inColumn ? 12 : 6} className="mb-2" style={{ flexGrow: '1' }} onClick={onClick}>
       <Card style={{ width: '100%', height: '100%' }} bg={bgVariant}>
         <Card.Header>{title}</Card.Header>
         <Card.Body className="d-flex align-items-center">
@@ -20,6 +20,7 @@ function InfosComponent({
 InfosComponent.defaultProps = {
   inColumn: false,
   bgVariant: 'light',
+  onClick: null,
 };
 
 export default InfosComponent;

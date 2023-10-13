@@ -28,6 +28,8 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import About from '../../pages/About/About';
 import LegalNotice from '../../pages/LegalNotice/LegalNotice';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
+import Track from '../../pages/Track/Track';
+import Rentals from '../../pages/Rentals/Rentals';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -116,12 +118,21 @@ function App() {
             element={(<Skeleton page={<Tracks />} />)}
           />
           <Route
+            path="/locations"
+            element={(<Skeleton page={<Rentals />} />)}
+          />
+          <Route
             path="/location/:rentalId"
             element={(<Skeleton page={<Rental />} />)}
           />
           <Route
             path="/evenement/:eventId"
             element={(<Skeleton page={<EventPage />} />)}
+          />
+
+          <Route
+            path="/circuit/:trackId"
+            element={(<Skeleton page={<Track />} />)}
           />
           <Route
             path="/connexion"

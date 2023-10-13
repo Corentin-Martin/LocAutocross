@@ -5,6 +5,8 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import EventExtract from './EventExtract/EventExtract';
 import { setElementToDisplay } from '../../../actions/dashboard';
+// eslint-disable-next-line import/no-cycle
+import TracksMap from '../../TracksMap/TracksMap';
 
 function TrackComponent({ extract, track }) {
   const dispatch = useDispatch();
@@ -18,19 +20,20 @@ function TrackComponent({ extract, track }) {
     if (track.events.length > 3) {
       setMoreThan3(true);
     }
-    setEvents(futureEvents.slice(0, 3));
+    setEvents(extract ? futureEvents.slice(0, 3) : futureEvents);
   }, []);
   return (
     <>
-      <Card.Header>
+      <Card.Header onClick={() => (extract ? navigate(`/circuit/${track.id}`) : '')} style={{ cursor: 'pointer' }}>
         {track.name !== null && <Card.Title>{track.name}</Card.Title>}
         <Card.Subtitle>{track.city} ({track.postCode} - {track.department})</Card.Subtitle>
       </Card.Header>
       <Card.Body>
+        {!extract && <TracksMap fromTrackPage />}
         {events.length > 0
           ? (
             <>
-              {extract && <span className="fst-italic text-decoration-underline">Les prochains évènemements :</span>}
+              <h6 className="fst-italic text-decoration-underline">Les prochains évènemements :</h6>
               <ListGroup>
                 {events.map((event) => {
                   if (moment(event.start) > moment()) {

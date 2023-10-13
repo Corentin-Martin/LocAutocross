@@ -1,25 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import moment from 'moment';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../../components/CardComponent/CardComponent';
-import EventComponent from '../../components/CardComponent/EventComponent/EventComponent';
+import TrackComponent from '../../components/CardComponent/TrackComponent/TrackComponent';
 import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
+import { setTracks } from '../../actions/map';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
-function EventPage() {
+function Track() {
   const elementToDisplay = useSelector((state) => state.dashboard.elementToDisplay);
-  const { eventId } = useParams();
+  const { trackId } = useParams();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (elementToDisplay === null) {
-      AxiosPublic.get(`events/${eventId}`)
+      AxiosPublic.get(`tracks/${trackId}`)
         .then((response) => {
           dispatch(setElementToDisplay(response.data));
+          dispatch(setTracks([response.data]));
           setIsLoading(false);
         })
         .catch((err) => {
@@ -42,11 +43,11 @@ function EventPage() {
   return (
 
     <GeneralLayout
-      pageTitle={`${elementToDisplay.title !== null ? `${elementToDisplay.title} - ` : ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
-      description={`Découvrez les informations et véhicules à louer pour : ${elementToDisplay.title !== null ? `${elementToDisplay.title} - ` : ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
+      pageTitle={`Circuit de ${elementToDisplay.city}`}
+      description={`Découvrez toutes les informations relatives au circuit d'Autocross de ${elementToDisplay.city}`}
       childComponent={(
         <CardComponent
-          childComponent={<EventComponent event={elementToDisplay} />}
+          childComponent={<TrackComponent track={elementToDisplay} />}
         />
             )}
     />
@@ -54,4 +55,4 @@ function EventPage() {
   );
 }
 
-export default EventPage;
+export default Track;

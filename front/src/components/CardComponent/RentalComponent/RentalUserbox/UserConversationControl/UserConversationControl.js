@@ -39,7 +39,16 @@ function UserConversationControl({ rental }) {
   }
 
   if (localConversation === '' && rental.status < 4) {
-    return <Button type="button" className="col-12" onClick={() => handleShow()}>Envoyer un message au propriétaire</Button>;
+    return (
+      <>
+        <Button type="button" className="col-12" onClick={() => handleShow()}>Envoyer un message au propriétaire</Button>
+        <MasterModal
+          show={show}
+          handleClose={handleClose}
+          childComponent={<Chat noCloseButton />}
+        />
+      </>
+    );
   }
   return (
     <>

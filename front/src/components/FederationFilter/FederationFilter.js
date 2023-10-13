@@ -85,8 +85,7 @@ function FederationFilter({ onlyChampionships }) {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isFocused ? 'grey' : state.data.color,
-      color: state.isFocused ? 'black' : 'inherit',
+      color: state.isFocused ? 'black' : state.data.color,
     }),
   };
 

@@ -33,7 +33,7 @@ function RentalComponent({ rental }) {
       >
         <h2>{rental.event.title}</h2>
         <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY à HH:mm')}</p>
-        <p>Date de fin : {moment(rental.event.start).format('DD/MM/YYYY à HH:mm')}</p>
+        <p>Date de fin : {moment(rental.event.end).format('DD/MM/YYYY à HH:mm')}</p>
         {rental.event.championship !== null
               && (
               <p>Championnat : {`${rental.event.championship.alias} `}

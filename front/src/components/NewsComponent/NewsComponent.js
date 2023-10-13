@@ -3,6 +3,7 @@ import {
   Button, Card, Col, Row, Stack,
 } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RentalExtract from '../RentalExtract/RentalExtract';
 import AxiosPublic from '../../utils/AxiosPublic';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -10,6 +11,8 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 function NewsComponent() {
   const [newRentals, setNewRentals] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     AxiosPublic.get('rentals?last')
@@ -32,7 +35,7 @@ function NewsComponent() {
         <Stack direction="horizontal">
 
           <h2>Les nouveautés</h2>
-          <Button variant="primary" className="p-2 ms-auto">
+          <Button variant="primary" className="p-2 ms-auto" onClick={() => navigate('/locations')}>
             En voir plus
           </Button>
         </Stack>

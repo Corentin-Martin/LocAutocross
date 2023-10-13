@@ -27,7 +27,7 @@ function EventExtract({ event }) {
         </span>
       </div>
 
-      {event.title !== null ? <span className="fw-bold fst-italic mt-1">{event.title}</span> : ''}
+      {event.title !== null ? <span className="fw-bold fst-italic mt-1">{event.title}</span> : '/'}
 
     </ListGroup.Item>
   );
