@@ -126,6 +126,7 @@ class Event
      * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
      * @Groups({"track"})
+     * @Groups({"rentals"})
      */
     private $end;
 

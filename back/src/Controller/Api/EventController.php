@@ -99,7 +99,7 @@ class EventController extends AbstractController
             
             $reunitedEvents = array_merge($events, $eventsForCategory);
             $finalEvents = array_unique($reunitedEvents);
-            return $this->json($finalEvents, Response::HTTP_OK, [], ["groups" => ["events"]]);
+            return $this->json(array_values($finalEvents), Response::HTTP_OK, [], ["groups" => ["events"]]);
         }
 
         return (empty($eventRepository->findBy(['isCancelled' => false]))) ? $this->json('', Response::HTTP_NO_CONTENT, [])
