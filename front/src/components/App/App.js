@@ -25,6 +25,9 @@ import Events from '../../pages/Events/Events';
 import Tracks from '../../pages/Tracks/Tracks';
 import EventPage from '../../pages/EventPage/EventPage';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import About from '../../pages/About/About';
+import LegalNotice from '../../pages/LegalNotice/LegalNotice';
+import Confidentiality from '../../pages/Confidentiality/Confidentiality';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -131,6 +134,21 @@ function App() {
           <Route
             path="/inscription"
             element={(<Skeleton page={<Registration />} />)}
+          />
+
+          <Route
+            path="/a-propos"
+            element={(<Skeleton page={<About />} />)}
+          />
+
+          <Route
+            path="/mentions-legales"
+            element={(<Skeleton page={<LegalNotice />} />)}
+          />
+
+          <Route
+            path="/confidentialite"
+            element={(<Skeleton page={<Confidentiality />} />)}
           />
 
           {/* PROTECTED */}

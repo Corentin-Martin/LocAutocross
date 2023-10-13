@@ -113,7 +113,7 @@ function Header() {
                 )}
                 <Nav.Link
                   as={Link}
-                  to="/dashboard"
+                  to="/a-propos"
                   onClick={() => {
                     setShowOffCanvas(false);
                   }}
