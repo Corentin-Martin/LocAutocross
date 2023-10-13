@@ -135,14 +135,6 @@ function Header() {
                   }}
                 >Les circuits
                 </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/dashboard"
-                  onClick={() => {
-                    setShowOffCanvas(false);
-                  }}
-                >Les évenèments
-                </Nav.Link>
 
                 <Nav.Link
                   as={Link}

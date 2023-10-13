@@ -1,8 +1,10 @@
 import {
+  Button,
   Card, Col, Row,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { setElementToDisplay } from '../../../actions/dashboard';
 import TrackInfos from './TrackInfos/TrackInfos';
 import InfosComponent from '../../InfosComponent/InfosComponent';
@@ -16,6 +18,7 @@ import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 function EventComponent({ event, fromCalendar, large }) {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => () => {
     dispatch(setElementToDisplay(null));
@@ -45,6 +48,7 @@ function EventComponent({ event, fromCalendar, large }) {
 
       <Card.Body>
 
+        {fromCalendar && <Button onClick={() => navigate(`/evenement/${event.id}`)}>Voir la fiche de l'évènement</Button>}
         <Row className="mt-3 d-flex justify-content-between">
           <Col sm={12} md={6} className="mb-2" style={{ flexGrow: '1' }}>
             <Card.Img
@@ -55,7 +59,14 @@ function EventComponent({ event, fromCalendar, large }) {
           </Col>
 
           <Col sm={12} md={large ? 12 : 6} className="mb-2 d-flex flex-column" style={{ flexGrow: '1' }}>
-            <InfosComponent inColumn title="Circuit" childComponent={<TrackInfos track={event.track} />} />
+            <InfosComponent
+              onClick={() => {
+                navigate(`/circuit/${event.track.id}`);
+              }}
+              inColumn
+              title="Circuit"
+              childComponent={<TrackInfos track={event.track} />}
+            />
             <InfosComponent inColumn title="Dates" childComponent={<DatesInfos start={event.start} end={event.end} />} />
             {event.championship !== null && (
             <InfosComponent inColumn title="Championnat" childComponent={<ChampionshipInfos championship={event.championship} />} />

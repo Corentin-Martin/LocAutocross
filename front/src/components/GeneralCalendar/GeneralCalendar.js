@@ -99,11 +99,13 @@ function GeneralCalendar() {
         let eventsWithDate = [];
 
         response.data.forEach((oneEvent) => {
-          eventsWithDate = [...eventsWithDate, {
-            ...oneEvent,
-            start: new Date(oneEvent.start),
-            end: new Date(oneEvent.end),
-          }];
+          if (moment(oneEvent.start) > moment()) {
+            eventsWithDate = [...eventsWithDate, {
+              ...oneEvent,
+              start: new Date(oneEvent.start),
+              end: new Date(oneEvent.end),
+            }];
+          }
         });
         setEvents(eventsWithDate);
         setNoEvents(false);
@@ -161,7 +163,7 @@ function GeneralCalendar() {
             next: 'Suivant',
             today: 'Aujourd\'hui',
 
-            showMore: (total) => `Voir ${total} supplémentaires`,
+            showMore: (total) => `+ ${total} autre${total > 1 ? 's' : ''}`,
           }}
           culture="fr"
         />
