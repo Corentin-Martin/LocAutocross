@@ -29,6 +29,7 @@ import About from '../../pages/About/About';
 import LegalNotice from '../../pages/LegalNotice/LegalNotice';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
 import Track from '../../pages/Track/Track';
+import Rentals from '../../pages/Rentals/Rentals';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -115,6 +116,10 @@ function App() {
           <Route
             path="/circuits"
             element={(<Skeleton page={<Tracks />} />)}
+          />
+          <Route
+            path="/locations"
+            element={(<Skeleton page={<Rentals />} />)}
           />
           <Route
             path="/location/:rentalId"
