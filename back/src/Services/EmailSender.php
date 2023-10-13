@@ -93,4 +93,33 @@ class EmailSender
 
         
     }
+
+    public function sendAlertEventCancelled($event, $rental): void
+    {
+        $toSend = [
+            'owner' => ['email/alert-cancelled-owner.html.twig', $rental->getOwnerUser()],
+            'tenant'=> ['email/alert-cancelled-tenant.html.twig', $rental->getTenantUser()],
+        ];
+
+        foreach ($toSend as $personne) {
+
+            if (!is_null($personne[1])) {
+
+                $htmlContent = $this->twig->render($personne[0], [
+                    'rental' => $rental,
+                    'event' => $event
+                ]);
+        
+                $email = (new Email())
+                    ->from('info@pronautocross.fr')
+                    ->to($personne[1]->getEmail())
+                    ->subject('Evenement annulé')
+                    ->html($htmlContent);
+        
+                $this->mailer->send($email);
+            }
+        }
+
+        
+    }
 }

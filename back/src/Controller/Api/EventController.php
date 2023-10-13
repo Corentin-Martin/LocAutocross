@@ -5,6 +5,8 @@ namespace App\Controller\Api;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\EventRepository;
+use App\Repository\RentalRepository;
+use App\Services\EmailSender;
 use App\Services\UploadImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,7 +28,7 @@ class EventController extends AbstractController
     public function browse(Request $request, EventRepository $eventRepository): JsonResponse
     {
         if (!is_null($request->query->get('my'))) {
-            $events = $eventRepository->findBy(["associatedUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            $events = $eventRepository->findBy(["associatedUser" => $this->getUser(), "isCancelled" => false], ['createdAt' => 'DESC']);
             return $this->json($events, Response::HTTP_OK, [], ["groups" => ["event"]]);
         }
         /** @var array */
@@ -35,7 +37,7 @@ class EventController extends AbstractController
         if (!is_null($searchChampionships)) {
             foreach ($searchChampionships as $championship) {
 
-                $eventsForAChampionship = ($championship == 0) ? $eventRepository->findBy(['isOfficial' => false])
+                $eventsForAChampionship = ($championship == 0) ? $eventRepository->findBy(['isOfficial' => false, 'isCancelled' => false])
                                                                 : $eventRepository->findForAChampionship($championship);
 
                 foreach ($eventsForAChampionship as $event) {
@@ -100,8 +102,8 @@ class EventController extends AbstractController
             return $this->json($finalEvents, Response::HTTP_OK, [], ["groups" => ["events"]]);
         }
 
-        return (empty($eventRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($eventRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["events"]]);
+        return (empty($eventRepository->findBy(['isCancelled' => false]))) ? $this->json('', Response::HTTP_NO_CONTENT, [])
+                                                    : $this->json($eventRepository->findBy(['isCancelled' => false]), Response::HTTP_OK, [], ["groups" => ["events"]]);
     }
 
     /**
@@ -126,6 +128,7 @@ class EventController extends AbstractController
         $newEvent = $serializerInterface->deserialize($request->getContent(), Event::class, 'json');
 
         $newEvent->setAssociatedUser($user);
+        $newEvent->setIsCancelled(false);
 
         $uploadImageService->upload($newEvent);
 
@@ -160,7 +163,7 @@ class EventController extends AbstractController
     /**
      * @Route("/{id}", name="delete", requirements={"id"="\d+"}, methods={"DELETE"})
      */
-    public function delete(?Event $event, EventRepository $eventRepository): JsonResponse
+    public function delete(?Event $event, EventRepository $eventRepository, EmailSender $emailSender, RentalRepository $rentalRepository): JsonResponse
     {
         if (is_null($event)) {
             return $this->json(["message" => "Cet évenement n'existe pas"], Response::HTTP_NOT_FOUND, []);
@@ -170,8 +173,19 @@ class EventController extends AbstractController
             return $this->json(["message" => "L'utilisateur ne peut pas supprimer cet evenement"], Response::HTTP_FORBIDDEN, []);
         }
 
-        $eventRepository->remove($event, true);
+        $event->setIsCancelled(true);
 
-        return $this->json(["message" => "L'évènement a été supprimé"], Response::HTTP_OK, []);
+        $rentals = $event->getRentals();
+
+        foreach ($rentals as $rental) {
+            $emailSender->sendAlertEventCancelled($event, $rental);
+            $rental->setStatus(6);
+            $rentalRepository->add($rental, true);
+
+        }
+
+        $eventRepository->add($event, true);
+
+        return $this->json(["message" => "L'évènement a été désactivé"], Response::HTTP_OK, []);
     }
 }

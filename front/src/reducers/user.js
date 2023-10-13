@@ -12,6 +12,7 @@ const initialState = {
     3: ['En cours de réservation', '#ff8000'],
     4: ['Réservation validée', '#FF0000'],
     5: ['Archivé', '#fff'],
+    6: ['Evenement annulé', '#808080'],
   },
   user: null,
   token: null,

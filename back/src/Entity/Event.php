@@ -84,7 +84,7 @@ class Event
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="event")
+     * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="event", cascade={"remove"}))
      * @Groups({"event"})
      * @Groups({"federations"})
      */
@@ -114,6 +114,8 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="events")
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $associatedUser;
 
@@ -155,6 +157,20 @@ class Event
      * @Groups({"track"})
      */
     private $picture;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
+     * @Groups({"vehicle"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
+     * @Groups({"track"})
+     */
+    private $isCancelled;
 
     public function __construct()
     {
@@ -361,6 +377,18 @@ class Event
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function isIsCancelled(): ?bool
+    {
+        return $this->isCancelled;
+    }
+
+    public function setIsCancelled(?bool $isCancelled): self
+    {
+        $this->isCancelled = $isCancelled;
 
         return $this;
     }

@@ -15,6 +15,8 @@ function Rental() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
+  console.log(elementToDisplay);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -33,9 +35,13 @@ function Rental() {
     }
   }, [location.pathname]);
 
-  if (isLoading) {
+  // eslint-disable-next-line no-prototype-builtins
+  if (elementToDisplay === null && isLoading) {
     return <LoadingSpinner />;
   }
+
+  // TODO GERER EN VENANT DU GARAGE
+
   return (
     <GeneralLayout
       pageTitle={`Proposition de location pour ${elementToDisplay.event.title !== null ? `${elementToDisplay.event.title} - ` : ''}${elementToDisplay.event.track.city} - ${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')}`}

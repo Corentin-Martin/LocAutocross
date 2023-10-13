@@ -11,7 +11,7 @@ import {
 
   setOpenCreation,
 } from '../../actions/dashboard';
-import DeleteModal from '../DeleteModal/DeleteModal';
+import DeleteButton from '../DeleteButton/DeleteButton';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
@@ -75,7 +75,7 @@ function MyVehicles() {
             />
             <div className="under768 bg-tertiary bg-opacity-25">
               <div className="MyVehicles-Carousel-DeleteIcon">
-                <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+                <DeleteButton type="vehicles" idToDelete={vehicle.id} />
               </div>
               <h3 className="mt-3">{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</h3>
               <p>Moteur : {vehicle.engine}</p>
@@ -99,7 +99,7 @@ function MyVehicles() {
 
             <Carousel.Caption className="bg-tertiary rounded-4 bg-opacity-75 MyVehicles-Carousel-Caption over768">
               <div className="MyVehicles-Carousel-DeleteIcon">
-                <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+                <DeleteButton type="vehicles" idToDelete={vehicle.id} />
               </div>
               <h3>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</h3>
               <p>Moteur : {vehicle.engine}</p>

@@ -1,14 +1,16 @@
-import { Card } from 'react-bootstrap';
-import { Link, PencilSquare } from 'react-bootstrap-icons';
+import { Card, ListGroup } from 'react-bootstrap';
+import { PencilSquare } from 'react-bootstrap-icons';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
-import DeleteModal from '../../DeleteModal/DeleteModal';
+import DeleteButton from '../../DeleteButton/DeleteButton';
 import defaultKart from '../../../assets/images/defaultKart.jpeg';
 
 function VehicleComponent({ vehicle }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => () => {
     dispatch(setElementToDisplay(null));
@@ -25,7 +27,7 @@ function VehicleComponent({ vehicle }) {
     />
       <Card.Body style={{ position: 'relative' }}>
         <div className="CardComponent-DeleteIcon">
-          <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+          <DeleteButton type="vehicles" idToDelete={vehicle.id} />
         </div>
         <PencilSquare
           size={24}
@@ -60,14 +62,21 @@ function VehicleComponent({ vehicle }) {
 
         <Card.Subtitle>Locations</Card.Subtitle>
         {vehicle.rentals.length === 0
-          ? <Card.Text>Vous n'avez jamais proposé de location pour ce véhicule.</Card.Text> : '' }
-        {vehicle.rentals.map((rental) => (
-          <Link key={rental.id} to={`/location/${rental.id}`} className="CardComponent-RentalLink">
-            <Card.Text className="bg-tertiary p-2 rounded-3 m-1">
-              {rental.event.title} - {rental.event.track.city} - le {moment(rental.event.start).format('DD/MM/YYYY')}
-            </Card.Text>
-          </Link>
-        ))}
+          ? <Card.Text>Vous n'avez jamais proposé de location pour ce véhicule.</Card.Text>
+          : (
+            <ListGroup>
+              {vehicle.rentals.map((rental) => (
+                <ListGroup.Item
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate(`/location/${rental.id}`);
+                  }}
+                  key={rental.id}
+                >{rental.event.title !== null ? `${rental.event.title} - ` : ''}{rental.event.track.city} - le {moment(rental.event.start).format('DD/MM/YYYY')}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          )}
       </Card.Body>
     </>
   );

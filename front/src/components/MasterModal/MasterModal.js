@@ -10,7 +10,6 @@ function MasterModal({
       </Modal.Header>
       <Modal.Body className="d-flex justify-content-center">
         {childComponent}
-
       </Modal.Body>
     </Modal>
   );

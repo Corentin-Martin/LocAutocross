@@ -1,119 +1,89 @@
 import {
   Card, Col, Row,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
-import EventCreation from '../../FormAccordionCreation/EventCreation/EventCreation';
-import RentalList from './RentalList/RentalList';
-import MasterModal from '../../MasterModal/MasterModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { setElementToDisplay } from '../../../actions/dashboard';
+import TrackInfos from './TrackInfos/TrackInfos';
+import InfosComponent from '../../InfosComponent/InfosComponent';
+import DatesInfos from './DatesInfos/DatesInfos';
+import ChampionshipInfos from './ChampionshipInfos/ChampionshipInfos';
+import defaultAffiche from '../../../assets/images/defaultAffiche.jpg';
+import RentalInfos from './RentalInfos/RentalInfos';
+import EventControl from './EventControl/EventControl';
 
-function EventComponent({ event, fromCalendar }) {
+function EventComponent({ event, fromCalendar, large }) {
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
 
   useEffect(() => () => {
     dispatch(setElementToDisplay(null));
   }, []);
 
   useEffect(() => {
-    setShow(false);
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   }, [event]);
 
-  const location = useLocation();
-
-  const handleEditEvent = () => {
-    dispatch(setElementToEdit(event));
-    if (location.pathname === `/evenement/${event.id}`) {
-      setShow(true);
-    }
-    else {
-      dispatch(setElementToDisplay(null));
-
-      dispatch(setOpenCreation(true));
-    }
-  };
-
   return (
     <>
       <Card.Header>
         {event.title !== null ? <h2>{event.title}</h2> : ''}
-        <p>Date de début : {moment(event.start).format('DD/MM/YYYY')}</p>
-        <p>Date de fin : {moment(event.end).format('DD/MM/YYYY')}</p>
         {event.championship !== null
               && (
-              <p>Championnat : {event.championship.alias}
-              </p>
+                <p>Championnat : {`${event.championship.alias} `}
+                  - {event.championship.federation.alias}
+                </p>
               )}
+        {event.description !== null && <p>{event.description}</p>}
       </Card.Header>
 
       <Card.Body>
 
-        {event.description !== null && <p>{event.description}</p>}
-        <Row>
-          <Col sm={12} md={6} className="mb-3">
-            <div className="Event-Box">
-              <h3>Circuit</h3>
-              <ul>
-                <li>Nom : {event.track.name}</li>
-                <li>Ville : {event.track.city} {`(${event.track.postCode})`}</li>
-                <li>Département : {event.track.department}</li>
-              </ul>
-            </div>
+        <Row className="mt-3 d-flex justify-content-between">
+          <Col sm={12} md={6} className="mb-2" style={{ flexGrow: '1' }}>
+            <Card.Img
+              style={{ maxWidth: '100%' }}
+              src={event.picture !== null ? `http://localhost:8000/${event.picture}` : defaultAffiche}
+              alt={event.track.city}
+            />
           </Col>
-          <Col sm={12} md={6} className="mb-3">
-            <div className="Event-Box">
-              <h3>Dates</h3>
-              <ul>
-                <li>Début : {moment(event.start).format('DD/MM/YYYY')}</li>
-                <li>Fin : {moment(event.end).format('DD/MM/YYYY')}</li>
-              </ul>
-            </div>
-          </Col>
-          {event.championship !== null
-      && (
-        <Col sm={12} className="mb-3">
-          <div className="Event-Box">
-            <h3>Championnat</h3>
-            <ul>
-              <li>Nom : {event.championship.name} ({event.championship.alias})</li>
-              <li> Fédération : {event.championship.federation.alias}</li>
-            </ul>
-          </div>
-        </Col>
-      )}
-          <Col sm={12} className="mb-3">
-            <div className="Event-Box">
-              {event.rentals.length > 0 ? (
-                <RentalList
-                  rentals={event.rentals.filter(
-                    (rental) => (rental.status > 0 && rental.status < 5),
-                  )}
-                />
 
-              ) : <h3>Pas de locations proposées pour cette épreuve</h3>}
-            </div>
+          <Col sm={12} md={large ? 12 : 6} className="mb-2 d-flex flex-column" style={{ flexGrow: '1' }}>
+            <InfosComponent inColumn title="Circuit" childComponent={<TrackInfos track={event.track} />} />
+            <InfosComponent inColumn title="Dates" childComponent={<DatesInfos start={event.start} end={event.end} />} />
+            {event.championship !== null && (
+            <InfosComponent inColumn title="Championnat" childComponent={<ChampionshipInfos championship={event.championship} />} />
+            )}
           </Col>
+
+          <InfosComponent
+            title="Locations"
+            childComponent={(
+              <RentalInfos rentals={event.rentals.filter(
+                (rental) => (rental.status > 0 && rental.status < 5),
+              )}
+              />
+)}
+          />
         </Row>
-        {event.picture !== null && <img src={`http://localhost:8000/${event.picture}`} alt="affiche" />}
-        {!fromCalendar && <div onClick={handleEditEvent}>CLIC</div>}
+
+        {user !== null
+        && event.associatedUser !== null
+        && user.id === event.associatedUser.id
+        && !fromCalendar && (
+        <Row className="mt-3">
+          <InfosComponent
+            title="Panneau d'administration"
+            bgVariant="admin"
+            childComponent={<EventControl event={event} />}
+          />
+        </Row>
+        )}
 
       </Card.Body>
-
-      <MasterModal
-        show={show}
-        onHide={handleClose}
-        childComponent={<EventCreation />}
-      />
 
     </>
   );
@@ -121,6 +91,7 @@ function EventComponent({ event, fromCalendar }) {
 
 EventComponent.defaultProps = {
   fromCalendar: false,
+  large: false,
 };
 
 export default EventComponent;

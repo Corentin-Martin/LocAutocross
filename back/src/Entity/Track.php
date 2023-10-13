@@ -200,6 +200,14 @@ class Track
         return $this->events;
     }
 
+
+    public function setEvents($events): self
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
     public function addEvent(Event $event): self
     {
         if (!$this->events->contains($event)) {

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import './MyRentals.scss';
 import { ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setElementToDisplay } from '../../../actions/dashboard';
@@ -11,7 +12,7 @@ function MyRentals({ pastOrFuture }) {
     <ListGroup className="col-12">
 
       {pastOrFuture.map((rent) => (
-        <ListGroup.Item key={rent.id} action className="d-flex justify-content-between bg-secondary" onClick={() => dispatch(setElementToDisplay(rent))}>
+        <ListGroup.Item key={rent.id} action className="d-flex justify-content-between bg-secondary position-relative" onClick={() => dispatch(setElementToDisplay(rent))}>
           <ul className="ms-2 me-3">
             <li className="fw-bold">{moment(rent.event.start).format('DD/MM/YYYY')}</li>
             <li className="fst-italic">{rent.event.track.city}</li>
@@ -22,6 +23,8 @@ function MyRentals({ pastOrFuture }) {
           <span className="badge text-black rounded d-flex align-items-center justify-content-center" style={{ backgroundColor: statusMatching[rent.status][1], minWidth: '76px' }}>
             {statusMatching[rent.status][0]}
           </span>
+
+          {rent.event.isCancelled && <div className="diagonal-banner">EVENEMENT ANNULE</div>}
         </ListGroup.Item>
       ))}
 
