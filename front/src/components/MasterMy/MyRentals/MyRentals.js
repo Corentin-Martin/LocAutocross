@@ -1,8 +1,9 @@
 import moment from 'moment';
-import './MyRentals.scss';
+
 import { ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setElementToDisplay } from '../../../actions/dashboard';
+import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function MyRentals({ pastOrFuture }) {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ function MyRentals({ pastOrFuture }) {
             {statusMatching[rent.status][0]}
           </span>
 
-          {rent.event.isCancelled && <div className="diagonal-banner">EVENEMENT ANNULE</div>}
+          {rent.event.isCancelled && <CancellationBanner />}
         </ListGroup.Item>
       ))}
 

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
 import DeleteButton from '../../DeleteButton/DeleteButton';
 import defaultKart from '../../../assets/images/defaultKart.jpeg';
+import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function VehicleComponent({ vehicle }) {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ function VehicleComponent({ vehicle }) {
             dispatch(setOpenCreation(true));
           }}
         />
-        <Card.Title>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</Card.Title>
+        <Card.Title>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} - ` : ' - '}{moment(vehicle.year).format('YYYY')}</Card.Title>
 
         <Card.Subtitle>Informations</Card.Subtitle>
         <Card.Text>{vehicle.description ?? '/'}</Card.Text>
@@ -67,12 +68,13 @@ function VehicleComponent({ vehicle }) {
             <ListGroup>
               {vehicle.rentals.map((rental) => (
                 <ListGroup.Item
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', position: 'relative' }}
                   onClick={() => {
                     navigate(`/location/${rental.id}`);
                   }}
                   key={rental.id}
                 >{rental.event.title !== null ? `${rental.event.title} - ` : ''}{rental.event.track.city} - le {moment(rental.event.start).format('DD/MM/YYYY')}
+                  {rental.event.isCancelled && <CancellationBanner />}
                 </ListGroup.Item>
               ))}
             </ListGroup>

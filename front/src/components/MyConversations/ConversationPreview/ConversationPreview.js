@@ -4,6 +4,7 @@ import { Eye } from 'react-bootstrap-icons';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { setConversation, setElementToDisplay } from '../../../actions/dashboard';
+import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function ConversationPreview({ conv }) {
   const user = useSelector((state) => state.user.user);
@@ -13,7 +14,7 @@ function ConversationPreview({ conv }) {
   return (
     <ListGroup.Item
       className="bg-secondary d-flex flex-column"
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: 'pointer', position: 'relative' }}
       onClick={() => {
         dispatch(setConversation(conv)); dispatch(setElementToDisplay(conv));
       }}
@@ -32,6 +33,7 @@ function ConversationPreview({ conv }) {
       <div className="align-self-end d-flex align-items-center">
         Voir... <Eye size={16} className="ms-2" />
       </div>
+      {conv.rental.event.isCancelled && <CancellationBanner />}
     </ListGroup.Item>
   );
 }

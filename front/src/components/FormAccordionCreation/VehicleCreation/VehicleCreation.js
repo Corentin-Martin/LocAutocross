@@ -27,12 +27,12 @@ function VehicleCreation() {
   const [brands, setBrands] = useState([]);
   const [disciplines, setDisciplines] = useState([]);
 
-  const [model, setModel] = useState(null);
-  const [brand, setBrand] = useState(null);
-  const [engine, setEngine] = useState(null);
-  const [shocks, setShocks] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [picture, setPicture] = useState(null);
+  const [model, setModel] = useState('');
+  const [brand, setBrand] = useState('');
+  const [engine, setEngine] = useState('');
+  const [shocks, setShocks] = useState('');
+  const [description, setDescription] = useState('');
+  const [picture, setPicture] = useState('');
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState('2023-01-01');
   const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -167,7 +167,7 @@ function VehicleCreation() {
   };
 
   const handleYearChange = (e) => {
-    const yearSelect = parseInt(e.target.value, 10);
+    const yearSelect = parseInt(e.target.value, 10).toString().padStart(4, '0');
     setSelectedYear(yearSelect);
     setYear(`${yearSelect}-01-01`);
   };

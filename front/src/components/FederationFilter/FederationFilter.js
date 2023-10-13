@@ -114,24 +114,27 @@ function FederationFilter({ onlyChampionships }) {
                 <Offcanvas.Title>{fede.alias}</Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
-                {fede.disciplines.map((discipline) => (
-                  !onlyChampionships && (
-                  <>
-                    <div key={discipline.id} className="GeneralCalendar-Discipline">
-                      <h4>{discipline.name}</h4>
-                      <ReactSelect
-                        placeholder="Sélectionnez..."
-                        isMulti
-                        isSearchable
-                        isClearable={false}
-                        onChange={handleInputOnReactSelect}
-                        options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
-                      />
-                    </div>
-                    <hr />
-                  </>
-                  )
-                ))}
+                {fede.disciplines.map((discipline) => {
+                  if (!onlyChampionships) {
+                    return (
+                      <div key={discipline.id}>
+                        <div className="GeneralCalendar-Discipline">
+                          <h4>{discipline.name}</h4>
+                          <ReactSelect
+                            placeholder="Sélectionnez..."
+                            isMulti
+                            isSearchable
+                            isClearable={false}
+                            onChange={handleInputOnReactSelect}
+                            options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
+                          />
+                        </div>
+                        <hr />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
                 <div className="GeneralCalendar-Discipline">
                   <h4>Championnat</h4>
                   <ReactSelect

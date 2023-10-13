@@ -6,7 +6,7 @@ import { setConversation } from '../../../../../actions/dashboard';
 function ConversationsPreview({ conversations, setShowToParent }) {
   const dispatch = useDispatch();
   return (
-    <><Card.Text>Conversation{conversations.length > 1 ? 's' : ''} : {conversations.length}</Card.Text>
+    <div style={{ border: '1px solid #dee2e6', padding: '0.5rem 1rem' }}><Card.Text>Conversation{conversations.length > 1 ? 's' : ''} : {conversations.length}</Card.Text>
       {conversations.length > 0 && (
       <ListGroup>
         {conversations.map((conv) => (
@@ -22,7 +22,7 @@ function ConversationsPreview({ conversations, setShowToParent }) {
         ))}
       </ListGroup>
       )}
-    </>
+    </div>
   );
 }
 export default ConversationsPreview;

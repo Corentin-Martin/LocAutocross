@@ -3,7 +3,7 @@ import { TrashFill } from 'react-bootstrap-icons';
 import MasterModal from '../MasterModal/MasterModal';
 import DeleteOrCancel from '../MasterModal/DeleteOrCancel/DeleteOrCancel';
 
-function DeleteModal({ type, idToDelete, text }) {
+function DeleteButton({ type, idToDelete, text }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -40,8 +40,8 @@ function DeleteModal({ type, idToDelete, text }) {
   );
 }
 
-DeleteModal.defaultProps = {
+DeleteButton.defaultProps = {
   text: null,
 };
 
-export default DeleteModal;
+export default DeleteButton;
