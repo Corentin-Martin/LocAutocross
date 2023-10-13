@@ -40,9 +40,9 @@ function EventControl({ event }) {
             onClick={handleEditEvent}
           ><PencilSquare size={24} className="me-2" /> Editer
           </Card.Text>
-          <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
+          <div className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
             <DeleteButton type="events" idToDelete={event.id} text="Annuler" />
-          </Card.Text>
+          </div>
         </>
 
       )}

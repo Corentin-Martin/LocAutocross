@@ -17,6 +17,7 @@ import { setElementToDisplay } from '../../actions/dashboard';
 import FederationFilter from '../FederationFilter/FederationFilter';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import MasterModal from '../MasterModal/MasterModal';
+import { setSearch } from '../../actions/generalCalendar';
 
 function GeneralCalendar() {
   moment.locale('fr-FR');
@@ -116,6 +117,17 @@ function GeneralCalendar() {
       });
   }, [search]);
 
+  const assignDefaultTitle = (eventsToCheck) => eventsToCheck.map((event) => ({
+    ...event,
+    title: event.title !== null ? `${event.title} - ${event.track.city}` : event.track.city,
+  }));
+
+  const defaultTitledEvents = assignDefaultTitle(events);
+
+  useEffect(() => () => {
+    dispatch(setSearch(null));
+  }, []);
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -132,7 +144,7 @@ function GeneralCalendar() {
 
         <Calendar
           localizer={localizer}
-          events={events}
+          events={defaultTitledEvents}
           startAccessor="start"
           endAccessor="end"
           defaultView={Views.MONTH}
