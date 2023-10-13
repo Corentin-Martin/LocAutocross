@@ -33,7 +33,7 @@ function DashboardInfos({ myThings, text, type }) {
         .sort((a, b) => {
           const dateA = new Date(a.updatedAt);
           const dateB = new Date(b.updatedAt);
-          return dateA - dateB;
+          return dateB - dateA;
         });
 
       setOldest(byCreatedAt[0]);
@@ -54,9 +54,11 @@ function DashboardInfos({ myThings, text, type }) {
         console.error(err);
       });
   };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
+
   return (
     <div className="mt-3 text-center" style={{ flexGrow: '1' }}>
 

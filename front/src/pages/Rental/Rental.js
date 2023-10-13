@@ -34,11 +34,15 @@ function Rental() {
   }, [location.pathname]);
 
   // eslint-disable-next-line no-prototype-builtins
-  if (elementToDisplay === null && isLoading) {
+  if (elementToDisplay !== null && location.pathname === `/location/${rentalId}` && !elementToDisplay.hasOwnProperty('tenantUser')) {
+    dispatch(setElementToDisplay(null));
+    setIsLoading(true);
     return <LoadingSpinner />;
   }
 
-  // TODO GERER EN VENANT DU GARAGE
+  if (elementToDisplay === null && isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <GeneralLayout

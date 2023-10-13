@@ -77,7 +77,7 @@ function MyVehicles() {
               <div className="MyVehicles-Carousel-DeleteIcon">
                 <DeleteButton type="vehicles" idToDelete={vehicle.id} />
               </div>
-              <h3 className="mt-3">{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</h3>
+              <h3 className="mt-3">{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} - ` : ' - '}{moment(vehicle.year).format('YYYY')}</h3>
               <p>Moteur : {vehicle.engine}</p>
               <p>Amortisseurs : {vehicle.shocks ?? 'Non renseigné'}</p>
               <PencilSquare
@@ -101,7 +101,7 @@ function MyVehicles() {
               <div className="MyVehicles-Carousel-DeleteIcon">
                 <DeleteButton type="vehicles" idToDelete={vehicle.id} />
               </div>
-              <h3>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} -` : ' - '}{moment(vehicle.year).format('YYYY')}</h3>
+              <h3>{vehicle.brand.name}{vehicle.model !== null ? ` - ${vehicle.model} - ` : ' - '}{moment(vehicle.year).format('YYYY')}</h3>
               <p>Moteur : {vehicle.engine}</p>
               <p>Amortisseurs : {vehicle.shocks ?? 'Non renseigné'}</p>
               <PencilSquare
