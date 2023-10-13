@@ -23,7 +23,7 @@ function ReservationAction({ rental, associateConv, handleShow }) {
 
   if (rental.status === '4') {
     return (
-      <div className="alert alert-success mt-2 mb-2 d-flex flex-column justify-content-center align-items-center text-center">
+      <div style={{ border: '1px solid #dee2e6', padding: '0.5rem 1rem' }} className="alert alert-success mt-2 mb-2 d-flex flex-column justify-content-center align-items-center text-center">
         <Card.Text>Réservation validée pour {rental.tenantUser.pseudo}</Card.Text>
         <Card.Text>N'hésitez pas à prendre contact avec lui.</Card.Text>
       </div>
@@ -32,7 +32,7 @@ function ReservationAction({ rental, associateConv, handleShow }) {
 
   if (rental.status === '3') {
     return (
-      <div className="alert alert-danger mt-2 mb-2 d-flex flex-column justify-content-center align-items-center text-center">
+      <div style={{ border: '1px solid #dee2e6', padding: '0.5rem 1rem' }} className="alert alert-danger mt-2 mb-2 d-flex flex-column justify-content-center align-items-center text-center">
         <Card.Text>Vous avez une demande de reservation de {rental.tenantUser.pseudo} !</Card.Text>
         {associateConv.exists ? (
           <Card.Text> Vous avez déjà discuté avec.

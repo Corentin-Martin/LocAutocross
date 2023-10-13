@@ -3,7 +3,6 @@ import {
   Card, Row,
 } from 'react-bootstrap';
 import moment from 'moment/moment';
-import './RentalComponent.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import defaultKart from '../../../assets/images/defaultKart.jpeg';
@@ -12,6 +11,8 @@ import RentalUserbox from './RentalUserbox/RentalUserbox';
 import { setElementToDisplay } from '../../../actions/dashboard';
 import RentalInfos from './RentalInfos/RentalInfos';
 import VehicleInfos from './VehicleInfos/VehicleInfos';
+import InfosComponent from '../../InfosComponent/InfosComponent';
+import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function RentalComponent({ rental }) {
   const user = useSelector((state) => state.user.user);
@@ -28,17 +29,18 @@ function RentalComponent({ rental }) {
           dispatch(setElementToDisplay(null));
           navigate(`/evenement/${rental.event.id}`);
         }}
-        style={{ cursor: 'pointer' }}
+        style={{ cursor: 'pointer', position: 'relative' }}
       >
         <h2>{rental.event.title}</h2>
-        <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
-        <p>Date de fin : {moment(rental.event.start).format('DD/MM/YYYY')}</p>
+        <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY à HH:mm')}</p>
+        <p>Date de fin : {moment(rental.event.start).format('DD/MM/YYYY à HH:mm')}</p>
         {rental.event.championship !== null
               && (
               <p>Championnat : {`${rental.event.championship.alias} `}
                 - {rental.event.championship.federation.alias}
               </p>
               )}
+        {rental.event.isCancelled && <CancellationBanner />}
       </Card.Header>
 
       <Card.Body>
@@ -54,15 +56,18 @@ function RentalComponent({ rental }) {
         </Card.Title>
 
         <Row className="mt-3 d-flex justify-content-between">
-          <RentalInfos rental={rental} />
-          <VehicleInfos vehicle={rental.vehicle} />
+          <InfosComponent title="La location" childComponent={<RentalInfos rental={rental} />} />
+          <InfosComponent title="Le véhicule" childComponent={<VehicleInfos vehicle={rental.vehicle} />} />
 
-          {rental.event.isCancelled ? <div className="alert alert-danger text-center"><Card.Text>L'évènement est annulé, aucune action possible.</Card.Text></div>
-            : (
-              <>
-                <RentalControl rental={rental} />
-                <RentalUserbox rental={rental} />
-                {(user === null && rental.status < 4)
+          {user !== null
+          && user.id !== rental.ownerUser.id
+          && <InfosComponent title="GESTION UTILISATEUR" bgVariant="admin" childComponent={<RentalUserbox rental={rental} />} />}
+
+          {user !== null
+          && user.id === rental.ownerUser.id
+          && <InfosComponent title="ADMINISTRATION" bgVariant="admin" childComponent={<RentalControl rental={rental} />} />}
+
+          {(user === null && rental.status < 4 && !rental.event.isCancelled)
               && (
               <Button
                 type="button"
@@ -74,8 +79,7 @@ function RentalComponent({ rental }) {
               >Pour plus de renseignements ou pour réserver, veuillez vous connecter
               </Button>
               )}
-              </>
-            )}
+
         </Row>
       </Card.Body>
 

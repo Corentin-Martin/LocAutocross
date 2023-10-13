@@ -15,8 +15,6 @@ function Rental() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(elementToDisplay);
-
   const location = useLocation();
 
   useEffect(() => {

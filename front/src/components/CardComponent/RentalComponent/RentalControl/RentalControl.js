@@ -1,5 +1,5 @@
 import {
-  Card, Col,
+  Card,
 } from 'react-bootstrap';
 import './RentalControl.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -86,60 +86,49 @@ function RentalControl({ rental }) {
     setShowEdit(false);
   }, [rental]);
 
-  if (user === null || user.id !== rental.ownerUser.id || (!user.roles.includes('ROLE_PRO'))) {
-    return null;
-  }
-
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (rental.event.isCancelled) {
+    return <div className="alert alert-danger text-center"><Card.Text>L'évènement est annulé, aucune action possible.</Card.Text></div>;
+  }
+
+  if (moment(rental.event.start) < moment()) {
+    return (
+      <div className="alert alert-danger text-center">
+        <Card.Text>L'évènement est terminé. Aucune action possible.</Card.Text>
+        <Card.Text>{rental.status === '4' ? `Vous avez loué à ${rental.tenantUser.pseudo} pour cette épreuve.` : 'Pas de location effectuée.'}</Card.Text>
+      </div>
+    );
   }
 
   return (
 
     <>
-      <Col sm={12} className="mb-2">
-        <Card>
-          <Card.Header>PANNEAU D'ADMINISTRATION</Card.Header>
-          <Card.Body className="text-start">
-            {moment(rental.event.start) < moment()
-              ? (
-                <div className="alert alert-danger text-center">
-                  <Card.Text>L'évènement est terminé. Aucune action possible.</Card.Text>
-                  <Card.Text>{rental.status === '4' ? `Vous avez loué à ${rental.tenantUser.pseudo} pour cette épreuve.` : 'Pas de location effectuée.'}</Card.Text>
-                </div>
-              )
-              : (
-                <>
-                  <div className="d-flex justify-content-between mb-2">
 
-                    <Card.Text
-                      className="d-flex align-items-center"
-                      style={{ cursor: 'pointer' }}
-                      onClick={handleEditRental}
-                    ><PencilSquare size={24} className="me-2" /> Editer
-                    </Card.Text>
-                    <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
-                      <DeleteButton type="rentals" idToDelete={rental.id} />
-                    </Card.Text>
-                  </div>
+      <div className="d-flex justify-content-between mb-2">
+        <Card.Text
+          className="d-flex align-items-center"
+          style={{ cursor: 'pointer' }}
+          onClick={handleEditRental}
+        ><PencilSquare size={24} className="me-2" /> Editer
+        </Card.Text>
+        <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
+          <DeleteButton type="rentals" idToDelete={rental.id} />
+        </Card.Text>
+      </div>
 
-                  <ReservationAction
-                    rental={rental}
-                    associateConv={associateConv}
-                    handleShow={handleShow}
-                  />
+      <ReservationAction
+        rental={rental}
+        associateConv={associateConv}
+        handleShow={handleShow}
+      />
 
-                  <ConversationsPreview
-                    conversations={conversations}
-                    setShowToParent={setShowToParent}
-                  />
-
-                </>
-              )}
-
-          </Card.Body>
-        </Card>
-      </Col>
+      <ConversationsPreview
+        conversations={conversations}
+        setShowToParent={setShowToParent}
+      />
 
       <MasterModal
         show={show}

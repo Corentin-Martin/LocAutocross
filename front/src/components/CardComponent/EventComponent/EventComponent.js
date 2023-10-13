@@ -11,6 +11,7 @@ import ChampionshipInfos from './ChampionshipInfos/ChampionshipInfos';
 import defaultAffiche from '../../../assets/images/defaultAffiche.jpg';
 import RentalInfos from './RentalInfos/RentalInfos';
 import EventControl from './EventControl/EventControl';
+import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function EventComponent({ event, fromCalendar, large }) {
   const user = useSelector((state) => state.user.user);
@@ -29,7 +30,7 @@ function EventComponent({ event, fromCalendar, large }) {
 
   return (
     <>
-      <Card.Header>
+      <Card.Header style={{ position: 'relative' }}>
         {event.title !== null ? <h2>{event.title}</h2> : ''}
         {event.championship !== null
               && (
@@ -38,6 +39,8 @@ function EventComponent({ event, fromCalendar, large }) {
                 </p>
               )}
         {event.description !== null && <p>{event.description}</p>}
+
+        {event.isCancelled && <CancellationBanner />}
       </Card.Header>
 
       <Card.Body>
