@@ -7,7 +7,7 @@ import { PencilSquare } from 'react-bootstrap-icons';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../../actions/dashboard';
 import MasterModal from '../../../MasterModal/MasterModal';
 import EventCreation from '../../../FormAccordionCreation/EventCreation/EventCreation';
-import DeleteModal from '../../../DeleteModal/DeleteModal';
+import DeleteButton from '../../../DeleteButton/DeleteButton';
 
 function EventControl({ event }) {
   const [show, setShow] = useState(false);
@@ -33,9 +33,7 @@ function EventControl({ event }) {
         </div>
       )
       : (
-
-        <div className="d-flex justify-content-between mb-2">
-
+        <>
           <Card.Text
             className="d-flex align-items-center"
             style={{ cursor: 'pointer' }}
@@ -43,9 +41,10 @@ function EventControl({ event }) {
           ><PencilSquare size={24} className="me-2" /> Editer
           </Card.Text>
           <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
-            <DeleteModal type="events" idToDelete={event.id} />
+            <DeleteButton type="events" idToDelete={event.id} text="Annuler" />
           </Card.Text>
-        </div>
+        </>
+
       )}
       <MasterModal
         show={show}

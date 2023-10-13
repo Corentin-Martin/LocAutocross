@@ -7,7 +7,7 @@ import { PencilSquare } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
-import DeleteModal from '../../../DeleteModal/DeleteModal';
+import DeleteButton from '../../../DeleteButton/DeleteButton';
 import {
   setElementToDisplay, setElementToEdit, setOpenCreation,
 } from '../../../../actions/dashboard';
@@ -119,7 +119,7 @@ function RentalControl({ rental }) {
                     ><PencilSquare size={24} className="me-2" /> Editer
                     </Card.Text>
                     <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
-                      <DeleteModal type="rentals" idToDelete={rental.id} />
+                      <DeleteButton type="rentals" idToDelete={rental.id} />
                     </Card.Text>
                   </div>
 

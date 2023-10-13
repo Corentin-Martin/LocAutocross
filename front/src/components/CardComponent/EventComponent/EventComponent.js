@@ -12,7 +12,7 @@ import defaultAffiche from '../../../assets/images/defaultAffiche.jpg';
 import RentalInfos from './RentalInfos/RentalInfos';
 import EventControl from './EventControl/EventControl';
 
-function EventComponent({ event, fromCalendar }) {
+function EventComponent({ event, fromCalendar, large }) {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
@@ -51,7 +51,7 @@ function EventComponent({ event, fromCalendar }) {
             />
           </Col>
 
-          <Col sm={12} md={fromCalendar ? 12 : 6} className="mb-2 d-flex flex-column" style={{ flexGrow: '1' }}>
+          <Col sm={12} md={large ? 12 : 6} className="mb-2 d-flex flex-column" style={{ flexGrow: '1' }}>
             <InfosComponent inColumn title="Circuit" childComponent={<TrackInfos track={event.track} />} />
             <InfosComponent inColumn title="Dates" childComponent={<DatesInfos start={event.start} end={event.end} />} />
             {event.championship !== null && (
@@ -91,6 +91,7 @@ function EventComponent({ event, fromCalendar }) {
 
 EventComponent.defaultProps = {
   fromCalendar: false,
+  large: false,
 };
 
 export default EventComponent;

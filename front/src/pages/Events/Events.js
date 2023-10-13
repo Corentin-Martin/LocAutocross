@@ -62,7 +62,7 @@ function Events() {
       detail={(
         <CardComponent
           fromGestion
-          childComponent={<EventComponent event={elementToDisplay} />}
+          childComponent={<EventComponent event={elementToDisplay} large />}
         />
         )}
       myThings={<MasterMy myThings={myEvents} type="event" childComponent={<MyEvents />} />}

@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
-import DeleteModal from '../../DeleteModal/DeleteModal';
+import DeleteButton from '../../DeleteButton/DeleteButton';
 import defaultKart from '../../../assets/images/defaultKart.jpeg';
 
 function VehicleComponent({ vehicle }) {
@@ -27,7 +27,7 @@ function VehicleComponent({ vehicle }) {
     />
       <Card.Body style={{ position: 'relative' }}>
         <div className="CardComponent-DeleteIcon">
-          <DeleteModal type="vehicles" idToDelete={vehicle.id} />
+          <DeleteButton type="vehicles" idToDelete={vehicle.id} />
         </div>
         <PencilSquare
           size={24}

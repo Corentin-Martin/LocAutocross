@@ -161,9 +161,9 @@ function GeneralCalendar() {
             <CardComponent
               childComponent={(
                 <EventComponent
-                  inColumn={false}
                   event={selectedEvent}
                   fromCalendar
+                  large
                 />
 )}
             />
