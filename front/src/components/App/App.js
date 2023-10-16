@@ -30,6 +30,7 @@ import LegalNotice from '../../pages/LegalNotice/LegalNotice';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
 import Track from '../../pages/Track/Track';
 import Rentals from '../../pages/Rentals/Rentals';
+import Profil from '../../pages/Profil/Profil';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -178,6 +179,10 @@ function App() {
             />
           </Route>
           <Route element={<ProtectedRoute user={user} />}>
+            <Route
+              path="/mon-profil"
+              element={(<Skeleton page={<Profil />} />)}
+            />
             <Route
               path="/mes-conversations"
               element={(<Skeleton page={<Conversation />} />)}
