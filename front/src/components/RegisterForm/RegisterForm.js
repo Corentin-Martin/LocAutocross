@@ -22,6 +22,7 @@ function RegisterForm() {
   const [password, setPassword] = useState(null);
   const [role, setRole] = useState([]);
   const [wrongConnexion, setWrongConnexion] = useState(false);
+  const [duplicateMail, setDuplicateMail] = useState(false);
 
   const [show, setShow] = useState(false);
 
@@ -57,7 +58,10 @@ function RegisterForm() {
           }
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error.response.status);
+          if (error.response.status === 409) {
+            setDuplicateMail(true);
+          }
         });
     }
   };
@@ -188,6 +192,12 @@ function RegisterForm() {
         </div>
 
       </Row>
+
+      {duplicateMail && (
+      <Alert variant="danger" className="col-8 text-center">
+        Cette adresse mail existe déjà. Inscription impossible.
+      </Alert>
+      )}
 
       <Button variant="primary" type="submit">
         Se connecter
