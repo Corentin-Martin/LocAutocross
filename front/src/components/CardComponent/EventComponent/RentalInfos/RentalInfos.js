@@ -1,4 +1,5 @@
 import { Card, ListGroup } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import RentalItem from './RentalItem/RentalItem';
 
 function RentalInfos({ rentals }) {
@@ -13,5 +14,9 @@ function RentalInfos({ rentals }) {
     </ListGroup>
   );
 }
+
+RentalInfos.propTypes = {
+  rentals: PropTypes.array.isRequired,
+};
 
 export default RentalInfos;

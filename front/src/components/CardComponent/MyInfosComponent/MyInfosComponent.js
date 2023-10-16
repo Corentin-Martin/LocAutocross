@@ -1,18 +1,26 @@
-import { Button, Card, ListGroup } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useState } from 'react';
-import ItemInfo from './ItemInfo/ItemInfo';
-import DeleteButton from '../../DeleteButton/DeleteButton';
-import AxiosPrivate from '../../../utils/AxiosPrivate';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Card, ListGroup } from 'react-bootstrap';
 import { setUser } from '../../../actions/user';
+import ItemInfo from './ItemInfo/ItemInfo';
+import AxiosPrivate from '../../../utils/AxiosPrivate';
 import MasterModal from '../../MasterModal/MasterModal';
+import DeleteButton from '../../DeleteButton/DeleteButton';
 import RegisterForm from '../../RegisterForm/RegisterForm';
 
 function MyInfosComponent() {
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
   const [welcomePro, setWelcomePro] = useState(false);
+  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const setShowToParent = (bool) => {
+    setShow(bool);
+  };
 
   const handleChangeRole = () => {
     AxiosPrivate.put('user', { roles: ['ROLE_PRO', 'ROLE_USER'] })
@@ -28,15 +36,6 @@ function MyInfosComponent() {
   if (user === null) {
     return null;
   }
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const setShowToParent = (bool) => {
-    setShow(bool);
-  };
 
   return (
     <>

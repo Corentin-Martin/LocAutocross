@@ -1,4 +1,5 @@
 import { Card } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 function ChampionshipInfos({ championship }) {
   return (
@@ -8,5 +9,9 @@ function ChampionshipInfos({ championship }) {
     </>
   );
 }
+
+ChampionshipInfos.propTypes = {
+  championship: PropTypes.object.isRequired,
+};
 
 export default ChampionshipInfos;

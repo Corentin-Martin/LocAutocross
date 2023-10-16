@@ -7,6 +7,7 @@ import { PencilSquare } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import DeleteButton from '../../../DeleteButton/DeleteButton';
 import {
   setElementToDisplay, setElementToEdit, setOpenCreation,
@@ -146,5 +147,9 @@ function RentalControl({ rental }) {
 
   );
 }
+
+RentalControl.propTypes = {
+  rental: PropTypes.object.isRequired,
+};
 
 export default RentalControl;

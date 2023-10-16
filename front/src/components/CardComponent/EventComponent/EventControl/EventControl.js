@@ -1,13 +1,14 @@
+import moment from 'moment';
 import { useState } from 'react';
+import { Card } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import moment from 'moment';
-import { Card } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
+import PropTypes from 'prop-types';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../../actions/dashboard';
 import MasterModal from '../../../MasterModal/MasterModal';
-import EventCreation from '../../../FormAccordionCreation/EventCreation/EventCreation';
 import DeleteButton from '../../../DeleteButton/DeleteButton';
+import EventCreation from '../../../FormAccordionCreation/EventCreation/EventCreation';
 
 function EventControl({ event }) {
   const [show, setShow] = useState(false);
@@ -55,5 +56,9 @@ function EventControl({ event }) {
 
   );
 }
+
+EventControl.propTypes = {
+  event: PropTypes.object.isRequired,
+};
 
 export default EventControl;

@@ -1,14 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { ListGroup } from 'react-bootstrap';
 import moment from 'moment';
+import { ListGroup } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { setElementToDisplay } from '../../../../../actions/dashboard';
 
 function RentalItem({ rental }) {
+  const statusMatching = useSelector((state) => state.user.statusMatching);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const statusMatching = useSelector((state) => state.user.statusMatching);
 
   return (
 
@@ -45,5 +45,9 @@ function RentalItem({ rental }) {
 
   );
 }
+
+RentalItem.propTypes = {
+  rental: PropTypes.object.isRequired,
+};
 
 export default RentalItem;
