@@ -47,9 +47,9 @@ class RentalController extends AbstractController
         $toSend['totalPages'] = ceil($rentalsWithPagination->getTotalItemCount() / $rentalsWithPagination->getItemNumberPerPage());
         $toSend['rentals'] = $rentalsWithPagination;
 
-        if(empty($rentals)) {
-            return $this->json('', Response::HTTP_NO_CONTENT, []);
-        }
+        // if(empty($rentals)) {
+        //     return $this->json('', Response::HTTP_NO_CONTENT, []);
+        // }
 
         return $this->json($toSend, 200, [], ['groups' => ["rentals"]]);
 
