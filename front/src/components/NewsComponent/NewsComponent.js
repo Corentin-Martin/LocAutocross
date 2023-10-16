@@ -28,6 +28,7 @@ function NewsComponent() {
   if (isLoading) {
     return <LoadingSpinner />;
   }
+
   return (
 
     <Card>
@@ -40,11 +41,12 @@ function NewsComponent() {
           </Button>
         </Stack>
         <Row>
-          {newRentals.map((rental) => (
+          {newRentals.length > 0 && newRentals.map((rental) => (
             <Col key={rental.id} xs={12} md={6} lg={3} className="mb-2">
               <RentalExtract rental={rental} />
             </Col>
           ))}
+          {newRentals.length === 0 && <Col className="alert alert-danger mt-3">Rien à afficher pour le moment.</Col>}
         </Row>
       </Card.Body>
     </Card>
