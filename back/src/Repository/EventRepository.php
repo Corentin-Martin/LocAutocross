@@ -47,6 +47,7 @@ class EventRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('e')
            ->join('e.championship', 'c')
            ->andWhere('c = :championship')
+           ->andWhere('e.isCancelled = false')
            ->setParameter('championship', $championship)
            ->getQuery()
            ->getResult()

@@ -3,7 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Entity\Track;
+use App\Repository\ChampionshipRepository;
 use App\Repository\TrackRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +21,18 @@ class TrackController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(TrackRepository $trackRepository): JsonResponse
+    public function browse(Request $request, TrackRepository $trackRepository, ChampionshipRepository $championshipRepository): JsonResponse
     {
+
+        // if (!is_null($request->query->get('championship'))) {
+        //     $championship = $championshipRepository->findOneBy(["id" => $request->query->get('championship')]);
+        //     $tracks = $trackRepository->findTracksInAChampionship($championship);
+
+        //     return $this->json($tracks, Response::HTTP_OK, [], ["groups" => ["test"]]);
+        // }
+
         return (empty($trackRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                            : $this->json($trackRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["tracks"]]);
+                                                            : $this->json($trackRepository->findBy([], ["city" => "ASC"]), Response::HTTP_OK, [], ["groups" => ["tracks"]]);
     }
 
     /**
@@ -30,8 +40,20 @@ class TrackController extends AbstractController
      */
     public function read(?Track $track): JsonResponse
     {
-        return (is_null($track)) ? $this->json(["message" => "Ce championnat n'existe pas"], Response::HTTP_NOT_FOUND, [])
-                                        : $this->json($track, Response::HTTP_OK, [], ["groups" => ["track"]]);
+        if (is_null($track)) {
+            return $this->json(["message" => "Ce circuit n'existe pas"], Response::HTTP_NOT_FOUND, []);
+        }
+    
+        $nonCancelledEvents = [];
+        foreach ($track->getEvents() as $event) {
+            if (!$event->isIsCancelled()) {
+                $nonCancelledEvents[] = $event;
+            }
+        }
+    
+        $track->setEvents(new ArrayCollection($nonCancelledEvents));
+    
+        return $this->json($track, Response::HTTP_OK, [], ["groups" => ["track"]]);
     }
 
     /**

@@ -59,10 +59,6 @@ class MessageController extends AbstractController
 
         $messageRepository->add($newMessage, true);
 
-        $update = new Update('http://localhost:8000',
-        $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]])
-    );
-
         return $this->json($newMessage, Response::HTTP_CREATED, [], ["groups" => ["message"]]);
     }
 }

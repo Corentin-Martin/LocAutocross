@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/api/rentals", name="app_api_rentals_")
@@ -22,7 +23,7 @@ class RentalController extends AbstractController
     /**
      * @Route("", name="browse", methods={"GET"})
      */
-    public function browse(Request $request, RentalRepository $rentalRepository): JsonResponse
+    public function browse(Request $request, RentalRepository $rentalRepository, PaginatorInterface $paginatorInterface): JsonResponse
     {
         if (!is_null($request->query->get('last'))) {
             $rentals = $rentalRepository->findLastPublished();
@@ -33,8 +34,26 @@ class RentalController extends AbstractController
             $rentals = $rentalRepository->findBy(["ownerUser" => $this->getUser()], ['createdAt' => 'DESC']);
             return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
         }
-        return (empty($rentalRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
-                                                    : $this->json($rentalRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+
+        $rentals = $rentalRepository->findFutureRentals();
+
+        $rentalsWithPagination = $paginatorInterface->paginate(
+            $rentals,
+            $request->query->getInt('page', 1),
+            12
+        );
+
+        $toSend = [];
+        $toSend['totalPages'] = ceil($rentalsWithPagination->getTotalItemCount() / $rentalsWithPagination->getItemNumberPerPage());
+        $toSend['rentals'] = $rentalsWithPagination;
+
+        // if(empty($rentals)) {
+        //     return $this->json('', Response::HTTP_NO_CONTENT, []);
+        // }
+
+        return $this->json($toSend, 200, [], ['groups' => ["rentals"]]);
+
+
     }
 
     /**

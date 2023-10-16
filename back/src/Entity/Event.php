@@ -20,11 +20,13 @@ class Event
      * @ORM\Column(type="integer")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"vehicle"})
      * @Groups({"championship"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"track"})
      */
     private $id;
 
@@ -32,11 +34,13 @@ class Event
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"vehicle"})
      * @Groups({"championship"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"track"})
      */
     private $title;
 
@@ -44,11 +48,13 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"vehicle"})
      * @Groups({"federations"})
      * @Groups({"championship"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"track"})
      */
     private $start;
 
@@ -56,23 +62,29 @@ class Event
      * @ORM\Column(type="boolean")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
+     * @Groups({"track"})
      */
     private $isOfficial;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="event")
+     * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="event", cascade={"remove"}))
      * @Groups({"event"})
      * @Groups({"federations"})
      */
@@ -96,11 +108,14 @@ class Event
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"rentals"})
+     * @Groups({"track"})
      */
     private $championship;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="events")
+     * @Groups({"events"})
+     * @Groups({"event"})
      */
     private $associatedUser;
 
@@ -108,7 +123,10 @@ class Event
      * @ORM\Column(type="datetime")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
+     * @Groups({"track"})
+     * @Groups({"rentals"})
      */
     private $end;
 
@@ -116,7 +134,9 @@ class Event
      * @ORM\Column(type="boolean")
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
+     * @Groups({"track"})
      */
     private $allDay;
 
@@ -124,9 +144,34 @@ class Event
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"events"})
      * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
+     * @Groups({"track"})
      */
     private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
+     * @Groups({"track"})
+     */
+    private $picture;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"eventWithoutTrack"})
+     * @Groups({"vehicle"})
+     * @Groups({"championship"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"conversation"})
+     * @Groups({"track"})
+     */
+    private $isCancelled;
 
     public function __construct()
     {
@@ -323,5 +368,29 @@ class Event
     public function __toString(): string
     {
         return $this->id;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function isIsCancelled(): ?bool
+    {
+        return $this->isCancelled;
+    }
+
+    public function setIsCancelled(?bool $isCancelled): self
+    {
+        $this->isCancelled = $isCancelled;
+
+        return $this;
     }
 }

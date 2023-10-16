@@ -12,25 +12,13 @@ $theme-colors: (
   'tertiary': vars.$tertiary,
   'success' : green,
   'danger' : red,
+  'admin': #fbe870
   );
 
 @import '~bootstrap/scss/bootstrap';
 
 body {
   font-family: 'Reem Kufi Fun', sans-serif;
-  // background-color: vars.$background;
 
 }
 
-
-/* 
-  // or you can import your own font
-  @font-face {
-    font-family: 'Roboto';
-    src: url('../assets/fonts/Roboto-Regular.ttf');
-  }
-
-  body {
-    font-family: 'Roboto', sans-serif;
-  }
-*/

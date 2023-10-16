@@ -8,13 +8,13 @@ function Footer() {
 
       <Nav className="justify-content-center mt-3" bg="primary">
         <Nav>
-          <Link to="/" className="nav-link">
+          <Link to="/mentions-legales" className="nav-link">
             Mentions légales
           </Link>
         </Nav>
         <Nav>
-          <Link to="/" className="nav-link">
-            Confidentialités
+          <Link to="/confidentialite" className="nav-link">
+            Confidentialité
           </Link>
         </Nav>
         <Nav>

@@ -1,0 +1,39 @@
+.CardComponent {
+
+  &-DeleteIcon {
+    position: absolute;
+    top:0;
+    right:0;
+    margin: 1rem;
+    transition-duration: .5s;
+    cursor: pointer;
+
+
+  }
+
+  &-CloseIcon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    z-index: 3;
+    transition-duration: .5s;
+    cursor: pointer;
+    }
+
+  &-DeleteIcon:hover, &-EditIcon:hover, &-CloseIcon:hover{
+    transform: scale(1.5);
+  }
+
+  &-EditIcon {
+    position: absolute;
+    top:0;
+    left:0;
+    margin: 1rem;
+    transition-duration: .5s;
+    cursor: pointer;
+
+
+
+  }
+}

@@ -1,0 +1,7 @@
+<div>
+<h1>Attention, évènment annulé</h1>
+<p>Bonjour {{rental.tenantUser.pseudo}}, l'évènement : {% if rental.event.title is not null %}{{rental.event.title}} - {% endif %}{{rental.event.track.city}} du {{rental.event.start|date('d/m/Y')}} est annulé !</p>
+<p>Votre demande de location pour : {{rental.vehicle.brand.name}} {{rental.vehicle.year|date('Y')}} est donc elle aussi annulée.</p>
+<p> {{rental.ownerUser.pseudo}} a également été prévenu </p>
+<p>Bonne journée</p>
+</div>

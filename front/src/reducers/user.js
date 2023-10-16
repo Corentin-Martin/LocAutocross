@@ -12,25 +12,20 @@ const initialState = {
     3: ['En cours de réservation', '#ff8000'],
     4: ['Réservation validée', '#FF0000'],
     5: ['Archivé', '#fff'],
+    6: ['Evenement annulé', '#808080'],
   },
   user: null,
   token: null,
   mainHeight: null,
   resetToken: null,
-  conversations: '',
+  conversations: {
+    unread: [],
+    read: [],
+  },
 };
 
 function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    /*
-    Exemple d'action
-    case SET_CONNECTED_USER:
-      return {
-        ...state,
-        connectedUser: action.payload.connectedUser,
-      };
-    */
-
     case SET_USER_CONNECTED:
       return {
         ...state,

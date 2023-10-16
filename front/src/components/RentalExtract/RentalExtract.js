@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import defaultKart from '../../assets/images/defaultKart.jpeg';
-import { setRental } from '../../actions/dashboard';
+import { setElementToDisplay } from '../../actions/dashboard';
 
 function RentalExtract({ rental }) {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ function RentalExtract({ rental }) {
         <Button
           variant="tertiary"
           onClick={() => {
-            dispatch(setRental(rental));
+            dispatch(setElementToDisplay(rental));
             navigate(`/location/${rental.id}`);
           }}
           className="mt-3"

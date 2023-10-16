@@ -1,11 +1,41 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import AxiosPrivate from './AxiosPrivate';
+import { setUser } from '../actions/user';
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
-function ProtectedRoute({ user, pro = false }) {
-  if (user === null) {
+function ProtectedRoute({ pro = false }) {
+  const user = useSelector((state) => state.user.user);
+  const [localUser, setLocalUser] = useState(null);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      setIsLoading(false);
+    }
+    else {
+      AxiosPrivate.get('user')
+        .then((response) => {
+          dispatch(setUser(response.data));
+          setLocalUser(response.data);
+          setIsLoading(false);
+        }).catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [user]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (localUser === null) {
     return <Navigate to="/" replace />;
   }
   if (pro) {
-    if (!user.roles.includes('ROLE_PRO')) {
+    if (!localUser.roles.includes('ROLE_PRO')) {
       return <Navigate to="/" replace />;
     }
   }

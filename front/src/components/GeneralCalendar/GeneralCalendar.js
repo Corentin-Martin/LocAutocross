@@ -6,12 +6,18 @@ import {
   useEffect, useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ReactSelect from 'react-select';
+
 import {
-  Container, Row, Col, Alert, Button, Offcanvas, Spinner,
+  Container, Alert,
 } from 'react-bootstrap';
-import { setModalCalendarIsOpen, setSelectedEvent } from '../../actions/generalCalendar';
 import AxiosPublic from '../../utils/AxiosPublic';
+import CardComponent from '../CardComponent/CardComponent';
+import EventComponent from '../CardComponent/EventComponent/EventComponent';
+import { setElementToDisplay } from '../../actions/dashboard';
+import FederationFilter from '../FederationFilter/FederationFilter';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import MasterModal from '../MasterModal/MasterModal';
+import { setSearch } from '../../actions/generalCalendar';
 
 function GeneralCalendar() {
   moment.locale('fr-FR');
@@ -19,7 +25,7 @@ function GeneralCalendar() {
 
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEventLocal] = useState(null);
-  const [search, setSearch] = useState([]);
+  const search = useSelector((state) => state.generalCalendar.search);
   const [isLoading, setIsLoading] = useState(true);
   const federations = useSelector((state) => state.generalCalendar.federations);
   const [noEvents, setNoEvents] = useState(false);
@@ -49,10 +55,14 @@ function GeneralCalendar() {
     }
   }, []);
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+
   useEffect(() => {
     if (selectedEvent !== null) {
-      dispatch(setModalCalendarIsOpen(true));
-      dispatch(setSelectedEvent(selectedEvent));
+      setShow(true);
+      dispatch(setElementToDisplay(selectedEvent));
     }
   }, [selectedEvent]);
 
@@ -82,18 +92,20 @@ function GeneralCalendar() {
   );
 
   useEffect(() => {
-    const queryString = search.join('&');
+    const queryString = search !== null ? search.join('&') : '';
 
     AxiosPublic.get(`events?${queryString}`)
       .then((response) => {
         let eventsWithDate = [];
 
         response.data.forEach((oneEvent) => {
-          eventsWithDate = [...eventsWithDate, {
-            ...oneEvent,
-            start: new Date(oneEvent.start),
-            end: new Date(oneEvent.end),
-          }];
+          if (moment(oneEvent.start) > moment()) {
+            eventsWithDate = [...eventsWithDate, {
+              ...oneEvent,
+              start: new Date(oneEvent.start),
+              end: new Date(oneEvent.end),
+            }];
+          }
         });
         setEvents(eventsWithDate);
         setNoEvents(false);
@@ -107,172 +119,73 @@ function GeneralCalendar() {
       });
   }, [search]);
 
-  const handleInputOnReactSelect = (selectedOptions, meta) => {
-    if (meta.action === 'select-option') {
-      const table = [];
-      selectedOptions.forEach((element) => {
-        if (!search.includes(element.value)) {
-          table.push(element.value);
-        }
-      });
-      const tableFin = [...search, ...table];
-      setSearch(tableFin);
-    }
+  const assignDefaultTitle = (eventsToCheck) => eventsToCheck.map((event) => ({
+    ...event,
+    title: event.title !== null ? `${event.title} - ${event.track.city}` : event.track.city,
+  }));
 
-    if (meta.action === 'remove-value') {
-      setSearch(search.filter((item) => item !== meta.removedValue.value));
-    }
-  };
+  const defaultTitledEvents = assignDefaultTitle(events);
 
-  const handleInputUnofficial = (event) => {
-    if (!search.includes(event.target.value)) {
-      setSearch([...search, event.target.value]);
-    }
-    else {
-      setSearch(search.filter((item) => item !== event.target.value));
-    }
-  };
+  useEffect(() => () => {
+    dispatch(setSearch(null));
+  }, []);
 
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      borderRadius: '4px',
-      boxShadow: state.isFocused ? '0 0 3px rgba(0, 0, 0, 0.3)' : 'none',
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isFocused ? 'grey' : state.data.color,
-      color: state.isFocused ? 'black' : 'inherit',
-    }),
-  };
-
-  const [showFFSA, setShowFFSA] = useState(false);
-
-  const handleCloseFFSA = () => setShowFFSA(false);
-  const handleShowFFSA = () => {
-    setShowFFSA(true);
-    setSearch([]);
-  };
-
-  const [showUFOLEP, setShowUFOLEP] = useState(false);
-
-  const handleCloseUFOLEP = () => setShowUFOLEP(false);
-  const handleShowUFOLEP = () => {
-    setShowUFOLEP(true);
-    setSearch([]);
-  };
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
 
     <div className="GeneralCalendar">
-      {isLoading ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Chargement...</span>
-        </Spinner>
-      ) : (
 
-        <Container fluid>
+      <Container fluid>
 
-          <Row className="mb-3">
-            {federations.map((fede) => (
-              <Col size={6} key={fede.id}>
-                <Button variant="primary" className="col-8" onClick={fede.alias === 'FFSA' ? handleShowFFSA : handleShowUFOLEP}>
-                  {'>'} {fede.alias}
-                </Button>
+        <FederationFilter />
 
-                <Offcanvas
-                  show={fede.alias === 'FFSA' ? showFFSA : showUFOLEP}
-                  onHide={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}
-                  placement={fede.alias === 'FFSA' ? 'start' : 'end'}
-                  scroll
-                >
-                  <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{fede.alias}</Offcanvas.Title>
-                  </Offcanvas.Header>
-                  <Offcanvas.Body>
-                    {fede.disciplines.map((discipline) => (
-                      <div key={discipline.id} className="GeneralCalendar-Discipline">
-                        <h4>{discipline.name}</h4>
-                        <ReactSelect
-                          placeholder="Sélectionnez..."
-                          isMulti
-                          isSearchable
-                          isClearable={false}
-                          onChange={handleInputOnReactSelect}
-                          options={discipline.categories.map((cate) => ({ value: `category[]=${cate.id}`, label: cate.name }))}
-                        />
-                      </div>
-                    ))}
-                    <hr />
-                    <div className="GeneralCalendar-Discipline">
-                      <h4>Championnat</h4>
-                      <ReactSelect
-                        styles={customStyles}
-                        isClearable={false}
-                        closeMenuOnSelect={false}
-                        isMulti
-                        isSearchable
-                        onChange={handleInputOnReactSelect}
-                        options={fede.championships.map((oneChampionship) => (
-                          { value: `championship[]=${oneChampionship.id}`, label: oneChampionship.name, color: oneChampionship.color }))}
-                      />
-                    </div>
-                    <div style={{ backgroundColor: '#ffcd61' }} className="GeneralCalendar-Unofficial">
+        {noEvents && <Alert variant="danger">Aucun événement ne correspond à votre recherche</Alert>}
 
-                      <label htmlFor="unofficial">
-                        <input type="checkbox" onChange={handleInputUnofficial} name="unofficial" id="unofficial" value="championship[]=0" />
-                        Séances non-officielles
-                      </label>
+        <Calendar
+          localizer={localizer}
+          events={defaultTitledEvents}
+          startAccessor="start"
+          endAccessor="end"
+          defaultView={Views.MONTH}
+          style={{ height: '70vh', width: '100%' }}
+          onSelectEvent={onSelectEvent}
+          eventPropGetter={eventPropGetter}
+          popup
+          views={{ month: true, week: true }}
+          messages={{
+            week: 'Semaine',
+            day: 'Jour',
+            month: 'Mois',
+            previous: 'Précédent',
+            next: 'Suivant',
+            today: 'Aujourd\'hui',
 
-                    </div>
-                    <hr />
-                    <Button type="button" className="col-12" onClick={fede.alias === 'FFSA' ? handleCloseFFSA : handleCloseUFOLEP}>Valider mes choix</Button>
-                  </Offcanvas.Body>
-                </Offcanvas>
-              </Col>
-            ))}
-          </Row>
-          <Row className="mb-3">
-            <Col size={8}>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => {
-                  setSearch([]);
-                }}
-              >Réinitialiser les filtres
-              </Button>
-            </Col>
-          </Row>
+            showMore: (total) => `+ ${total} autre${total > 1 ? 's' : ''}`,
+          }}
+          culture="fr"
+        />
 
-          {noEvents && <Alert variant="danger">Aucun événement ne correspond à votre recherche</Alert>}
+        <MasterModal
+          show={show}
+          handleClose={handleClose}
+          childComponent={(
+            <CardComponent
+              childComponent={(
+                <EventComponent
+                  event={selectedEvent}
+                  fromCalendar
+                  large
+                />
+)}
+            />
+)}
+        />
 
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            defaultView={Views.MONTH}
-            style={{ height: '70vh', width: '100%' }}
-            onSelectEvent={onSelectEvent}
-            eventPropGetter={eventPropGetter}
-            popup
-            views={{ month: true, week: true }}
-            messages={{
-              week: 'Semaine',
-              day: 'Jour',
-              month: 'Mois',
-              previous: 'Précédent',
-              next: 'Suivant',
-              today: 'Aujourd\'hui',
+      </Container>
 
-              showMore: (total) => `Voir ${total} supplémentaires`,
-            }}
-            culture="fr"
-          />
-
-        </Container>
-      )}
     </div>
   );
 }

@@ -60,7 +60,10 @@ class Track
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"tracks"})
      * @Groups({"track"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      */
@@ -68,7 +71,10 @@ class Track
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"tracks"})
      * @Groups({"track"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
      */
@@ -86,8 +92,23 @@ class Track
 
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="track")
+     * @Groups({"track"})
      */
     private $events;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"tracks"})
+     * @Groups({"track"})
+     */
+    private $latitude;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"tracks"})
+     * @Groups({"track"})
+     */
+    private $longitude;
 
     public function __construct()
     {
@@ -179,6 +200,14 @@ class Track
         return $this->events;
     }
 
+
+    public function setEvents($events): self
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
     public function addEvent(Event $event): self
     {
         if (!$this->events->contains($event)) {
@@ -219,5 +248,34 @@ class Track
     public function onPreUpdate()
     {
         $this->updatedAt = new \DateTime("now");
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(float $latitude): self
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(float $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
     }
 }

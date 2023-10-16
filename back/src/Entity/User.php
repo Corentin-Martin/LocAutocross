@@ -23,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"user"})
+     * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
@@ -34,6 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user"})
+     * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
@@ -45,6 +47,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      * @Groups({"user"})
+     * @Groups({"events"})
+     * @Groups({"event"})
      * @Groups({"conversation"})
      */
     private $roles = [];
@@ -58,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user"})
+     * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
@@ -69,6 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user"})
+     * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
@@ -80,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user"})
+     * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
@@ -111,11 +118,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"user"})
      */
     private $updatedAt;
 

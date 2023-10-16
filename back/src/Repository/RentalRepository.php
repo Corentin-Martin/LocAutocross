@@ -46,10 +46,33 @@ class RentalRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
         ->where('r.status BETWEEN :minStatus AND :maxStatus')
+        ->join('r.event', 'e')
+        ->andWhere('e.isCancelled = false')
+        ->andWhere('e.start > :currentDate')
         ->setParameter('minStatus', 1)
         ->setParameter('maxStatus', 4)
+        ->setParameter('currentDate', new \DateTime())
         ->orderBy('r.createdAt', 'DESC')
         ->setMaxResults(4)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+        /**
+    * @return Rental[] Returns an array of Rental objects
+     */
+    public function findFutureRentals(): array
+    {
+        return $this->createQueryBuilder('r')
+        ->where('r.status BETWEEN :minStatus AND :maxStatus')
+        ->join('r.event', 'e')
+        ->andWhere('e.isCancelled = false')
+        ->andWhere('e.start > :currentDate')
+        ->setParameter('minStatus', 1)
+        ->setParameter('maxStatus', 4)
+        ->setParameter('currentDate', new \DateTime())
+        ->orderBy('r.createdAt', 'DESC')
         ->getQuery()
         ->getResult()
         ;

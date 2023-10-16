@@ -1,0 +1,14 @@
+@use 'src/styles/vars';
+
+
+.card-body {
+  box-shadow: 5px 5px 7px vars.$tertiary;
+}
+
+
+// @media screen and (min-width: 1200px) {
+//   .CardText {
+//     text-align: center;
+//   }
+// }
+
