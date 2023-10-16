@@ -2,15 +2,17 @@ import './RegisterForm.scss';
 import {
   Alert, Button, FloatingLabel, Form, Row,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Password from '../Password/Password';
 import { setToken, setUser, setUserConnected } from '../../actions/user';
 import AxiosPublic from '../../utils/AxiosPublic';
 import ModalRoleChoice from './ModalRoleChoice/ModalRoleChoice';
+import AxiosPrivate from '../../utils/AxiosPrivate';
 
-function RegisterForm() {
+function RegisterForm({ setShowToParent }) {
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,12 +31,22 @@ function RegisterForm() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  useEffect(() => {
+    if (user !== null) {
+      setMail(user.email);
+      setPseudo(user.pseudo);
+      setFirstname(user.firstname);
+      setLastname(user.lastname);
+      setRole(user.roles);
+    }
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if ([mail, pseudo, firstname, lastname, password, role].some((value) => value === null)) {
       setWrongConnexion(true);
     }
-    else {
+    else if (user === null) {
       AxiosPublic.post('user', {
         email: mail,
         password: password,
@@ -54,11 +66,31 @@ function RegisterForm() {
             navigate(`/location/${location.state.rental.id}`);
           }
           else {
-            navigate('/mes-conversations');
+            navigate('/mon-profil');
           }
         })
         .catch((error) => {
           console.error(error.response.status);
+          if (error.response.status === 409) {
+            setDuplicateMail(true);
+          }
+        });
+    }
+    else {
+      AxiosPrivate.put('user', {
+        email: mail,
+        pseudo: pseudo,
+        password: password,
+        firstname: firstname,
+        lastname: lastname,
+        roles: role,
+      })
+        .then((response) => {
+          dispatch(setUser(response.data));
+          setShowToParent(false);
+        }).catch((error) => {
+          console.error(error.response.status);
+
           if (error.response.status === 409) {
             setDuplicateMail(true);
           }
@@ -78,7 +110,7 @@ function RegisterForm() {
     <Form onSubmit={handleSubmit} className="col-12 d-flex flex-column align-items-center">
       {wrongConnexion && (
         <Alert variant="danger" className="col-8 text-center">
-          Attention, tous les champs sont obligatoires pour l'inscription !
+          Attention, tous les champs sont obligatoires !
         </Alert>
       )}
       <FloatingLabel
@@ -91,6 +123,7 @@ function RegisterForm() {
             setMail(event.currentTarget.value);
           }}
           type="email"
+          value={mail ?? ''}
           placeholder="name@example.com"
         />
       </FloatingLabel>
@@ -106,6 +139,7 @@ function RegisterForm() {
           }}
           type="text"
           placeholder="pseudo"
+          value={pseudo ?? ''}
         />
       </FloatingLabel>
 
@@ -120,6 +154,7 @@ function RegisterForm() {
           }}
           type="text"
           placeholder="Prénom"
+          value={firstname ?? ''}
         />
       </FloatingLabel>
 
@@ -134,11 +169,13 @@ function RegisterForm() {
           }}
           type="text"
           placeholder="Nom de famille"
+          value={lastname ?? ''}
         />
       </FloatingLabel>
 
       <Password sendPasswordToParent={receivePasswordFromChild} />
 
+      {user === null && (
       <Row className="mb-3 col-8 text-center d-flex flex-column justify-content-center align-items-center">
 
         <h5>Choisissez votre rôle :</h5>
@@ -192,15 +229,16 @@ function RegisterForm() {
         </div>
 
       </Row>
+      )}
 
       {duplicateMail && (
       <Alert variant="danger" className="col-8 text-center">
-        Cette adresse mail existe déjà. Inscription impossible.
+        Cette adresse mail existe déjà.
       </Alert>
       )}
 
       <Button variant="primary" type="submit">
-        Se connecter
+        {user === null ? "S'inscrire" : 'Modifier mes informations'}
       </Button>
     </Form>
 
