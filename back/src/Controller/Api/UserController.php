@@ -69,6 +69,17 @@ class UserController extends AbstractController
     {
         /** @var User */
         $user = $serializerInterface->deserialize($request->getContent(), User::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $this->getUser()]);
+        
+        $checkUser = $userRepository->findOneBy(["email" => $user->getEmail()]);
+
+        /** @var User */
+        $currentUser = $this->getUser();
+
+        
+
+        if ($checkUser && $checkUser->getId() !== $currentUser->getId()) {
+            return $this->json(["message" => "Cette adresse email existe déjà"], Response::HTTP_CONFLICT, []);
+        }
 
         $user->setPassword($userPasswordHasherInterface->hashPassword($user, $user->getPassword()));
 
