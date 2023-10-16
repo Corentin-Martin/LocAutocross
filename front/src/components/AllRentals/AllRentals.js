@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 import AxiosPublic from '../../utils/AxiosPublic';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Pagination from '../Pagination/Pagination';
 import RentalExtract from '../RentalExtract/RentalExtract';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function AllRentals() {
   const [rentals, setRentals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const sendPageToParent = (page) => {
@@ -37,6 +36,7 @@ function AllRentals() {
   if (!isLoading && rentals.length === 0) {
     return <div className="alert alert-danger">Rien à afficher pour le moment</div>;
   }
+
   return (
     <>
       <Row>

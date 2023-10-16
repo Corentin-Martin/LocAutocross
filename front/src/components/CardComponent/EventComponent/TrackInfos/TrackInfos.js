@@ -1,4 +1,5 @@
 import { Card } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 function TrackInfos({ track }) {
   return (
@@ -9,5 +10,9 @@ function TrackInfos({ track }) {
     </>
   );
 }
+
+TrackInfos.propTypes = {
+  track: PropTypes.object.isRequired,
+};
 
 export default TrackInfos;

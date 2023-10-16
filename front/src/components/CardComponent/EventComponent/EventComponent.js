@@ -1,18 +1,18 @@
 import {
-  Button,
-  Card, Col, Row,
+  Button, Card, Col, Row,
 } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { setElementToDisplay } from '../../../actions/dashboard';
 import TrackInfos from './TrackInfos/TrackInfos';
-import InfosComponent from '../../InfosComponent/InfosComponent';
 import DatesInfos from './DatesInfos/DatesInfos';
-import ChampionshipInfos from './ChampionshipInfos/ChampionshipInfos';
-import defaultAffiche from '../../../assets/images/defaultAffiche.jpg';
 import RentalInfos from './RentalInfos/RentalInfos';
 import EventControl from './EventControl/EventControl';
+import InfosComponent from '../../InfosComponent/InfosComponent';
+import ChampionshipInfos from './ChampionshipInfos/ChampionshipInfos';
+import defaultAffiche from '../../../assets/images/defaultAffiche.jpg';
 import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function EventComponent({ event, fromCalendar, large }) {
@@ -106,6 +106,13 @@ function EventComponent({ event, fromCalendar, large }) {
 EventComponent.defaultProps = {
   fromCalendar: false,
   large: false,
+  event: null,
+};
+
+EventComponent.propTypes = {
+  event: PropTypes.object,
+  fromCalendar: PropTypes.bool,
+  large: PropTypes.bool,
 };
 
 export default EventComponent;

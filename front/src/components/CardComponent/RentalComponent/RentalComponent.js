@@ -5,18 +5,18 @@ import {
 import moment from 'moment/moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import defaultKart from '../../../assets/images/defaultKart.jpeg';
-import RentalControl from './RentalControl/RentalControl';
-import RentalUserbox from './RentalUserbox/RentalUserbox';
+import PropTypes from 'prop-types';
 import { setElementToDisplay } from '../../../actions/dashboard';
 import RentalInfos from './RentalInfos/RentalInfos';
 import VehicleInfos from './VehicleInfos/VehicleInfos';
+import RentalControl from './RentalControl/RentalControl';
+import RentalUserbox from './RentalUserbox/RentalUserbox';
 import InfosComponent from '../../InfosComponent/InfosComponent';
+import defaultKart from '../../../assets/images/defaultKart.jpeg';
 import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function RentalComponent({ rental }) {
   const user = useSelector((state) => state.user.user);
-
   const statusMatching = useSelector((state) => state.user.statusMatching);
 
   const navigate = useNavigate();
@@ -91,5 +91,13 @@ function RentalComponent({ rental }) {
     </>
   );
 }
+
+RentalComponent.defaultProps = {
+  rental: null,
+};
+
+RentalComponent.propTypes = {
+  rental: PropTypes.object,
+};
 
 export default RentalComponent;

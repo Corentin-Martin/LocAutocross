@@ -1,8 +1,4 @@
 .CardComponent {
-  &-RentalLink {
-    text-decoration: none;
-    color: white;
-  }
 
   &-DeleteIcon {
     position: absolute;
@@ -25,7 +21,7 @@
     cursor: pointer;
     }
 
-  &-DeleteIcon:hover, &-EditIcon:hover, &-MoreIcon:hover, &-CloseIcon:hover{
+  &-DeleteIcon:hover, &-EditIcon:hover, &-CloseIcon:hover{
     transform: scale(1.5);
   }
 
