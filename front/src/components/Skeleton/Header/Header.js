@@ -80,6 +80,14 @@ function Header() {
                     title="Mon Bureau"
                     id="offcanvasNavbarDropdown-expand-false"
                   >
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/mon-profil"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Mon profil
+                    </NavDropdown.Item>
                     {user !== null && user.roles.includes('ROLE_PRO')
                     && (
                     <>

@@ -114,9 +114,9 @@ function RentalControl({ rental }) {
           onClick={handleEditRental}
         ><PencilSquare size={24} className="me-2" /> Editer
         </Card.Text>
-        <Card.Text className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
+        <div className="d-flex align-items center text-black" style={{ cursor: 'pointer' }}>
           <DeleteButton type="rentals" idToDelete={rental.id} />
-        </Card.Text>
+        </div>
       </div>
 
       <ReservationAction
