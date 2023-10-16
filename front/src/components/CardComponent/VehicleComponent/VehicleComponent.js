@@ -21,11 +21,12 @@ function VehicleComponent({ vehicle }) {
     return null;
   }
   return (
-    <><Card.Img
-      variant="top"
-      src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
-      alt={vehicle.model}
-    />
+    <>
+      <Card.Img
+        variant="top"
+        src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
+        alt={vehicle.model}
+      />
       <Card.Body style={{ position: 'relative' }}>
         <div className="CardComponent-DeleteIcon">
           <DeleteButton type="vehicles" idToDelete={vehicle.id} />

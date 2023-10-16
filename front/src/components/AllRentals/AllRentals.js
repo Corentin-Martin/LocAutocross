@@ -33,6 +33,10 @@ function AllRentals() {
   if (isLoading) {
     return <LoadingSpinner />;
   }
+
+  if (!isLoading && rentals.length === 0) {
+    return <div className="alert alert-danger">Rien à afficher pour le moment</div>;
+  }
   return (
     <>
       <Row>

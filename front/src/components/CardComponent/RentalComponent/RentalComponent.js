@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import moment from 'moment/moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import defaultKart from '../../../assets/images/defaultKart.jpeg';
 import RentalControl from './RentalControl/RentalControl';
 import RentalUserbox from './RentalUserbox/RentalUserbox';
@@ -21,14 +21,19 @@ function RentalComponent({ rental }) {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const handleClickHeader = () => {
+    if (location.pathname !== '/mes-locations') {
+      dispatch(setElementToDisplay(null));
+      navigate(`/evenement/${rental.event.id}`);
+    }
+  };
 
   return (
     <>
       <Card.Header
-        onClick={() => {
-          dispatch(setElementToDisplay(null));
-          navigate(`/evenement/${rental.event.id}`);
-        }}
+        onClick={handleClickHeader}
         style={{ cursor: 'pointer', position: 'relative' }}
       >
         <h2>{rental.event.title}</h2>
