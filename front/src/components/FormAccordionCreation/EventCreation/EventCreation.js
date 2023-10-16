@@ -54,7 +54,7 @@ function EventCreation({ closeModal }) {
           )[0] : { id: 0 },
       );
       setPrivateEvent(!elementToEdit.isOfficial);
-      setTrack(elementToEdit.track);
+      setTrack(elementToEdit.track.id);
       setStart(elementToEdit.start);
       setEnd(elementToEdit.end);
       setAllDay(elementToEdit.allDay);
@@ -69,6 +69,10 @@ function EventCreation({ closeModal }) {
     AxiosPublic.get('tracks')
       .then((response) => {
         setTracks(response.data);
+
+        if (newTrack !== null) {
+          setTrack(newTrack.id);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -136,7 +140,7 @@ function EventCreation({ closeModal }) {
 
       else {
         AxiosPrivate.put(`events/${elementToEdit.id}`, {
-          track: track.id,
+          track: track,
           championship: (champChoice !== 0 ? champChoice : null),
           title: title,
           isOfficial: !privateEvent,
@@ -183,6 +187,10 @@ function EventCreation({ closeModal }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const setShowToParent = (bool) => {
+    setShow(bool);
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -197,7 +205,7 @@ function EventCreation({ closeModal }) {
         show={show}
         handleClose={handleClose}
         title="Nouveau circuit"
-        childComponent={<TrackCreation />}
+        childComponent={<TrackCreation setShowToParent={setShowToParent} />}
       />
       )}
 
@@ -299,7 +307,7 @@ function EventCreation({ closeModal }) {
         <Form.Select
           aria-label="Default select example"
           onChange={(e) => setTrack(e.target.value)}
-          value={track ? track.id : ''}
+          value={track ?? ''}
         >
           <option>Sélectionnez un circuit</option>
           {tracks.map((oneTrack) => (
