@@ -130,7 +130,6 @@ function App() {
             path="/evenement/:eventId"
             element={(<Skeleton page={<EventPage />} />)}
           />
-
           <Route
             path="/circuit/:trackId"
             element={(<Skeleton page={<Track />} />)}
@@ -147,24 +146,21 @@ function App() {
             path="/inscription"
             element={(<Skeleton page={<Registration />} />)}
           />
-
           <Route
             path="/a-propos"
             element={(<Skeleton page={<About />} />)}
           />
-
           <Route
             path="/mentions-legales"
             element={(<Skeleton page={<LegalNotice />} />)}
           />
-
           <Route
             path="/confidentialite"
             element={(<Skeleton page={<Confidentiality />} />)}
           />
 
-          {/* PROTECTED */}
-          <Route element={<ProtectedRoute user={user} pro />}>
+          {/* RESERVED FOR PRO */}
+          <Route element={<ProtectedRoute pro />}>
             <Route
               path="/mon-garage"
               element={(<Skeleton page={<Vehicles />} />)}
@@ -178,7 +174,9 @@ function App() {
               element={(<Skeleton page={<Events />} />)}
             />
           </Route>
-          <Route element={<ProtectedRoute user={user} />}>
+
+          {/* RESERVED FOR USER */}
+          <Route element={<ProtectedRoute />}>
             <Route
               path="/mon-profil"
               element={(<Skeleton page={<Profil />} />)}
