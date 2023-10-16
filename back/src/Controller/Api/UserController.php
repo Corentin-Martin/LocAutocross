@@ -30,6 +30,11 @@ class UserController extends AbstractController
         /** @var User */
         $newUser = $serializerInterface->deserialize($request->getContent(), User::class, 'json');
 
+        
+        if ($userRepository->findOneBy(["email" => $newUser->getEmail()])) {
+            return $this->json(["message" => "Cette adresse email existe déjà"], Response::HTTP_CONFLICT, []);
+        }
+
         $newUser->setPassword($userPasswordHasherInterface->hashPassword($newUser, $newUser->getPassword()));
 
         $userRepository->add($newUser, true);
