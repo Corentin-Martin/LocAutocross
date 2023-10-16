@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Badge, Button, FloatingLabel, Form, Row,
@@ -54,7 +54,7 @@ function EventCreation({ closeModal }) {
           )[0] : { id: 0 },
       );
       setPrivateEvent(!elementToEdit.isOfficial);
-      setTrack(elementToEdit.track.id);
+      setTrack(elementToEdit.track);
       setStart(elementToEdit.start);
       setEnd(elementToEdit.end);
       setAllDay(elementToEdit.allDay);
@@ -71,7 +71,7 @@ function EventCreation({ closeModal }) {
         setTracks(response.data);
 
         if (newTrack !== null) {
-          setTrack(newTrack.id);
+          setTrack(newTrack);
         }
         setIsLoading(false);
       })
@@ -121,7 +121,7 @@ function EventCreation({ closeModal }) {
     if (verification()) {
       if (elementToEdit === null) {
         AxiosPrivate.post('events', {
-          track: track,
+          track: track.id,
           championship: (champChoice !== 0 ? champChoice : null),
           title: title,
           isOfficial: !privateEvent,
@@ -140,7 +140,7 @@ function EventCreation({ closeModal }) {
 
       else {
         AxiosPrivate.put(`events/${elementToEdit.id}`, {
-          track: track,
+          track: track.id,
           championship: (champChoice !== 0 ? champChoice : null),
           title: title,
           isOfficial: !privateEvent,
@@ -189,6 +189,33 @@ function EventCreation({ closeModal }) {
 
   const setShowToParent = (bool) => {
     setShow(bool);
+  };
+
+  const dataRef = useRef();
+  const [match, setMatch] = useState(false);
+  const [trackSearch, setTrackSearch] = useState('');
+
+  const handleTrackChange = (e) => {
+    setTrackSearch(e.target.value);
+    const parts = e.target.value.split('/');
+    const firstPart = parts[0].trim();
+    const selectedTrack = tracks.find((oneTrack) => oneTrack.city === firstPart);
+
+    for (let i = 0; i < dataRef.current.options.length; i += 1) {
+      if (dataRef.current.options[i].value.trim().toUpperCase()
+        .includes(e.target.value.trim().toUpperCase())) {
+        setMatch(true);
+        break;
+      }
+      setMatch(false);
+    }
+
+    if (selectedTrack) {
+      setTrack(selectedTrack);
+    }
+    else {
+      setTrack(null);
+    }
   };
 
   if (isLoading) {
@@ -304,30 +331,34 @@ function EventCreation({ closeModal }) {
 
       <Form.Group controlId="trackSelect" className="mb-3 col-10">
         <Form.Label>Circuit *</Form.Label>
-        <Form.Select
-          aria-label="Default select example"
-          onChange={(e) => setTrack(e.target.value)}
-          value={track ?? ''}
-        >
-          <option>Sélectionnez un circuit</option>
+        <Form.Control
+          type="text"
+          placeholder="Sélectionnez un circuit"
+          list="tracksList"
+          value={track ? `${track.city} / ${track.postCode} / ${track.department}` : trackSearch}
+          onChange={handleTrackChange}
+        />
+        <datalist id="tracksList" ref={dataRef}>
           {tracks.map((oneTrack) => (
             <option
-              value={oneTrack.id}
+              value={`${oneTrack.city} / ${oneTrack.postCode} / ${oneTrack.department}`}
               key={oneTrack.id}
-            >
-              {`${oneTrack.city} / ${oneTrack.postCode} / ${oneTrack.department}`}
-            </option>
+            />
           ))}
-        </Form.Select>
-        <div className="mt-2 text-center bg-secondary rounded-2 p-2">
-          Le circuit n'existe pas ?
-          <span
-            className="badge bg-primary text-black p-1"
-            style={{ cursor: 'pointer' }}
-            onClick={handleShow}
-          >Voulez-vous le créer ?
-          </span>
-        </div>
+        </datalist>
+
+        {!match && !track && trackSearch !== '' && (
+          <div className="text-danger mt-2 bg-secondary text-center rounded-2 p-2">
+            Aucune correspondance trouvée.
+            <span
+              className="badge bg-primary text-black p-1"
+              style={{ cursor: 'pointer' }}
+              onClick={handleShow}
+            >Voulez-vous créer un circuit ?
+            </span>
+          </div>
+        )}
+
       </Form.Group>
       <Form.Group controlId="startSelect" className="mb-3 col-10">
         <Form.Label className="text-center">Début *</Form.Label>
