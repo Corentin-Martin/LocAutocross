@@ -36,7 +36,7 @@ function RentalComponent({ rental }) {
         onClick={handleClickHeader}
         style={{ cursor: 'pointer', position: 'relative' }}
       >
-        <h2>{rental.event.title}</h2>
+        {rental.event.title !== null && <h2>{rental.event.title}</h2>}
         <p>Date de début : {moment(rental.event.start).format('DD/MM/YYYY à HH:mm')}</p>
         <p>Date de fin : {moment(rental.event.end).format('DD/MM/YYYY à HH:mm')}</p>
         {rental.event.championship !== null
