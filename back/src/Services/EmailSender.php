@@ -50,6 +50,23 @@ class EmailSender
         $this->mailer->send($email);
     }
 
+    public function sendNotAcceptedMail($rental, $exTenant): void
+    {
+
+        $htmlContent = $this->twig->render('email/not-accepted.html.twig', [
+            'rental' => $rental,
+            'exTenant' => $exTenant,
+        ]);
+
+        $email = (new Email())
+            ->from('info@pronautocross.fr')
+            ->to($exTenant->getEmail())
+            ->subject('Concernant votre demande de réservation')
+            ->html($htmlContent);
+
+        $this->mailer->send($email);
+    }
+
     public function sendNotifNewConv($user, $rental, $byOwner = false): void
     {
         $template = ($byOwner) ? 'email/new-conv-by-owner.html.twig' : 'email/new-conv.html.twig';
