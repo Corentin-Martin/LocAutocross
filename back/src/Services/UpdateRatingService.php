@@ -28,7 +28,9 @@ class UpdateRatingService
 
         $rating = [];
         foreach ($comments as $comment) {
-            $rating[] = $comment->getRating();
+            if (!is_null($comment->getRating())) {
+                $rating[] = $comment->getRating();
+            }
         }
 
         $sum = array_sum($rating);
