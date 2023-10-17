@@ -63,6 +63,32 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/details/{id}", name="readOne", methods={"GET"})
+     */
+    public function readOne(?User $user): JsonResponse
+    {
+        if (is_null($user)) {
+            return $this->json(["message" => "Cet utilisateur n'existe pas"], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!in_array('ROLE_PRO', $user->getRoles())) {
+            return $this->json(["message" => "Impossible d'afficher les informations de cet utilisateur"], Response::HTTP_FORBIDDEN);
+        }
+
+        $comments = [];
+        foreach ($user->getPropositions() as $rental) {
+            
+            if (!is_null($rental->getComment())) {
+                $comments[] = $rental->getComment();
+            }
+        }
+
+        $toSend = ['user' => $user, 'comments' => $comments];
+
+        return $this->json($toSend, Response::HTTP_OK, [], ["groups" => ["user-detail"]]);
+    }
+
+    /**
      * @Route("", name="edit", methods={"PUT", "PATCH"})
      */
     public function edit(Request $request, SerializerInterface $serializerInterface, UserPasswordHasherInterface $userPasswordHasherInterface, UserRepository $userRepository): JsonResponse

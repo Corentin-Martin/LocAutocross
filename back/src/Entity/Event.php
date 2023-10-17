@@ -28,6 +28,7 @@ class Event
      * @Groups({"conversation"})
      * @Groups({"track"})
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -43,6 +44,7 @@ class Event
      * @Groups({"conversation"})
      * @Groups({"track"})
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $title;
 
@@ -58,6 +60,7 @@ class Event
      * @Groups({"conversation"})
      * @Groups({"track"})
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $start;
 
@@ -104,6 +107,7 @@ class Event
      * @Groups({"conversation"})
      * @Groups({"championship"})
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $track;
 
@@ -113,6 +117,7 @@ class Event
      * @Groups({"event"})
      * @Groups({"rentals"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $championship;
 
@@ -151,6 +156,7 @@ class Event
      * @Groups({"eventWithoutTrack"})
      * @Groups({"federations"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $description;
 
@@ -160,6 +166,7 @@ class Event
      * @Groups({"event"})
      * @Groups({"eventWithoutTrack"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $picture;
 
@@ -174,6 +181,7 @@ class Event
      * @Groups({"rentals"})
      * @Groups({"conversation"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $isCancelled;
 

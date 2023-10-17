@@ -17,18 +17,21 @@ class Comment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $rating;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $content;
 
@@ -36,6 +39,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $associatedUser;
 
@@ -43,6 +47,7 @@ class Comment
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $createdAt;
 

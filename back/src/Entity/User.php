@@ -23,6 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"user"})
+     * @Groups({"user-detail"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
@@ -36,6 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user"})
+     * @Groups({"user-detail"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
@@ -64,6 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user"})
+     * @Groups({"user-detail"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
@@ -77,6 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user"})
+     * @Groups({"user-detail"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
@@ -90,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user"})
+     * @Groups({"user-detail"})
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"federations"})
@@ -103,6 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="ownerUser")
+     * @Groups({"user-detail"})
      */
     private $propositions;
 
@@ -150,6 +156,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"user"})
+     * @Groups({"user-detail"})
+     * @Groups({"events"})
+     * @Groups({"event"})
+     * @Groups({"federations"})
+     * @Groups({"rentals"})
+     * @Groups({"message"})
+     * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $rating;
 
