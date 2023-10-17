@@ -16,6 +16,7 @@ import Rental from '../../pages/Rental/Rental';
 import Events from '../../pages/Events/Events';
 import Tracks from '../../pages/Tracks/Tracks';
 import Profil from '../../pages/Profil/Profil';
+import Comment from '../../pages/Comment/Comment';
 import Rentals from '../../pages/Rentals/Rentals';
 import AxiosPublic from '../../utils/AxiosPublic';
 import AxiosPrivate from '../../utils/AxiosPrivate';
@@ -180,6 +181,10 @@ function App() {
             <Route
               path="/mes-conversations"
               element={(<Skeleton page={<Conversation />} />)}
+            />
+            <Route
+              path="/mon-avis/:rentalId"
+              element={(<Skeleton page={<Comment />} />)}
             />
           </Route>
 
