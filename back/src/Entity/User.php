@@ -29,6 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"rentals"})
      * @Groups({"message"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $id;
 
@@ -41,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"rentals"})
      * @Groups({"message"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $email;
 
@@ -68,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"rentals"})
      * @Groups({"message"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $pseudo;
 
@@ -80,6 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"rentals"})
      * @Groups({"message"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $firstname;
 
@@ -92,6 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"rentals"})
      * @Groups({"message"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $lastname;
 
@@ -142,6 +147,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="user")
      */
     private $messages;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $rating;
 
 
     public function __construct()
@@ -530,6 +540,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $message->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRating(): ?float
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?float $rating): self
+    {
+        $this->rating = $rating;
 
         return $this;
     }

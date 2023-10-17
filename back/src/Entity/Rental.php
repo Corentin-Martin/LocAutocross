@@ -23,6 +23,7 @@ class Rental
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $id;
 
@@ -53,6 +54,7 @@ class Rental
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $vehicle;
 
@@ -71,6 +73,7 @@ class Rental
      * @Groups({"rentals"})
      * @Groups({"vehicle"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $event;
 

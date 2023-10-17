@@ -155,5 +155,21 @@ class EmailSender
         $this->mailer->send($email);
     }
 
+    public function sendNewComment($rental, $comment): void
+    {
+        $htmlContent = $this->twig->render('email/new-comment.html.twig', [
+            'rental' => $rental,
+            'comment' => $comment
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->to($rental->getOwnerUser()->getEmail())
+            ->subject($rental->getTenantUser()->getPseudo() . " vient de vous laisser un commentaire !")
+            ->html($htmlContent);
+
+        $this->mailer->send($email);
+    }
+
 
 }

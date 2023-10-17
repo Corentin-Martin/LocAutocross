@@ -27,6 +27,7 @@ class Event
      * @Groups({"rentals"})
      * @Groups({"conversation"})
      * @Groups({"track"})
+     * @Groups({"comment"})
      */
     private $id;
 
@@ -41,6 +42,7 @@ class Event
      * @Groups({"rentals"})
      * @Groups({"conversation"})
      * @Groups({"track"})
+     * @Groups({"comment"})
      */
     private $title;
 
@@ -55,6 +57,7 @@ class Event
      * @Groups({"rentals"})
      * @Groups({"conversation"})
      * @Groups({"track"})
+     * @Groups({"comment"})
      */
     private $start;
 
@@ -100,6 +103,7 @@ class Event
      * @Groups({"rentals"})
      * @Groups({"conversation"})
      * @Groups({"championship"})
+     * @Groups({"comment"})
      */
     private $track;
 
