@@ -32,6 +32,7 @@ import Conversation from '../../pages/Conversation/Conversation';
 import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
+import User from '../../pages/User/User';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -126,6 +127,10 @@ function App() {
           <Route
             path="/evenement/:eventId"
             element={(<Skeleton page={<EventPage />} />)}
+          />
+          <Route
+            path="/utilisateur/:userId"
+            element={(<Skeleton page={<User />} />)}
           />
           <Route
             path="/circuit/:trackId"
