@@ -12,8 +12,8 @@ function UserComponent({ user, comments }) {
         <InfosComponent title="Fiche" childComponent={<UserFiche user={user} />} />
         <InfosComponent title="Note" childComponent={<GlobalRating rating={user.rating} />} />
       </Row>
-      {comments.length > 0 && <InfosComponent inColumn title="Avis" childComponent={<CommentsComponent comments={comments} />} />}
-      {user.propositions.length > 0 && <InfosComponent title="Ses locations à venir" childComponent={<FutureRentals rentals={user.propositions} />} />}
+      {comments.length > 0 && <InfosComponent inColumn title="Avis" bgVariant="primary" childComponent={<CommentsComponent comments={comments} />} />}
+      {user.propositions.length > 0 && <InfosComponent inColumn title="Ses locations à venir" childComponent={<FutureRentals rentals={user.propositions} />} />}
 
     </Card.Body>
   );

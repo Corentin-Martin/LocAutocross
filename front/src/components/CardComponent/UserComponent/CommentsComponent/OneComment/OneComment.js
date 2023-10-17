@@ -1,16 +1,25 @@
 import moment from 'moment';
-import { Card } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
+import { Star, StarFill } from 'react-bootstrap-icons';
 
 function OneComment({ comment }) {
   return (
-    <Card className="m-1" style={{ width: '45%', flexGrow: '1' }}>
-      <Card.Body className="col-12">
-        <Card.Text>Auteur : {comment.associatedUser.pseudo}</Card.Text>
-        <Card.Text>Le : {moment(comment.createdAt).format('DD/MM/YYYY à HH:mm')}</Card.Text>
-        <Card.Text>Commentaire : {comment.content}</Card.Text>
-        <Card.Text>Note : {comment.rating ?? 'Non noté'}</Card.Text>
-      </Card.Body>
-    </Card>
+    <ListGroup variant="flush" className="col-12 col-md-6 text-start m-3 p-3 rounded">
+      <ListGroup.Item variant="primary">Par : {comment.associatedUser.pseudo} - Le : {moment(comment.createdAt).format('DD/MM/YYYY à HH:mm')}</ListGroup.Item>
+      <ListGroup.Item variant="primary">Commentaire : {comment.content}</ListGroup.Item>
+      <ListGroup.Item variant="primary">Note : {comment.rating !== null ? [1, 2, 3, 4, 5].map((value) => {
+        if (comment.rating >= value) {
+          return <StarFill className="me-1" key={value} />;
+        }
+        return (
+          <Star
+            key={value}
+            className="me-1"
+          />
+        );
+      }) : 'Non noté'}
+      </ListGroup.Item>
+    </ListGroup>
   );
 }
 
