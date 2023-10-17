@@ -6,6 +6,8 @@ import CommentForm from '../../components/CommentForm/CommentForm';
 import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import AxiosPublic from '../../utils/AxiosPublic';
+import CardText from '../../components/CardText/CardText';
+import CommentText from '../../components/CardText/CommentText/CommentText';
 
 function Comment() {
   const { rentalId } = useParams();
@@ -13,6 +15,7 @@ function Comment() {
   const [isLoading, setIsLoading] = useState(true);
   const [wrong, setWrong] = useState(false);
   const [commentExist, setCommentExist] = useState(false);
+  const [rental, setRental] = useState(null);
 
   useEffect(() => {
     AxiosPublic.get(`rentals/${rentalId}`)
@@ -29,6 +32,7 @@ function Comment() {
           setWrong(true);
         }
 
+        setRental(response.data);
         setIsLoading(false);
       }).catch((error) => {
         console.error(error);
@@ -48,9 +52,14 @@ function Comment() {
   }
   return (
     <GeneralLayout
-      title="Mon commentaire"
-      pageTitle="Mon commentaire"
-      childComponent={<CommentForm />}
+      title="Mon avis"
+      pageTitle="Mon avis"
+      childComponent={(
+        <>
+          <CardText childComponent={<CommentText rental={rental} />} />
+          <CommentForm rentalId={rental.id} />
+        </>
+    )}
     />
   );
 }
