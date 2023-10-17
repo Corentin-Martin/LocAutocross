@@ -1,10 +1,11 @@
-<div>
-<h1>Il y a du nouveau</h1>
-<p>Bonjour {{rental.ownerUser.pseudo}}, il y a du nouveau concernant votre proposition de location pour {{rental.event.track.city}} !</p>
+{% extends 'base.html.twig' %}
+{% block body %}
+<p>Bonjour {{rental.ownerUser.pseudo}}, il y a du nouveau concernant votre proposition de location pour {{rental.event.track.city}} le {{rental.event.start|date("d/m/Y")}} !</p>
 {% if rental.tenantUser is null %}
 <p>Le statut vient de nouveau de passer sur disponible.</p>
 {% else %}
 <p>{{rental.tenantUser.pseudo}} {% if rental.status is same as('2') %} est intéressé{% else %} vient de faire une demande de réservation{% endif %}.</p>
 {% endif %}
-<p>Bisous</p>
-</div>
+<p>Pour entrer en contact avec lui, rendez-vous sur <a href='http://localhost:8080/location/{{rental.id}}'>la page de la location.</a></p>
+<p>N'oubliez pas de vous connecter pour accéder au panneau de contrôle.</p>
+{% endblock %}

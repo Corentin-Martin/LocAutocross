@@ -1,12 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import AxiosPrivate from './AxiosPrivate';
 import { setUser } from '../actions/user';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 function ProtectedRoute({ pro = false }) {
-  const user = useSelector((state) => state.user.user);
   const [localUser, setLocalUser] = useState(null);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +24,7 @@ function ProtectedRoute({ pro = false }) {
           console.error(error);
         });
     }
-  }, [user]);
+  }, []);
 
   if (isLoading) {
     return <LoadingSpinner />;

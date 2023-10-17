@@ -1,38 +1,43 @@
-<div>
-<h1>Réservation validée</h1>
+{% extends 'base.html.twig' %}
+{% block body %}
 <p>Bonjour {{rental.tenantUser.pseudo}}, bonne nouvelle, votre demande de réservation a été acceptée !</p>
-
-<h3>Récap : </h3>
-<ul class="list-group">
-  <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="ms-2 me-auto">
-      <div class="fw-bold">Epreuve</div>
-      {{rental.event.title}} - {{rental.event.track.city}}
-    </div>
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="ms-2 me-auto">
-      <div class="fw-bold">Dates</div>
-      <p>Début : {{rental.event.start|date("d/m/Y H:i")}}</p>
-      <p>Fin : {{rental.event.end|date("d/m/Y H:i")}}</p>
-    </div>
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="ms-2 me-auto">
-      <div class="fw-bold">Véhicule</div>
-      <p>{{rental.vehicle.brand.name}}{% if rental.vehicle.model is not null %} - {{rental.vehicle.model}} -{% endif %} {{rental.vehicle.year|date("Y")}}</p>
-    </div>
-  </li>
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="ms-2 me-auto">
-      <div class="fw-bold">Loueur</div>
-      <p>Pseudo : {{rental.ownerUser.pseudo}}</p>
-      <p>Prénom : {{rental.ownerUser.firstname}}</p>
-      <p>Nom de famille : {{rental.ownerUser.lastname}}</p>
-      <p>Adresse mail : {{rental.ownerUser.email}}</p>
-    </div>
-  </li>
-</ul>
-
-<p>Bisous</p>
-</div>
+<br/>
+<table class="table-perso">
+  <tr>
+    <td colspan="2" class="perso-center">Informations épreuve</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Epreuve</td>
+    <td >{% if rental.event.title is not null %}{{rental.event.title}} - {% endif %}{{rental.event.track.city}}</td>
+  </tr>
+  <tr>
+    <td class="perso-title" >Dates</td>
+    <td>Du {{rental.event.start|date("d/m/Y H:i")}} au {{rental.event.end|date("d/m/Y H:i")}}</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Véhicule</td>
+    <td>{{rental.vehicle.brand.name}}{% if rental.vehicle.model is not null %} - {{rental.vehicle.model}} -{% endif %} {{rental.vehicle.year|date("Y")}}</td>
+  </tr>
+  <tr>
+    <td colspan="2" class="perso-center">Informations loueur</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Pseudo</td>
+    <td >{{rental.ownerUser.pseudo}}</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Prénom</td>
+    <td >{{rental.ownerUser.firstname}}</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Nom de famille</td>
+    <td >{{rental.ownerUser.lastname}}</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Adresse mail</td>
+    <td >{{rental.ownerUser.email}}</td>
+  </tr>
+</table>
+<br/>
+<p>Toutes les informations sont aussi à retrouver directement sur <a href='http://localhost:8080/location/{{rental.id}}'>la fiche de la location</a>.
+{% endblock %}

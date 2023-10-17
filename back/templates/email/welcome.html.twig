@@ -1,5 +1,19 @@
-<div>
-<h1>{{subject}}</h1>
-<p>Bonjour {{pseudo}}, bienvenue sur Loc'Autocross !</p>
-<p>Bisous</p>
-</div>
+{% extends 'base.html.twig' %}
+{% block body %}
+<p>Bonjour {{user.pseudo}},</p>
+<p>Bienvenue sur Loc'Autocross.</p>
+{% set roleProFound = false %}
+
+{% for role in user.roles %}
+    {% if role == 'ROLE_PRO' %}
+        {% set roleProFound = true %}
+        <p>Vous allez désormais pouvoir proposer votre ou vos véhicule(s) à la location !</p>
+        <p>Si un évènement n'est pas présent dans le calendrier, vous pouvez le créer vous-même.</p>
+    {% endif %}
+{% endfor %}
+
+{% if not roleProFound %}
+    <p>Vous allez désormais pouvoir chercher la location idéale pour les épreuves de votre choix !</p>
+{% endif %}
+<p>Merci d'avoir choisi <a href='http://localhost:8080'>www.locautocross.fr</a> !</p>
+{% endblock %}
