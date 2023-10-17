@@ -11,10 +11,12 @@ class EmailSender
     private $mailer;
     private $twig;
 
+
     public function __construct(MailerInterface $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+
     }
 
     public function sendWelcomeEmail($user): void
@@ -25,7 +27,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from('info@pronautocross.fr', "Loc'Autocross")
             ->to($user->getEmail())
             ->subject('Bienvenue - Inscription validée')
             ->html($htmlContent);
@@ -41,7 +43,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from('info@pronautocross.fr', "Loc'Autocross")
             ->to($rental->getOwnerUser()->getEmail())
             ->subject('Du nouveau pour votre location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
@@ -58,7 +60,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from('info@pronautocross.fr', "Loc'Autocross")
             ->to($exTenant->getEmail())
             ->subject('Du nouveau pour la location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
@@ -78,7 +80,7 @@ class EmailSender
         $to = ($byOwner) ? $rental->getTenantUser()->getEmail() : $rental->getOwnerUser()->getEmail();
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from('info@pronautocross.fr', "Loc'Autocross")
             ->to($to)
             ->subject('Nouvelle conversation - Location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
@@ -99,7 +101,7 @@ class EmailSender
             ]);
     
             $email = (new Email())
-                ->from('info@pronautocross.fr')
+                ->from('info@pronautocross.fr', "Loc'Autocross")
                 ->to($personne[1])
                 ->subject('Réservation validée pour ' . $rental->getEvent()->getTrack()->getCity())
                 ->html($htmlContent);
@@ -127,7 +129,7 @@ class EmailSender
                 ]);
         
                 $email = (new Email())
-                    ->from('info@pronautocross.fr')
+                    ->from('info@pronautocross.fr', "Loc'Autocross")
                     ->to($personne[1]->getEmail())
                     ->subject('Attention, évènement annulé')
                     ->html($htmlContent);
@@ -135,7 +137,7 @@ class EmailSender
                 $this->mailer->send($email);
             }
         }
-
-        
     }
+
+
 }
