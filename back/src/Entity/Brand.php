@@ -27,6 +27,8 @@ class Brand
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -41,6 +43,8 @@ class Brand
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $name;
 

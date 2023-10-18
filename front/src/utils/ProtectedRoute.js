@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import AxiosPrivate from './AxiosPrivate';
@@ -9,6 +9,7 @@ function ProtectedRoute({ pro = false }) {
   const [localUser, setLocalUser] = useState(null);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -30,9 +31,14 @@ function ProtectedRoute({ pro = false }) {
     return <LoadingSpinner />;
   }
 
+  if (localUser === null && location.pathname.startsWith('/mon-avis')) {
+    return <Navigate to="/connexion" replace />;
+  }
+
   if (localUser === null) {
     return <Navigate to="/" replace />;
   }
+
   if (pro) {
     if (!localUser.roles.includes('ROLE_PRO')) {
       return <Navigate to="/" replace />;

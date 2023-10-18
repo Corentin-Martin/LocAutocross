@@ -27,6 +27,8 @@ class Track
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -41,6 +43,8 @@ class Track
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $name;
 
@@ -55,6 +59,8 @@ class Track
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $city;
 
