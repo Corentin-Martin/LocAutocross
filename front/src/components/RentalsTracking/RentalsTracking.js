@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import RentalsBloc from './RentalsBloc/RentalsBloc';
 
 function RentalsTracking({ rentals }) {
   const [interested, setInterested] = useState([]);
@@ -34,7 +35,17 @@ function RentalsTracking({ rentals }) {
   }
 
   return (
-    <div>Oh</div>
+    <>
+      <RentalsBloc title="Ma liste" rentals={interested} />
+
+      <RentalsBloc title={`En cours de demande de réservation${askReservation.length > 1 ? 's' : ''}`} rentals={askReservation} />
+
+      <RentalsBloc title={`Réservation${validate.length > 1 ? 's' : ''} validée${validate.length > 1 ? 's' : ''}`} rentals={validate} feeling />
+
+      <RentalsBloc title={`Evènement${cancelled.length > 1 ? 's' : ''} annulé${cancelled.length > 1 ? 's' : ''}`} rentals={cancelled} />
+
+    </>
+
   );
 }
 
