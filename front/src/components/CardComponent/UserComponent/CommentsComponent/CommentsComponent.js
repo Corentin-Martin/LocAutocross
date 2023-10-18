@@ -1,7 +1,10 @@
-import { Carousel } from 'react-bootstrap';
+import { Card, Carousel } from 'react-bootstrap';
 import OneComment from './OneComment/OneComment';
 
 function CommentsComponent({ comments }) {
+  if (comments.length === 0) {
+    return <Card.Text>Aucune avis pour le moment.</Card.Text>;
+  }
   return (
 
     <Carousel fade className="d-flex justify-content-center align-items-center mt-2 mb-2" style={{ minWidth: '100%' }}>
