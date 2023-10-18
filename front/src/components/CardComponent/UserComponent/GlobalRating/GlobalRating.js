@@ -1,23 +1,15 @@
 import { Card } from 'react-bootstrap';
-import { Star, StarFill } from 'react-bootstrap-icons';
+import Stars from '../../../Stars/Stars';
 
-function GlobalRating({ rating }) {
+function GlobalRating({ rating, number }) {
+  if (rating === null) {
+    <Card.Text className="text-center fs-3">Non noté</Card.Text>;
+  }
   return (
     <>
-      <div>
-        {[1, 2, 3, 4, 5].map((value) => {
-          if (rating >= value) {
-            return <StarFill className="me-1" key={value} />;
-          }
-          return (
-            <Star
-              key={value}
-              className="me-1"
-            />
-          );
-        })}
-      </div>
-      <Card.Text className="text-center mt-2 fs-3">{rating}</Card.Text>
+      <Stars rating={rating} />
+      <Card.Text className="text-center mt-1 mb-1 fs-3">{rating}</Card.Text>
+      <Card.Text className="text-center fst-italic">{number} avis</Card.Text>
     </>
   );
 }

@@ -1,15 +1,23 @@
-import { Row } from 'react-bootstrap';
+import { Card, Carousel } from 'react-bootstrap';
 import RentalExtract from '../../../RentalExtract/RentalExtract';
 
 function FutureRentals({ rentals }) {
+  if (rentals.length === 0) {
+    return <Card.Text>Aucune proposition de location pour le moment.</Card.Text>;
+  }
   return (
-    <Row className="d-flex justify-content-center align-items-center">
+
+    <Carousel fade className="d-flex justify-content-center align-items-center mt-2 mb-2" style={{ minWidth: '100%' }}>
       {rentals.map((rental) => (
-        <div key={rental.id} className="col-12 col-md-6 col-lg-3">
-          <RentalExtract rental={rental} />
-        </div>
+        <Carousel.Item key={rental.id} style={{ width: '100%' }} className="d-flex justify-content-center align-items-center bg-tertiary">
+          <div className="col-12 col-md-6">
+            <RentalExtract rental={rental} />
+          </div>
+        </Carousel.Item>
       ))}
-    </Row>
+
+    </Carousel>
+
   );
 }
 

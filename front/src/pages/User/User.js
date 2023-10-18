@@ -42,6 +42,8 @@ function User() {
   }
   return (
     <GeneralLayout
+      title={elementToDisplay.user.pseudo}
+      pageTitle={elementToDisplay.user.pseudo}
       childComponent={(
         <CardComponent
           childComponent={(
