@@ -23,9 +23,9 @@ class CommentController extends AbstractController
     /**
      * @Route("/{id}", name="add", methods={"POST"})
      */
-    public function index(?Rental $rental, Request $request, CommentRepository $commentRepository, SerializerInterface $serializerInterface, EmailSender $emailSender, UpdateRatingService $updateRatingService): JsonResponse
+    public function add(?Rental $rental, Request $request, CommentRepository $commentRepository, SerializerInterface $serializerInterface, EmailSender $emailSender, UpdateRatingService $updateRatingService): JsonResponse
     {
-        /**@var User */
+        /** @var User */
         $user = $this->getUser();
 
         if (is_null($rental)) {

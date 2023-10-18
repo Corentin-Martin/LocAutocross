@@ -114,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Rental::class, mappedBy="tenantUser")
+     * @Groups({"user"})
      */
     private $reservations;
 

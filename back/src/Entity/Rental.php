@@ -47,6 +47,7 @@ class Rental
      * @Groups({"federations"})
      * @Groups({"conversation"})
      * @Groups({"user-detail"})
+
      */
     private $status;
 
@@ -68,6 +69,7 @@ class Rental
      * @Groups({"rentals"})
      * @Groups({"event"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $ownerUser;
 
