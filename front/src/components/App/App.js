@@ -33,6 +33,7 @@ import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
 import User from '../../pages/User/User';
+import RentalGestionForUser from '../../pages/RentalGestionForUser/RentalGestionForUser';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -190,6 +191,10 @@ function App() {
             <Route
               path="/mon-avis/:rentalId"
               element={(<Skeleton page={<Comment />} />)}
+            />
+            <Route
+              path="/mon-suivi-locations"
+              element={(<Skeleton page={<RentalGestionForUser />} />)}
             />
           </Route>
 
