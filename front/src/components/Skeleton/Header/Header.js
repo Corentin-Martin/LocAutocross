@@ -88,9 +88,28 @@ function Header() {
                       }}
                     >Mon profil
                     </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/mon-suivi-locations"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Mes projets locations
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/mes-conversations"
+                      onClick={() => {
+                        setShowOffCanvas(false);
+                      }}
+                    >Mes conversations
+                    </NavDropdown.Item>
                     {user !== null && user.roles.includes('ROLE_PRO')
                     && (
                     <>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item className="fw-bold text-center">Espace Pro</NavDropdown.Item>
                       <NavDropdown.Item
                         as={Link}
                         to="/mon-garage"
@@ -99,6 +118,7 @@ function Header() {
                         }}
                       >Mon garage
                       </NavDropdown.Item>
+
                       <NavDropdown.Item
                         as={Link}
                         to="/mes-locations"
@@ -117,14 +137,6 @@ function Header() {
                       </NavDropdown.Item>
                     </>
                     )}
-                    <NavDropdown.Item
-                      as={Link}
-                      to="/mes-conversations"
-                      onClick={() => {
-                        setShowOffCanvas(false);
-                      }}
-                    >Mes conversations
-                    </NavDropdown.Item>
 
                   </NavDropdown>
 

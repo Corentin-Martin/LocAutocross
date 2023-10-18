@@ -2,12 +2,14 @@ import './CommentForm.scss';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Star, StarFill } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 import AxiosPrivate from '../../utils/AxiosPrivate';
 
 function CommentForm({ rentalId }) {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(null);
   const [wrong, setWrong] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ function CommentForm({ rentalId }) {
         content: content,
         rating: rating,
       }).then((response) => {
-        console.log(response.data);
+        navigate(`/utilisateur/${response.data.rental.ownerUser.id}`);
       }).catch((error) => {
         console.error(error);
       });

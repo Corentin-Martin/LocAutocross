@@ -35,6 +35,11 @@ class RentalController extends AbstractController
             return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
         }
 
+        if (!is_null($request->query->get('project'))) {
+            $rentals = $rentalRepository->findBy(["tenantUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+        }
+
         $rentals = $rentalRepository->findFutureRentals();
 
         $rentalsWithPagination = $paginatorInterface->paginate(
