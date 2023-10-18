@@ -293,7 +293,7 @@ function RentalCreation() {
                           value={oneEvent.id}
                           key={oneEvent.id}
                         >
-                          {oneEvent.title}
+                          {oneEvent.title ? `${oneEvent.title} - ${oneEvent.track.city}` : oneEvent.track.city}
                         </option>
                       ))}
                     </Form.Select>
