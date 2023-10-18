@@ -2,6 +2,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, ListGroup } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../../actions/user';
 import ItemInfo from './ItemInfo/ItemInfo';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
@@ -14,6 +15,7 @@ function MyInfosComponent() {
   const [welcomePro, setWelcomePro] = useState(false);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -50,7 +52,7 @@ function MyInfosComponent() {
           <ItemInfo title="Prénom" content={user.firstname} />
           <ItemInfo title="Nom de famille" content={user.lastname} />
           <ItemInfo title="Adresse email" content={user.email} />
-          <ItemInfo title="Rôle" content={user.roles.includes('ROLE_PRO') ? 'Pro' : 'Pilote'} />
+          <ItemInfo title="Rôle" content={user.roles.includes('ROLE_PRO') ? <>Pro <span className="badge bg-tertiary ms-1 p-2" onClick={() => navigate(`/utilisateur/${user.id}`)}>Voir mon profil public</span></> : 'Pilote'} />
           <ItemInfo title="Compte créé le" content={moment(user.createdAt).format('DD/MM/YYYY')} />
         </ListGroup>
         <Button type="button" className="mt-3" onClick={handleShow}>Modifier mes informations</Button>
