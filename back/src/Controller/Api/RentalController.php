@@ -35,6 +35,11 @@ class RentalController extends AbstractController
             return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
         }
 
+        if (!is_null($request->query->get('project'))) {
+            $rentals = $rentalRepository->findBy(["tenantUser" => $this->getUser()], ['createdAt' => 'DESC']);
+            return $this->json($rentals, Response::HTTP_OK, [], ["groups" => ["rentals"]]);
+        }
+
         $rentals = $rentalRepository->findFutureRentals();
 
         $rentalsWithPagination = $paginatorInterface->paginate(
@@ -46,10 +51,6 @@ class RentalController extends AbstractController
         $toSend = [];
         $toSend['totalPages'] = ceil($rentalsWithPagination->getTotalItemCount() / $rentalsWithPagination->getItemNumberPerPage());
         $toSend['rentals'] = $rentalsWithPagination;
-
-        // if(empty($rentals)) {
-        //     return $this->json('', Response::HTTP_NO_CONTENT, []);
-        // }
 
         return $this->json($toSend, 200, [], ['groups' => ["rentals"]]);
 
@@ -138,6 +139,20 @@ class RentalController extends AbstractController
 
         if (is_null($rental)) {
             return $this->json(["message" => "Cette location n'existe pas"], Response::HTTP_NOT_FOUND, []);
+        }
+
+        if (!is_null($rental->getTenantUser()) && ($rental->getOwnerUser() === $user)){
+            
+            $serializerInterface->deserialize($request->getContent(), Rental::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $rental]);
+            $exTenant = $rental->getTenantUser();
+            $rental->setTenantUser(null);
+            $rentalRepository->add($rental, true);
+
+            $emailSender->sendNotAcceptedMail($rental, $exTenant);
+            $emailSender->sendBookUpdate($rental);
+
+
+            return $this->json($rental, Response::HTTP_OK, [], ["groups"=> ["rentals"]]);
         }
 
         if (!is_null($rental->getTenantUser()) && ($rental->getTenantUser() !== $user)) {

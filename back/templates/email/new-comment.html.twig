@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<p>Bonjour {{rental.ownerUser.pseudo}},<p>
+<p>Suite à votre location à {{rental.event.track.city}} le {{rental.event.start|date("d/m/Y")}}, {{rental.tenantUser.pseudo}} vient de vous laisser un commentaire.</p>
+<br/>
+<table class="table-perso">
+  <tr>
+    <td class="perso-title">Commentaire</td>
+    <td >{{comment.content}}</td>
+  </tr>
+  <tr>
+    <td class="perso-title">Note</td>
+    <td >{% if comment.rating is not null %}{{comment.rating}}{% else %}Non noté{% endif %}</td>
+  </tr>
+{% endblock %}

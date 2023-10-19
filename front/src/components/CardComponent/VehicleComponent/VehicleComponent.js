@@ -1,17 +1,15 @@
-import { Card, ListGroup } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { PencilSquare } from 'react-bootstrap-icons';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
 import DeleteButton from '../../DeleteButton/DeleteButton';
-import defaultKart from '../../../assets/images/defaultKart.jpeg';
-import CancellationBanner from '../../CancellationBanner/CancellationBanner';
+import defaultKart from '../../../assets/images/defaultKart.png';
+import RentalsListGroup from '../../RentalsListGroup/RentalsListGroup';
 
 function VehicleComponent({ vehicle }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => () => {
     dispatch(setElementToDisplay(null));
@@ -66,19 +64,7 @@ function VehicleComponent({ vehicle }) {
         {vehicle.rentals.length === 0
           ? <Card.Text>Vous n'avez jamais proposé de location pour ce véhicule.</Card.Text>
           : (
-            <ListGroup>
-              {vehicle.rentals.map((rental) => (
-                <ListGroup.Item
-                  style={{ cursor: 'pointer', position: 'relative' }}
-                  onClick={() => {
-                    navigate(`/location/${rental.id}`);
-                  }}
-                  key={rental.id}
-                >{rental.event.title !== null ? `${rental.event.title} - ` : ''}{rental.event.track.city} - le {moment(rental.event.start).format('DD/MM/YYYY')}
-                  {rental.event.isCancelled && <CancellationBanner />}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
+            <RentalsListGroup rentals={vehicle.rentals} />
           )}
       </Card.Body>
     </>

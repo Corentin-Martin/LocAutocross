@@ -7,8 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { X } from 'react-bootstrap-icons';
-import { setElementToDisplay, setElementToEdit } from '../../../actions/dashboard';
+import { setElementToDisplay, setElementToEdit, setNewItemByModal } from '../../../actions/dashboard';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
+import MasterModal from '../../MasterModal/MasterModal';
+import EventCreation from '../EventCreation/EventCreation';
 
 function RentalCreation() {
   const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
@@ -52,6 +54,18 @@ function RentalCreation() {
     }
   }, [elementToEdit]);
 
+  const newEvent = useSelector((state) => state.dashboard.newItemByModal);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-prototype-builtins
+    if (newEvent !== null && newEvent.hasOwnProperty('isOfficial')) {
+      setEvent(newEvent.id);
+      setChampChoice(newEvent.championship);
+      setFedeChoice(newEvent.championship.federation);
+      setPrivateEvent(!newEvent.isOfficial);
+    }
+  }, [newEvent]);
+
   useEffect(() => {
     if (champChoice !== null) {
       AxiosPrivate.get(`events?championship[]=${champChoice.id}`)
@@ -83,7 +97,7 @@ function RentalCreation() {
           console.log(error);
         });
     }
-  }, [champChoice]);
+  }, [champChoice, newEvent]);
 
   const [wrong, setWrong] = useState([]);
 
@@ -149,6 +163,7 @@ function RentalCreation() {
             console.error(err);
           });
       }
+      dispatch(setNewItemByModal(null));
     }
   };
 
@@ -172,9 +187,28 @@ function RentalCreation() {
     }
   }, [isOpenCreationModal]);
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const setShowToRental = (bool) => {
+    setShow(bool);
+  };
+
   return (
 
     <Form className="d-flex flex-column align-items-center bg-primary rounded-4 p-2 col-12" onSubmit={handleSubmit}>
+
+      {show
+      && (
+      <MasterModal
+        show={show}
+        handleClose={handleClose}
+        title="Nouvel évènement"
+        childComponent={<EventCreation setShowToRental={setShowToRental} fromRentalCreation />}
+      />
+      )}
 
       <Form.Group controlId="categoriesSelect" className="mb-3 col-10">
 
@@ -293,12 +327,22 @@ function RentalCreation() {
                           value={oneEvent.id}
                           key={oneEvent.id}
                         >
-                          {oneEvent.title}
+                          {oneEvent.title ? `${oneEvent.title} - ${oneEvent.track.city}` : oneEvent.track.city}
                         </option>
                       ))}
                     </Form.Select>
                     )}
-        {champChoice !== null && noEvents && <p>Pas d'évenement proposé</p>}
+        {champChoice !== null && noEvents && (
+        <div className="text-danger mt-2 bg-secondary text-center rounded-2 p-2">
+          Aucune évènment proposé.
+        </div>
+        )}
+        <div
+          className="badge bg-secondary col-12 text-black mt-1 p-1"
+          style={{ cursor: 'pointer' }}
+          onClick={handleShow}
+        >Voulez-vous créer un évènement ?
+        </div>
 
       </Form.Group>
 

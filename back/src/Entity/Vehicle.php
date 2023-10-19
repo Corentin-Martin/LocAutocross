@@ -26,6 +26,8 @@ class Vehicle
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -39,6 +41,8 @@ class Vehicle
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $year;
 
@@ -49,6 +53,7 @@ class Vehicle
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
+     * @Groups({"user-detail"})
      */
     private $description;
 
@@ -59,6 +64,7 @@ class Vehicle
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
+     * @Groups({"user-detail"})
      */
     private $engine;
 
@@ -69,6 +75,7 @@ class Vehicle
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
+     * @Groups({"user-detail"})
      */
     private $shocks;
 
@@ -79,6 +86,7 @@ class Vehicle
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"rentals"})
+     * @Groups({"user-detail"})
      */
     private $picture;
 
@@ -119,6 +127,8 @@ class Vehicle
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $brand;
 
@@ -131,6 +141,8 @@ class Vehicle
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $category;
 
@@ -144,6 +156,8 @@ class Vehicle
      * @Groups({"federations"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $model;
 

@@ -12,8 +12,16 @@ $theme-colors: (
   'tertiary': vars.$tertiary,
   'success' : green,
   'danger' : red,
-  'admin': #fbe870
+  'admin': #fbe870,
+  'status-0' : #fff,
+  'status-1' : #00FF00,
+  'status-2' : #FFFF00,
+  'status-3' : #ff8000,
+  'status-4' : #FF0000,
+  'status-5' : #fff,
+  'status-6' : #808080,
   );
+
 
 @import '~bootstrap/scss/bootstrap';
 

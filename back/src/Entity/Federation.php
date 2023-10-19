@@ -26,6 +26,7 @@ class Federation
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -39,6 +40,7 @@ class Federation
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $name;
 
@@ -52,6 +54,7 @@ class Federation
      * @Groups({"events"})
      * @Groups({"event"})
      * @Groups({"track"})
+     * @Groups({"user-detail"})
      */
     private $alias;
 

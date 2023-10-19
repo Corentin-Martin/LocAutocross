@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
@@ -11,24 +12,25 @@ class EmailSender
     private $mailer;
     private $twig;
 
+
     public function __construct(MailerInterface $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+
     }
 
-    public function sendNotificationEmail($user, $subject): void
+    public function sendWelcomeEmail($user): void
     {
 
         $htmlContent = $this->twig->render('email/welcome.html.twig', [
-            'subject' => $subject,
-            'pseudo' => $user->getPseudo(),
+            'user' => $user,
         ]);
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
             ->to($user->getEmail())
-            ->subject($subject)
+            ->subject('Bienvenue - Inscription validée')
             ->html($htmlContent);
 
         $this->mailer->send($email);
@@ -42,9 +44,26 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
             ->to($rental->getOwnerUser()->getEmail())
-            ->subject('Du nouveau pour votre location')
+            ->subject('Du nouveau pour votre location à ' . $rental->getEvent()->getTrack()->getCity())
+            ->html($htmlContent);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendNotAcceptedMail($rental, $exTenant): void
+    {
+
+        $htmlContent = $this->twig->render('email/not-accepted.html.twig', [
+            'rental' => $rental,
+            'exTenant' => $exTenant,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->to($exTenant->getEmail())
+            ->subject('Du nouveau pour la location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
 
         $this->mailer->send($email);
@@ -62,9 +81,9 @@ class EmailSender
         $to = ($byOwner) ? $rental->getTenantUser()->getEmail() : $rental->getOwnerUser()->getEmail();
 
         $email = (new Email())
-            ->from('info@pronautocross.fr')
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
             ->to($to)
-            ->subject('Une nouvelle conversation')
+            ->subject('Nouvelle conversation - Location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
 
         $this->mailer->send($email);
@@ -83,9 +102,9 @@ class EmailSender
             ]);
     
             $email = (new Email())
-                ->from('info@pronautocross.fr')
+                ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
                 ->to($personne[1])
-                ->subject('Réservation validée')
+                ->subject('Réservation validée pour ' . $rental->getEvent()->getTrack()->getCity())
                 ->html($htmlContent);
     
             $this->mailer->send($email);
@@ -111,15 +130,46 @@ class EmailSender
                 ]);
         
                 $email = (new Email())
-                    ->from('info@pronautocross.fr')
+                    ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
                     ->to($personne[1]->getEmail())
-                    ->subject('Evenement annulé')
+                    ->subject('Attention, évènement annulé')
                     ->html($htmlContent);
         
                 $this->mailer->send($email);
             }
         }
-
-        
     }
+
+    public function sendReminderToComment($rental): void
+    {
+        $htmlContent = $this->twig->render('email/reminder-comment.html.twig', [
+            'rental' => $rental,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->to($rental->getTenantUser()->getEmail())
+            ->subject("Qu'avez-vous pensé de votre location à " . $rental->getEvent()->getTrack()->getCity() . " ?")
+            ->html($htmlContent);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendNewComment($rental, $comment): void
+    {
+        $htmlContent = $this->twig->render('email/new-comment.html.twig', [
+            'rental' => $rental,
+            'comment' => $comment
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->to($rental->getOwnerUser()->getEmail())
+            ->subject($rental->getTenantUser()->getPseudo() . " vient de vous laisser un commentaire !")
+            ->html($htmlContent);
+
+        $this->mailer->send($email);
+    }
+
+
 }

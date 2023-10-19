@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
 import { setConversation } from '../../../actions/dashboard';
+import { setConversations } from '../../../actions/user';
 
 function ChatForm({ conversation, setSendLoadToChat }) {
   const rental = useSelector((state) => state.dashboard.elementToDisplay);
@@ -42,6 +43,14 @@ function ChatForm({ conversation, setSendLoadToChat }) {
           console.error(err);
         });
     }
+
+    AxiosPrivate.get('conversations')
+      .then((response) => {
+        dispatch(setConversations(response.data));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (

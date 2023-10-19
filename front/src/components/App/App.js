@@ -16,6 +16,7 @@ import Rental from '../../pages/Rental/Rental';
 import Events from '../../pages/Events/Events';
 import Tracks from '../../pages/Tracks/Tracks';
 import Profil from '../../pages/Profil/Profil';
+import Comment from '../../pages/Comment/Comment';
 import Rentals from '../../pages/Rentals/Rentals';
 import AxiosPublic from '../../utils/AxiosPublic';
 import AxiosPrivate from '../../utils/AxiosPrivate';
@@ -31,6 +32,9 @@ import Conversation from '../../pages/Conversation/Conversation';
 import RentalGestion from '../../pages/RentalGestion/RentalGestion';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
+import User from '../../pages/User/User';
+import RentalGestionForUser from '../../pages/RentalGestionForUser/RentalGestionForUser';
+import Faq from '../../pages/Faq/Faq';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -127,6 +131,10 @@ function App() {
             element={(<Skeleton page={<EventPage />} />)}
           />
           <Route
+            path="/utilisateur/:userId"
+            element={(<Skeleton page={<User />} />)}
+          />
+          <Route
             path="/circuit/:trackId"
             element={(<Skeleton page={<Track />} />)}
           />
@@ -154,6 +162,10 @@ function App() {
             path="/confidentialite"
             element={(<Skeleton page={<Confidentiality />} />)}
           />
+          <Route
+            path="/faq"
+            element={(<Skeleton page={<Faq />} />)}
+          />
 
           {/* RESERVED FOR PRO */}
           <Route element={<ProtectedRoute pro />}>
@@ -180,6 +192,14 @@ function App() {
             <Route
               path="/mes-conversations"
               element={(<Skeleton page={<Conversation />} />)}
+            />
+            <Route
+              path="/mon-avis/:rentalId"
+              element={(<Skeleton page={<Comment />} />)}
+            />
+            <Route
+              path="/mon-suivi-locations"
+              element={(<Skeleton page={<RentalGestionForUser />} />)}
             />
           </Route>
 

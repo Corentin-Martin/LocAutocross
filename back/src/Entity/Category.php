@@ -28,6 +28,8 @@ class Category
      * @Groups({"federation"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -43,6 +45,8 @@ class Category
      * @Groups({"federation"})
      * @Groups({"rentals"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $name;
 

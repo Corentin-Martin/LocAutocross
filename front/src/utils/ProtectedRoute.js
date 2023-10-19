@@ -1,15 +1,15 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import AxiosPrivate from './AxiosPrivate';
 import { setUser } from '../actions/user';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 function ProtectedRoute({ pro = false }) {
-  const user = useSelector((state) => state.user.user);
   const [localUser, setLocalUser] = useState(null);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -25,15 +25,20 @@ function ProtectedRoute({ pro = false }) {
           console.error(error);
         });
     }
-  }, [user]);
+  }, []);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
+  if (localUser === null && location.pathname.startsWith('/mon-avis')) {
+    return <Navigate to="/connexion" replace />;
+  }
+
   if (localUser === null) {
     return <Navigate to="/" replace />;
   }
+
   if (pro) {
     if (!localUser.roles.includes('ROLE_PRO')) {
       return <Navigate to="/" replace />;

@@ -4,7 +4,7 @@ import { Carousel } from 'react-bootstrap';
 import moment from 'moment';
 import { PencilSquare, ThreeDots } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import defaultKart from '../../assets/images/defaultKart.jpeg';
+import defaultKart from '../../assets/images/defaultKart.png';
 import {
   setElementToDisplay,
   setElementToEdit,

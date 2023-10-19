@@ -1,5 +1,4 @@
 import { ListGroup } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
 function ItemInfo({ title, content }) {
   return (
@@ -9,10 +8,5 @@ function ItemInfo({ title, content }) {
     </ListGroup.Item>
   );
 }
-
-ItemInfo.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-};
 
 export default ItemInfo;

@@ -1,0 +1,6 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<p>Bonjour {{rental.tenantUser.pseudo}},<p>
+<p>Comment s'est passé votre location à {{rental.event.track.city}} avec {{rental.ownerUser.pseudo}} ?</p>
+<p>N'hésitez pas à laisser un commentaire et une note !</p>
+{% endblock %}

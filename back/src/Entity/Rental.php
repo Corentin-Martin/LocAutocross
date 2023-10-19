@@ -23,6 +23,8 @@ class Rental
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $id;
 
@@ -33,6 +35,7 @@ class Rental
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"conversation"})
+     * @Groups({"user-detail"})
      */
     private $price;
 
@@ -43,6 +46,8 @@ class Rental
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"conversation"})
+     * @Groups({"user-detail"})
+
      */
     private $status;
 
@@ -53,6 +58,8 @@ class Rental
      * @Groups({"event"})
      * @Groups({"federations"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $vehicle;
 
@@ -62,6 +69,7 @@ class Rental
      * @Groups({"rentals"})
      * @Groups({"event"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
      */
     private $ownerUser;
 
@@ -71,6 +79,8 @@ class Rental
      * @Groups({"rentals"})
      * @Groups({"vehicle"})
      * @Groups({"conversation"})
+     * @Groups({"comment"})
+     * @Groups({"user-detail"})
      */
     private $event;
 
@@ -109,6 +119,7 @@ class Rental
      * @Groups({"rentals"})
      * @Groups({"conversation"})
      * @Groups({"federations"})
+     * @Groups({"user-detail"})
      */
     private $description;
 

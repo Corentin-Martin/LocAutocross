@@ -47,7 +47,7 @@ class UserController extends AbstractController
 
         $token = $JWTTokenManagerInterface->create($newUser);
 
-        $emailSender->sendNotificationEmail($newUser, 'Bienvenue !');
+        $emailSender->sendWelcomeEmail($newUser);
 
         return $this->json(["user" => $newUser, "token" => $token], Response::HTTP_CREATED, [], ["groups" => ["user"]]);
     }
@@ -60,6 +60,32 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         return $this->json($user, Response::HTTP_OK, [], ["groups" => ["user"]]);
+    }
+
+    /**
+     * @Route("/details/{id}", name="readOne", methods={"GET"})
+     */
+    public function readOne(?User $user): JsonResponse
+    {
+        if (is_null($user)) {
+            return $this->json(["message" => "Cet utilisateur n'existe pas"], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!in_array('ROLE_PRO', $user->getRoles())) {
+            return $this->json(["message" => "Impossible d'afficher les informations de cet utilisateur"], Response::HTTP_FORBIDDEN);
+        }
+
+        $comments = [];
+        foreach ($user->getPropositions() as $rental) {
+            
+            if (!is_null($rental->getComment())) {
+                $comments[] = $rental->getComment();
+            }
+        }
+
+        $toSend = ['user' => $user, 'comments' => $comments];
+
+        return $this->json($toSend, Response::HTTP_OK, [], ["groups" => ["user-detail"]]);
     }
 
     /**
