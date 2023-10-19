@@ -40,14 +40,14 @@ class CommentEmailCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $events = $this->eventRepository->createQueryBuilder('e')
-                                                ->select('e')
-                                                ->where('e.end BETWEEN :now AND :end')
-                                                ->setParameters(array(
-                                                'now' => new DateTime('-1 days'),
-                                                'end' => new DateTime('now'),
-                                                ))
-                                                ->getQuery()
-                                                ->getResult();
+                                        ->select('e')
+                                        ->where('e.end BETWEEN :now AND :end')
+                                        ->setParameters(array(
+                                        'now' => new DateTime('-1 days'),
+                                        'end' => new DateTime('now'),
+                                        ))
+                                        ->getQuery()
+                                        ->getResult();
 
 
         if (count($events) > 0) {

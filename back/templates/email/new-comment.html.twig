@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 <p>Bonjour {{rental.ownerUser.pseudo}},<p>
-<p>Suite à votre location à {{rental.event.track.city}} le {{rental.event.start|date("d/m/Y")}}, {{rental.tenantUser.pseudo}} vient vous laisser un commentaire.</p>
+<p>Suite à votre location à {{rental.event.track.city}} le {{rental.event.start|date("d/m/Y")}}, {{rental.tenantUser.pseudo}} vient de vous laisser un commentaire.</p>
 <br/>
 <table class="table-perso">
   <tr>
