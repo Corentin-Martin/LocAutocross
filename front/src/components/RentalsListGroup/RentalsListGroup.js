@@ -19,7 +19,7 @@ function RentalsListGroup({
           key={rental.id}
         >{rental.event.title !== null ? `${rental.event.title} - ` : ''}{rental.event.track.city} - le {moment(rental.event.start).format('DD/MM/YYYY')}
           {!noCancelAlert && rental.event.isCancelled && <CancellationBanner />}
-          {feeling && (
+          {(feeling && moment(rental.event.end) < moment()) && (
             rental.comment
               ? (
                 <span
