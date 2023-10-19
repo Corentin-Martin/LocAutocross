@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import defaultKart from '../../assets/images/defaultKart.jpeg';
+import defaultKart from '../../assets/images/defaultKart.png';
 import { setElementToDisplay } from '../../actions/dashboard';
 
 function RentalExtract({ rental }) {
@@ -20,7 +20,7 @@ function RentalExtract({ rental }) {
         </Card.Text>
       </Card.Body>
       <Card.Body>
-        <Card.Img style={{ width: '85%' }} variant="top" src={rental.vehicle.image ?? defaultKart} className="mb-2" />
+        <Card.Img style={{ width: '85%' }} variant="top" src={rental.vehicle.picture !== null ? `http://localhost:8000/${rental.vehicle.picture}` : defaultKart} className="mb-2" />
         <Card.Title>{rental.vehicle.brand.name}</Card.Title>
         <Card.Subtitle>{rental.vehicle.category.map((category, index) => (
           index === rental.vehicle.category.length - 1 ? (` ${category.name}`) : (` ${category.name} /`)

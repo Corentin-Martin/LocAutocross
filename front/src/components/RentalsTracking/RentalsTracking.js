@@ -13,20 +13,28 @@ function RentalsTracking({ rentals }) {
       setNoRent(true);
     }
     else {
+      const insteredArray = [];
+      const askReservationArray = [];
+      const validateArray = [];
+      const cancelledArray = [];
       rentals.forEach((rent) => {
         if (rent.status === '2') {
-          setInterested([...interested, rent]);
+          insteredArray.push(rent);
         }
         if (rent.status === '3') {
-          setAskReservation([...askReservation, rent]);
+          askReservationArray.push(rent);
         }
         if (rent.status === '4') {
-          setValidate([...validate, rent]);
+          validateArray.push(rent);
         }
         if (rent.status === '6') {
-          setCancelled([...cancelled, rent]);
+          cancelledArray.push(rent);
         }
       });
+      setInterested(insteredArray);
+      setAskReservation(askReservationArray);
+      setValidate(validateArray);
+      setCancelled(cancelledArray);
     }
   }, []);
 

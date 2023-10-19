@@ -8,14 +8,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import AxiosPublic from '../../../utils/AxiosPublic';
-import { setElementToDisplay, setElementToEdit } from '../../../actions/dashboard';
+import { setElementToDisplay, setElementToEdit, setNewItemByModal } from '../../../actions/dashboard';
 import TrackCreation from '../../MasterModal/TrackCreation/TrackCreation';
 import AxiosPrivate from '../../../utils/AxiosPrivate';
 import handleFileUpload from '../../../utils/UploadImage';
 import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
 import MasterModal from '../../MasterModal/MasterModal';
 
-function EventCreation({ closeModal }) {
+function EventCreation({ closeModal, setShowToRental, fromRentalCreation }) {
   const elementToEdit = useSelector((state) => state.dashboard.elementToEdit);
 
   const federations = useSelector((state) => state.generalCalendar.federations);
@@ -132,7 +132,13 @@ function EventCreation({ closeModal }) {
           picture: picture,
 
         }).then((response) => {
-          dispatch(setElementToDisplay(response.data));
+          if (fromRentalCreation) {
+            setShowToRental(false);
+            dispatch(setNewItemByModal(response.data));
+          }
+          else {
+            dispatch(setElementToDisplay(response.data));
+          }
         }).catch((error) => {
           console.error(error);
         });
@@ -428,6 +434,7 @@ function EventCreation({ closeModal }) {
 
 EventCreation.defaultProps = {
   closeModal: null,
+  fromRentalCreation: false,
 };
 
 export default EventCreation;

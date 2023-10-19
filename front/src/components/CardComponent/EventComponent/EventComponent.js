@@ -12,7 +12,7 @@ import RentalInfos from './RentalInfos/RentalInfos';
 import EventControl from './EventControl/EventControl';
 import InfosComponent from '../../InfosComponent/InfosComponent';
 import ChampionshipInfos from './ChampionshipInfos/ChampionshipInfos';
-import defaultAffiche from '../../../assets/images/defaultAffiche.jpg';
+import defaultAffiche from '../../../assets/images/defaultAffiche.png';
 import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function EventComponent({ event, fromCalendar, large }) {

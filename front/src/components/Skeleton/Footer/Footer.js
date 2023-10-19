@@ -18,7 +18,7 @@ function Footer() {
           </Link>
         </Nav>
         <Nav>
-          <Link to="/" className="nav-link">
+          <Link to="/faq" className="nav-link">
             FAQ
           </Link>
         </Nav>
