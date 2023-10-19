@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Container, Alert,
 } from 'react-bootstrap';
+import { EyeFill } from 'react-bootstrap-icons';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../CardComponent/CardComponent';
 import EventComponent from '../CardComponent/EventComponent/EventComponent';
@@ -163,7 +164,9 @@ function GeneralCalendar() {
             next: 'Suivant',
             today: 'Aujourd\'hui',
 
-            showMore: (total) => `+ ${total} autre${total > 1 ? 's' : ''}`,
+            // eslint-disable-next-line react/no-unstable-nested-components
+            showMore: (total) => (<>{`+ ${total} `}<EyeFill /> </>),
+
           }}
           culture="fr"
         />
