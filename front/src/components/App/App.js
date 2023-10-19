@@ -34,6 +34,7 @@ import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import Confidentiality from '../../pages/Confidentiality/Confidentiality';
 import User from '../../pages/User/User';
 import RentalGestionForUser from '../../pages/RentalGestionForUser/RentalGestionForUser';
+import Faq from '../../pages/Faq/Faq';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -160,6 +161,10 @@ function App() {
           <Route
             path="/confidentialite"
             element={(<Skeleton page={<Confidentiality />} />)}
+          />
+          <Route
+            path="/faq"
+            element={(<Skeleton page={<Faq />} />)}
           />
 
           {/* RESERVED FOR PRO */}
