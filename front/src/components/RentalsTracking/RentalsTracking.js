@@ -31,7 +31,6 @@ function RentalsTracking({ rentals }) {
           cancelledArray.push(rent);
         }
       });
-
       setInterested(insteredArray);
       setAskReservation(askReservationArray);
       setValidate(validateArray);

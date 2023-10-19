@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import RentalComponent from '../../components/CardComponent/RentalComponent/RentalComponent';
 import { setElementToDisplay } from '../../actions/dashboard';
@@ -15,32 +15,18 @@ function Rental() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
-  const location = useLocation();
-
   useEffect(() => {
-    if (elementToDisplay === null) {
-      AxiosPublic.get(`rentals/${rentalId}`)
-        .then((response) => {
-          dispatch(setElementToDisplay(response.data));
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-    else {
-      setIsLoading(false);
-    }
-  }, [location.pathname]);
+    AxiosPublic.get(`rentals/${rentalId}`)
+      .then((response) => {
+        dispatch(setElementToDisplay(response.data));
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
-  // eslint-disable-next-line no-prototype-builtins
-  if (elementToDisplay !== null && location.pathname === `/location/${rentalId}` && !elementToDisplay.hasOwnProperty('tenantUser')) {
-    dispatch(setElementToDisplay(null));
-    setIsLoading(true);
-    return <LoadingSpinner />;
-  }
-
-  if (elementToDisplay === null && isLoading) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
 
