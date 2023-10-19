@@ -12,7 +12,7 @@ import VehicleInfos from './VehicleInfos/VehicleInfos';
 import RentalControl from './RentalControl/RentalControl';
 import RentalUserbox from './RentalUserbox/RentalUserbox';
 import InfosComponent from '../../InfosComponent/InfosComponent';
-import defaultKart from '../../../assets/images/defaultKart.jpeg';
+import defaultKart from '../../../assets/images/defaultKart.png';
 import CancellationBanner from '../../CancellationBanner/CancellationBanner';
 
 function RentalComponent({ rental }) {

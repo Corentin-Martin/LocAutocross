@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { setElementToDisplay, setElementToEdit, setOpenCreation } from '../../../actions/dashboard';
 import DeleteButton from '../../DeleteButton/DeleteButton';
-import defaultKart from '../../../assets/images/defaultKart.jpeg';
+import defaultKart from '../../../assets/images/defaultKart.png';
 import RentalsListGroup from '../../RentalsListGroup/RentalsListGroup';
 
 function VehicleComponent({ vehicle }) {
