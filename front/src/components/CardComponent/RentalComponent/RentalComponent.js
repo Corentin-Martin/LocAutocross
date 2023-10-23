@@ -51,7 +51,7 @@ function RentalComponent({ rental }) {
       <Card.Body>
         <Card.Img
           style={{ maxWidth: '70%' }}
-          src={rental.vehicle.picture !== null ? `http://localhost:8000/${rental.vehicle.picture}` : defaultKart}
+          src={rental.vehicle.picture !== null ? `${process.env.REACT_APP_API_URL}${rental.vehicle.picture}` : defaultKart}
           alt={rental.vehicle.model}
         />
         <Card.Title className="mt-3">{`${rental.vehicle.brand.name} - `}

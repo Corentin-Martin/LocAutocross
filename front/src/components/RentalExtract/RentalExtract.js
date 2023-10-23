@@ -20,7 +20,7 @@ function RentalExtract({ rental }) {
         </Card.Text>
       </Card.Body>
       <Card.Body>
-        <Card.Img style={{ width: '85%' }} variant="top" src={rental.vehicle.picture !== null ? `http://localhost:8000/${rental.vehicle.picture}` : defaultKart} className="mb-2" />
+        <Card.Img style={{ width: '85%' }} variant="top" src={rental.vehicle.picture !== null ? `${process.env.REACT_APP_API_URL}${rental.vehicle.picture}` : defaultKart} className="mb-2" />
         <Card.Title>{rental.vehicle.brand.name}</Card.Title>
         <Card.Subtitle>{rental.vehicle.category.map((category, index) => (
           index === rental.vehicle.category.length - 1 ? (` ${category.name}`) : (` ${category.name} /`)

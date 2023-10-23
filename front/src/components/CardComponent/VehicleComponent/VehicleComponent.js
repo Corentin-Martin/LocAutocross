@@ -22,7 +22,7 @@ function VehicleComponent({ vehicle }) {
     <>
       <Card.Img
         variant="top"
-        src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
+        src={vehicle.picture !== null ? `${process.env.REACT_APP_API_URL}${vehicle.picture}` : defaultKart}
         alt={vehicle.model}
       />
       <Card.Body style={{ position: 'relative' }}>
