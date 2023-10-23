@@ -20,7 +20,7 @@ class FederationController extends AbstractController
      */
     public function browse(FederationRepository $federationRepository): JsonResponse
     {
-        return (empty($federationRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (!empty($federationRepository->findAll()))  ? $this->json('', 204, [])
                                                             : $this->json($federationRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["federations"]]);
     }
 

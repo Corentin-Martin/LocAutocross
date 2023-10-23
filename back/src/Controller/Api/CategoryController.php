@@ -19,7 +19,7 @@ class CategoryController extends AbstractController
      */
     public function browse(CategoryRepository $categoryRepository): JsonResponse
     {
-        return (empty($categoryRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($categoryRepository->findAll()))  ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                                         : $this->json($categoryRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["vehicle"]]);
     }
 

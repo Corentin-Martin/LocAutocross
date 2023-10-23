@@ -20,7 +20,7 @@ class DisciplineController extends AbstractController
      */
     public function browse(DisciplineRepository $disciplineRepository): JsonResponse
     {
-        return (empty($disciplineRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($disciplineRepository->findAll()))  ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                                         : $this->json($disciplineRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["disciplines"]]);
     }
 
