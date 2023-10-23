@@ -64,7 +64,7 @@ class ConversationController extends AbstractController
             }
 
 
-            return (empty($conversationsOk))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+            return (empty($conversationsOk))  ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                             : $this->json($conversationsOk, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
         }
 
@@ -132,7 +132,7 @@ class ConversationController extends AbstractController
         $conversations = ['unread' => array_unique($unreadOk), 'read' => array_unique($readOk)];
 
 
-        return (empty($conversations))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($conversations))  ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                         : $this->json($conversations, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
     }
 
@@ -222,7 +222,7 @@ class ConversationController extends AbstractController
         }
         $conversation = $conversationRepository->findOneBy(["rental" => $rental, "interestedUser" => $this->getUser()]);
 
-        return is_null($conversation)   ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return is_null($conversation)   ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                         : $this->json($conversation, Response::HTTP_OK, [], ["groups" => ["conversation"]]);
 
     }

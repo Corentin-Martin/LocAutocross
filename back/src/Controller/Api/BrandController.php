@@ -24,10 +24,10 @@ class BrandController extends AbstractController
         if (!is_null($request->query->get('name'))) {
             $brand = $brandRepository->findOneBy(['name' => $request->query->get('name')]);
 
-            return (is_null($brand))    ? $this->json('', Response::HTTP_NO_CONTENT, [])
+            return (is_null($brand))    ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                         : $this->json($brand, Response::HTTP_OK, [], ["groups" => ["brand"]]);
         }
-        return (empty($brandRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($brandRepository->findAll())) ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                                     : $this->json($brandRepository->findBy([], ["name" => 'ASC']), Response::HTTP_OK, [], ["groups" => ["brands"]]);
     }
 

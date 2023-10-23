@@ -23,7 +23,7 @@ class ChampionshipController extends AbstractController
      */
     public function browse(ChampionshipRepository $championshipRepository): JsonResponse
     {
-        return (empty($championshipRepository->findAll()))  ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($championshipRepository->findAll()))  ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                                             : $this->json($championshipRepository->findAll(), Response::HTTP_OK, [], ["groups" => ["championships"]]);
     }
 

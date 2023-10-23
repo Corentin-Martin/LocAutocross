@@ -30,7 +30,7 @@ class VehicleController extends AbstractController
             return $this->json($vehicles, Response::HTTP_OK, [], ["groups" => ["vehicles"]]);
         }
 
-        return (empty($vehicleRepository->findAll())) ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($vehicleRepository->findAll())) ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                                     : $this->json($vehicleRepository->findBy(["isActiv" => true]), Response::HTTP_OK, [], ["groups" => ["vehicles"]]);
     }
 

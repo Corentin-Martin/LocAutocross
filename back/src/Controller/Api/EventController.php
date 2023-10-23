@@ -102,7 +102,7 @@ class EventController extends AbstractController
             return $this->json(array_values($finalEvents), Response::HTTP_OK, [], ["groups" => ["events"]]);
         }
 
-        return (empty($eventRepository->findBy(['isCancelled' => false]))) ? $this->json('', Response::HTTP_NO_CONTENT, [])
+        return (empty($eventRepository->findBy(['isCancelled' => false]))) ? $this->json(["message" => "Rien à afficher"], Response::HTTP_OK, [])
                                                     : $this->json($eventRepository->findBy(['isCancelled' => false]), Response::HTTP_OK, [], ["groups" => ["events"]]);
     }
 
