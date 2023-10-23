@@ -21,11 +21,13 @@ final class Version20230905113952 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE vehicle ADD model VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE vehicle ADD is_activ TINYINT(1) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE vehicle DROP model');
+        $this->addSql('ALTER TABLE vehicle DROP is_activ');
     }
 }
