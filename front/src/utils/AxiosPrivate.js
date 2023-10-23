@@ -1,7 +1,7 @@
 import axios from 'axios';
 import RefreshToken from './RefreshToken';
 
-axios.defaults.baseURL = 'http://localhost:8000/api/';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use(
   async (config) => {
