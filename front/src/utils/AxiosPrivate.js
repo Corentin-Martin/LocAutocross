@@ -1,7 +1,21 @@
 import axios from 'axios';
 import RefreshToken from './RefreshToken';
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}api/`;
+
+axios.interceptors.response.use(
+  (response) => {
+    if (response.status === 204) {
+      return Promise.resolve({
+        ...response,
+        data: undefined,
+      });
+    }
+    return response;
+  },
+  (error) => Promise.reject(error),
+
+);
 
 axios.interceptors.request.use(
   async (config) => {

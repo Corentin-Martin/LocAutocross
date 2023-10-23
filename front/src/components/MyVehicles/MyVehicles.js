@@ -69,7 +69,7 @@ function MyVehicles() {
         {vehicles.map((vehicle) => (
           <Carousel.Item key={vehicle.id} className="rounded-4">
             <img
-              src={vehicle.picture !== null ? `http://localhost:8000/${vehicle.picture}` : defaultKart}
+              src={vehicle.picture !== null ? `${process.env.REACT_APP_API_URL}${vehicle.picture}` : defaultKart}
               alt={vehicle.model}
               className="img-fluid MyVehicles-Carousel-Image"
             />

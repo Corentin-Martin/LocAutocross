@@ -53,7 +53,7 @@ function EventComponent({ event, fromCalendar, large }) {
           <Col sm={12} md={6} className="mb-2" style={{ flexGrow: '1' }}>
             <Card.Img
               style={{ maxWidth: '100%' }}
-              src={event.picture !== null ? `http://localhost:8000/${event.picture}` : defaultAffiche}
+              src={event.picture !== null ? `${process.env.REACT_APP_API_URL}${event.picture}` : defaultAffiche}
               alt={event.track.city}
             />
           </Col>
