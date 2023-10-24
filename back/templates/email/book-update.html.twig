@@ -6,6 +6,6 @@
 {% else %}
 <p>{{rental.tenantUser.pseudo}} {% if rental.status is same as('2') %} est intéressé{% else %} vient de faire une demande de réservation{% endif %}.</p>
 {% endif %}
-<p>Pour entrer en contact avec lui, rendez-vous sur <a href='http://localhost:8080/location/{{rental.id}}'>la page de la location.</a></p>
+<p>Pour entrer en contact avec lui, rendez-vous sur <a href='https://www.locautocross.fr/location/{{rental.id}}'>la page de la location.</a></p>
 <p>N'oubliez pas de vous connecter pour accéder au panneau de contrôle.</p>
 {% endblock %}

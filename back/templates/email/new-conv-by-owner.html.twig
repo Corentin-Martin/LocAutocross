@@ -2,6 +2,6 @@
 {% block body %}
 <p>Bonjour {{rental.tenantUser.pseudo}}, il y a du nouveau concernant la location pour {{rental.event.track.city}} le {{rental.event.start|date("d/m/Y")}} !</p>
 <p>{{rental.ownerUser.pseudo}} vient de vous contacter ! </p>
-<p>Pour lire le message et lui répondre, rendez-vous sur <a href='http://localhost:8080/location/{{rental.id}}'>la page de la location.</a></p>
+<p>Pour lire le message et lui répondre, rendez-vous sur <a href='https://www.locautocross.fr/location/{{rental.id}}'>la page de la location.</a></p>
 <p>N'oubliez pas de vous connecter pour accéder au panneau de contrôle.</p>
 {% endblock %}
