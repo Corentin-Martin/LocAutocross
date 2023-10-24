@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import GeneralLayout from '../../components/GeneralLayout/GeneralLayout';
@@ -15,6 +15,7 @@ function User() {
 
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (elementToDisplay === null) {
@@ -25,7 +26,12 @@ function User() {
           setIsLoading(false);
         })
         .catch((err) => {
-          console.error(err);
+          if (err.response.status === 404) {
+            navigate('/*');
+          }
+          else {
+            console.error(err);
+          }
         });
     }
     else {

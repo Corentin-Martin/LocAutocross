@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import RentalComponent from '../../components/CardComponent/RentalComponent/RentalComponent';
 import { setElementToDisplay } from '../../actions/dashboard';
@@ -14,6 +14,7 @@ function Rental() {
   const { rentalId } = useParams();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     AxiosPublic.get(`rentals/${rentalId}`)
@@ -22,7 +23,12 @@ function Rental() {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        if (err.response.status === 404) {
+          navigate('/*');
+        }
+        else {
+          console.error(err);
+        }
       });
   }, []);
 
