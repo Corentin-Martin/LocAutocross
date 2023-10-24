@@ -28,7 +28,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
             ->to($user->getEmail())
             ->subject('Bienvenue - Inscription validée')
             ->html($htmlContent);
@@ -44,7 +44,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
             ->to($rental->getOwnerUser()->getEmail())
             ->subject('Du nouveau pour votre location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
@@ -61,7 +61,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
             ->to($exTenant->getEmail())
             ->subject('Du nouveau pour la location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
@@ -81,7 +81,7 @@ class EmailSender
         $to = ($byOwner) ? $rental->getTenantUser()->getEmail() : $rental->getOwnerUser()->getEmail();
 
         $email = (new Email())
-            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
             ->to($to)
             ->subject('Nouvelle conversation - Location à ' . $rental->getEvent()->getTrack()->getCity())
             ->html($htmlContent);
@@ -102,7 +102,7 @@ class EmailSender
             ]);
     
             $email = (new Email())
-                ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+                ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
                 ->to($personne[1])
                 ->subject('Réservation validée pour ' . $rental->getEvent()->getTrack()->getCity())
                 ->html($htmlContent);
@@ -130,7 +130,7 @@ class EmailSender
                 ]);
         
                 $email = (new Email())
-                    ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+                    ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
                     ->to($personne[1]->getEmail())
                     ->subject('Attention, évènement annulé')
                     ->html($htmlContent);
@@ -147,7 +147,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
             ->to($rental->getTenantUser()->getEmail())
             ->subject("Qu'avez-vous pensé de votre location à " . $rental->getEvent()->getTrack()->getCity() . " ?")
             ->html($htmlContent);
@@ -163,7 +163,7 @@ class EmailSender
         ]);
 
         $email = (new Email())
-            ->from(new Address('info@pronautocross.fr', "Loc'Autocross"))
+            ->from(new Address('info@locautocross.fr', "Loc'Autocross"))
             ->to($rental->getOwnerUser()->getEmail())
             ->subject($rental->getTenantUser()->getPseudo() . " vient de vous laisser un commentaire !")
             ->html($htmlContent);
