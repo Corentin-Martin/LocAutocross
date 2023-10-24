@@ -35,6 +35,7 @@ import Confidentiality from '../../pages/Confidentiality/Confidentiality';
 import User from '../../pages/User/User';
 import RentalGestionForUser from '../../pages/RentalGestionForUser/RentalGestionForUser';
 import Faq from '../../pages/Faq/Faq';
+import Error404 from '../../pages/Error404/Error404';
 
 function App() {
   const token = useSelector((state) => state.user.token);
@@ -202,6 +203,11 @@ function App() {
               element={(<Skeleton page={<RentalGestionForUser />} />)}
             />
           </Route>
+
+          <Route
+            path="*"
+            element={(<Skeleton page={<Error404 />} />)}
+          />
 
         </Routes>
       </div>
