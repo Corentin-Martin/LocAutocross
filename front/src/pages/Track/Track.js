@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
 import CardComponent from '../../components/CardComponent/CardComponent';
@@ -14,6 +14,7 @@ function Track() {
   const { trackId } = useParams();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (elementToDisplay === null) {
@@ -24,7 +25,12 @@ function Track() {
           setIsLoading(false);
         })
         .catch((err) => {
-          console.error(err);
+          if (err.response.status === 404) {
+            navigate('/*');
+          }
+          else {
+            console.error(err);
+          }
         });
     }
     else {

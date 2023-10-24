@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { setElementToDisplay } from '../../actions/dashboard';
 import AxiosPublic from '../../utils/AxiosPublic';
@@ -14,6 +14,7 @@ function EventPage() {
   const { eventId } = useParams();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (elementToDisplay === null) {
@@ -23,7 +24,12 @@ function EventPage() {
           setIsLoading(false);
         })
         .catch((err) => {
-          console.error(err);
+          if (err.response.status === 404) {
+            navigate('/*');
+          }
+          else {
+            console.error(err);
+          }
         });
     }
     else {
