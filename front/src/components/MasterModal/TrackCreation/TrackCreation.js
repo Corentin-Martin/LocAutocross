@@ -26,7 +26,7 @@ function TrackCreation({ setShowToParent }) {
       event.currentTarget.value.length >= 4 && event.currentTarget.value !== lastSearchTerm) {
       setLastSearchTerm(event.currentTarget.value);
 
-      const apiUrl = `http://api.geonames.org/postalCodeSearchJSON?placename_startsWith=${event.currentTarget.value}&country=FR&username=locautocross`;
+      const apiUrl = `https://secure.geonames.org/postalCodeSearchJSON?placename_startsWith=${event.currentTarget.value}&country=FR&username=locautocross`;
 
       fetch(apiUrl)
         .then((response) => response.json())
