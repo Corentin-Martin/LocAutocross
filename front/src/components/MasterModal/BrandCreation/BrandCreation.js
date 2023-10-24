@@ -20,7 +20,8 @@ function BrandCreation({ setShowToParent }) {
     setBrandExist(false);
     AxiosPublic.get(`brands?name=${brandName}`)
       .then((response) => {
-        if (response.status !== 204) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (!response.data.hasOwnProperty('message')) {
           setBrandExist(true);
         }
       })
