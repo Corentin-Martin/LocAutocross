@@ -100,13 +100,11 @@ function GeneralCalendar() {
         let eventsWithDate = [];
 
         response.data.forEach((oneEvent) => {
-          if (moment(oneEvent.start) > moment()) {
-            eventsWithDate = [...eventsWithDate, {
-              ...oneEvent,
-              start: new Date(oneEvent.start),
-              end: new Date(oneEvent.end),
-            }];
-          }
+          eventsWithDate = [...eventsWithDate, {
+            ...oneEvent,
+            start: new Date(oneEvent.start),
+            end: new Date(oneEvent.end),
+          }];
         });
         setEvents(eventsWithDate);
         setNoEvents(false);
