@@ -38,7 +38,7 @@ function UserConversationControl({ rental }) {
     return <LoadingSpinner />;
   }
 
-  if (localConversation === '' && rental.status < 4) {
+  if (localConversation.message === 'Rien à afficher' && rental.status < 4) {
     return (
       <>
         <Button type="button" className="col-12" onClick={() => handleShow()}>Envoyer un message au propriétaire</Button>
