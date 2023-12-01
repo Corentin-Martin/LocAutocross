@@ -38,10 +38,8 @@ function Rental() {
 
   return (
     <GeneralLayout
-      title={`Proposition de location pour ${elementToDisplay.event.title !== null ? `${elementToDisplay.event.title} - ` : ''}${elementToDisplay.event.track.city} - ${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')}`}
       pageTitle={`Proposition de location pour ${elementToDisplay.event.title !== null ? `${elementToDisplay.event.title} - ` : ''}${elementToDisplay.event.track.city} - ${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')}`}
-      description={`${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')} par ${elementToDisplay.ownerUser.pseudo} `}
-      image={elementToDisplay.vehicle.picture ?? null}
+      description={`Proposition de location pour ${elementToDisplay.event.title !== null ? `${elementToDisplay.event.title} - ` : ''}${elementToDisplay.event.track.city} - ${elementToDisplay.vehicle.brand.name} ${moment(elementToDisplay.vehicle.brand.year).format('YYYY')}`}
       childComponent={(
 
         <CardComponent
