@@ -17,7 +17,7 @@ function GeneralLayout({
       metaDescriptionSocial.setAttribute('content', `Loc'Autocross - ${description}`);
     }
 
-    if (metaTitleSocial && title !== null) {
+    if (metaTitleSocial && pageTitle !== null) {
       metaTitleSocial.setAttribute('content', `Loc'Autocross - ${pageTitle}`);
     }
 
@@ -25,7 +25,11 @@ function GeneralLayout({
       const metaImageSocial = document.querySelector('meta[property="og:image"]');
       metaImageSocial.setAttribute('content', `${process.env.REACT_APP_API_URL}${image}`);
     }
-  }, [title, description, image]);
+    else {
+      const metaImageSocial = document.querySelector('meta[property="og:image"]');
+      metaImageSocial.setAttribute('content', 'https://api.locautocross.fr/images/banniere.png');
+    }
+  }, [title, description, image, pageTitle]);
 
   return (
     <div className="GeneralLayout">

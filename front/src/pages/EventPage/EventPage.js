@@ -48,7 +48,6 @@ function EventPage() {
   return (
 
     <GeneralLayout
-      title={`${elementToDisplay.title !== null ? `${elementToDisplay.title} - ` : ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
       pageTitle={`${elementToDisplay.title !== null ? `${elementToDisplay.title} - ` : ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
       description={`Découvrez les informations et véhicules à louer pour : ${elementToDisplay.title !== null ? `${elementToDisplay.title} - ` : ''}${elementToDisplay.track.city} - ${moment(elementToDisplay).format('DD/MM/YYYY')}`}
       childComponent={(

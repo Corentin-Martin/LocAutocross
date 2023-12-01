@@ -49,7 +49,6 @@ function Track() {
   return (
 
     <GeneralLayout
-      title={`Circuit de ${elementToDisplay.city}`}
       pageTitle={`Circuit de ${elementToDisplay.city}`}
       description={`Découvrez toutes les informations relatives au circuit d'Autocross de ${elementToDisplay.city}`}
       childComponent={(
